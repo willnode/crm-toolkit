@@ -1,0 +1,22 @@
+{
+  "short_name": "Create-React-App",
+  "name": "Create-React-App",
+  "description": "Create-React-App",
+  "icons": [
+    {
+    "src": "assets/logo-192.png",
+    "type": "image/png",
+    "sizes": "192x192"
+    },
+    {
+    "src": "assets/logo-512.png",
+    "type": "image/png",
+    "sizes": "512x512"
+    }
+  ],
+  "start_url": "login",
+  "background_color": "#09d9fe",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#09d9fe"
+}
