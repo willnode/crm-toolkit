@@ -1,5 +1,18 @@
-import React, {useState} from 'react';
 import session from '../main/Session';
+import React from 'react';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import { useStyles } from '../main/Style';
+
 
 async function form_login(e) {
   const data = session.extract(e);
@@ -18,52 +31,68 @@ async function form_login(e) {
 }
 
 export default function Login() {
-	let [loading, setLoading] = useState(false);
+  const classes = useStyles();
+
   return (
-    <div className="container-fluid bg-info">
-
-      <div className="row justify-content-center">
-
-        <div className="col-xl-10 col-lg-12 col-md-9">
-
-          <div className="card o-hidden border-0 shadow-lg my-5 animated fadeInUp faster">
-            <div className="card-body p-0">
-              <div className="row justify-content-center">
-                <div className="col-lg-6">
-                  <div className="p-5">
-                    <div className="text-center">
-                      <h1 className="h4 text-gray-900 mb-4">Login</h1>
-                    </div>
-                    <form className="user" onSubmit={(e) => {setLoading(true); form_login(e);}}>
-                      <div className="form-group">
-                        <input type="text" required className="form-control form-control-user" name="username" placeholder="Email / No HP" autoComplete="email" />
-                      </div>
-                      <div className="form-group">
-                        <input type="password" required className="form-control form-control-user" name="password" placeholder="Password" autoComplete="current-password" />
-                      </div>
-
-                      <div className="form-group">
-                        <div className="custom-control custom-checkbox small">
-                          <input type="checkbox" className="custom-control-input" id="rememberMe"/>
-                          <label className="custom-control-label" htmlFor="rememberMe">
-                            Remember Me
-                          </label>
-                        </div>
-                      </div>
-                      <button disabled={loading} className="btn btn-primary btn-user btn-block">
-                        Login
-                    </button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <form className={classes.form} onSubmit={form_login}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
+            autoFocus
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+          />
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Sign In
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link href="#" variant="body2">
+                Forgot password?
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link href="#" variant="body2">
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
+        </form>
       </div>
-
-    </div>
-  )
+    </Container>
+  );
 }

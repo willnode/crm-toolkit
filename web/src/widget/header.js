@@ -1,13 +1,11 @@
 import React from 'react';
 import {
-  AppBar, Toolbar, IconButton, Typography, Button
+  AppBar, Toolbar, Typography, Button
 } from '@material-ui/core';
-import {
-  Menu as MenuIcon
-} from '@material-ui/icons';
 import {
 useStyles
 } from '../main/Style';
+import { Link } from 'react-router-dom';
 
 // function HeaderLogon() {
 //   return <>
@@ -51,15 +49,13 @@ useStyles
 export default function Header() {
   const classes = useStyles();
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-          <MenuIcon />
-        </IconButton>
+    <AppBar position="static" >
+      <Toolbar >
         <Typography variant="h6" className={classes.title}>
-          News
+          CRM Toolkit
         </Typography>
-        <Button color="inherit">Login</Button>
+        <Button component={Link} to="/" color="inherit">Home</Button>
+        <Button component={Link} to="/login" color="inherit">Login</Button>
       </Toolbar>
     </AppBar>
   )
