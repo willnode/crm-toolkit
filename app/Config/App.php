@@ -23,6 +23,8 @@ class App extends BaseConfig
 	*/
 	public $baseURL = 'http://localhost:8080/';
 
+	public $frontURL = 'http://localhost:3000/';
+
 	/*
 	|--------------------------------------------------------------------------
 	| Index File

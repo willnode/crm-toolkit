@@ -15,6 +15,7 @@ namespace App\Controllers;
  */
 
 use CodeIgniter\Controller;
+use Config\Services;
 
 class BaseController extends Controller
 {
@@ -26,7 +27,17 @@ class BaseController extends Controller
 	 *
 	 * @var array
 	 */
-	protected $helpers = [];
+	protected $helpers = ['BackEnd'];
+
+	/** @var \App\Models\LoginModel */
+	protected $login;
+
+
+	/**
+	 * To be overridden, role name applied
+	 * @var string
+	 */
+	const ROLE = NULL;
 
 	/**
 	 * Constructor.
@@ -39,8 +50,19 @@ class BaseController extends Controller
 		//--------------------------------------------------------------------
 		// Preload any models, libraries, etc, here.
 		//--------------------------------------------------------------------
-		// E.g.:
-		// $this->session = \Config\Services::session();
+
+		// Always set CORS
+		set_cors_headers();
+
+		// respond to preflights
+		if (Services::request()->getMethod() === OPTIONS) {
+			// return only the headers and not the content
+			exit;
+		}
+
+		// $this->login = $request->login;
+		// $request->room = static::ROLE;
+
 	}
 
 }

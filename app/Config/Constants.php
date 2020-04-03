@@ -13,6 +13,20 @@
 //
 defined('APP_NAMESPACE') || define('APP_NAMESPACE', 'App');
 
+
+/*
+|--------------------------------------------------------------------------
+| HTTP Verbs constants for convenience
+|--------------------------------------------------------------------------
+*/
+define('GET', 'get');
+define('POST', 'post');
+define('PUT', 'put');
+define('OPTIONS', 'options');
+define('DELETE', 'delete');
+define('UPDATE', 'update');
+define('CREATE', 'create');
+
 /*
 |--------------------------------------------------------------------------
 | Composer Path
