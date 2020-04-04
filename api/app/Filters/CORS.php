@@ -9,10 +9,10 @@ class CORS implements FilterInterface
 {
     public function before(RequestInterface $request)
     {
-        $request = Services::request();
-		if (!$request->isAJAX())
+		$request = Services::request();
+		if ($request->getMethod() !== OPTIONS AND !$request->isAJAX())
 		{
-			//return;
+			return;
 		}
 		$frontUrl = $request->config->frontURL;
 		if (is_array($frontUrl)) {

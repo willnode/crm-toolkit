@@ -51,17 +51,7 @@ class BaseController extends Controller
 		// Preload any models, libraries, etc, here.
 		//--------------------------------------------------------------------
 
-		// Always set CORS
-		set_cors_headers();
-
-		// respond to preflights
-		if (Services::request()->getMethod() === OPTIONS) {
-			// return only the headers and not the content
-			exit;
-		}
-
-		// $this->login = $request->login;
-		// $request->room = static::ROLE;
+		$this->login = $request->login;
 
 	}
 
