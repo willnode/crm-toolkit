@@ -16,17 +16,26 @@ const Logout = function () {
   return <Redirect to="/login" />
 }
 
-const RoleRooms = () => (<>
-  <Route path="/admin" component={Admin} />
-</>)
+const RoleRooms = (props) => (
+  <Switch>
+    <Route path="/admin" component={Admin} />
+    <Route {...props} />
+  </Switch>
+)
 
-const RoleSidebars = () => (<>
-  <Route path="/admin" component={AdminSidebar} />
-</>)
+const RoleSidebars = (props) => (
+  <Switch>
+    <Route path="/admin" component={AdminSidebar} />
+    <Route {...props} />
+  </Switch>
+)
 
-const RoleTopbars = () => (<>
-  <Route path="/admin" component={AdminTopbar} />
-</>)
+const RoleTopbars = (props) => (
+  <Switch>
+    <Route path="/admin" component={AdminTopbar} />
+    <Route {...props} />
+  </Switch>
+)
 
 function RedirectIfLoggedInOrShow({ component }) {
   return session.login ? <Redirect to={'/' + session.login.role + '/'} /> : React.createElement(component);
@@ -58,10 +67,7 @@ class App extends Component {
           <Route exact path="/login">
             <RedirectIfLoggedInOrShow component={Login} />
           </Route>
-          {
-            RoleRooms()
-          }
-          <Route component={Page404} />
+          <RoleRooms component={Page404} />
         </Switch>
       </Layout>
     );

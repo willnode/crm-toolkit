@@ -1,7 +1,6 @@
-import {renderToStaticMarkup} from 'react-dom/server'
 import React from 'react';
 import session from '../main/Session';
-import { Link, Router, Redirect, useParams } from 'react-router-dom';
+import { Link, Redirect, useParams } from 'react-router-dom';
 
 function controlError() {
 	return ''; //TODO

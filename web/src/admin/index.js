@@ -5,13 +5,8 @@ import User from './user';
 import Page404 from '../static/404';
 import Sidebar from './sidebar';
 import Topbar from './topbar';
-import {
-	Switch,
-	Route,
-} from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { CheckRole } from '../widget/controls';
-import { Container, Paper, Box } from '@material-ui/core';
-import Page from '../widget/page';
 
 export default function () {
 	return (

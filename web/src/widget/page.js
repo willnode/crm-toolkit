@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import session from '../main/Session';
-import { Component } from 'react';
 import propTypes from 'prop-types';
-import { Typography, Container, Box, Paper } from '@material-ui/core';
-import { Skeleton } from '@material-ui/lab';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import Box from '@material-ui/core/Box';
+import Paper from '@material-ui/core/Paper';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const ErrorPrompt = () => (
 	<>

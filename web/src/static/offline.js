@@ -1,7 +1,9 @@
 import React from 'react';
 import session from '../main/Session';
 import { useLocation } from 'react-router-dom';
-import { Container, Typography, Button } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import { useStyles } from '../main/Helper';
 
 function useQuery() {

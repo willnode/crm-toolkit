@@ -1,7 +1,7 @@
 import React from 'react';
 import Page from '../widget/page';
 import session from '../main/Session';
-import { Typography } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 
 export default function () {
 	return <Page center>

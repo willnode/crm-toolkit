@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import React, { StrictMode } from 'react';
 import { BrowserRouter } from "react-router-dom";
-import { CssBaseline, useMediaQuery } from '@material-ui/core';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import * as serviceWorker from './serviceWorker';
 import { baseUrl } from './main/Config';
