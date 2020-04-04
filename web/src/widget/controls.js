@@ -1,6 +1,11 @@
 import React from 'react';
 import session from '../main/Session';
 import { Link, Redirect, useParams } from 'react-router-dom';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import MUICheckbox from '@material-ui/core/Checkbox';
+import Box from '@material-ui/core/Box';
 
 function controlError() {
 	return ''; //TODO
@@ -61,7 +66,7 @@ function controlDiv(attr) {
  * General form <input>
  */
 function controlInput(attr) {
-	if (!attr.type || attr.type === 'text' ) {
+	if (!attr.type || attr.type === 'text') {
 		attr.maxLength = 255;
 	}
 	return (<div className="form-group row">
@@ -218,9 +223,13 @@ function controlButtons(buttons, style = 'btn-group') {
 
 				switch (type) {
 					case 'submit':
-						return <div key={id} onClick={(e) => {if(conf()) {var f = window.$(e.target).parents('form')[0];
-							f[name].checked=true;f.dispatchEvent(new Event('submit', { bubbles: true}));}}}
-							className={style} style={{cursor: 'pointer'}}><i className={icon}></i>
+						return <div key={id} onClick={(e) => {
+							if (conf()) {
+								var f = window.$(e.target).parents('form')[0];
+								f[name].checked = true; f.dispatchEvent(new Event('submit', { bubbles: true }));
+							}
+						}}
+							className={style} style={{ cursor: 'pointer' }}><i className={icon}></i>
 							<input type="checkbox" hidden name={name} value={value} />{title}</div>
 					case 'download':
 						return <a key={id} onClick={() => conf()} href={value} target="_blank" rel="noopener noreferrer" className={style} download>
@@ -233,7 +242,7 @@ function controlButtons(buttons, style = 'btn-group') {
 						return <button key={id} onClick={window.callbacks[id]} data-onclick={id} className={style}>
 							<i className={icon}></i>{title}</button>
 					case 'copy':
-						return <button key={id} onClick={() => {if(conf()) prompt('Copy this text (Ctrl+C):', value); return false}} className={style}>
+						return <button key={id} onClick={() => { if (conf()) prompt('Copy this text (Ctrl+C):', value); return false }} className={style}>
 							<i className={icon}></i>{title}</button>
 					default:
 						return '';
@@ -243,32 +252,81 @@ function controlButtons(buttons, style = 'btn-group') {
 	</div>
 }
 
-function controlDelete(url,id) {
+function controlDelete(url) {
 	return (_) => {
-		(session.deleteByRole(url+'/'+id)
-		.then(() => session.setMessage('Successfully deleted'))
-		.catch((e) => session.setError(e))
+		(session.delete(url)
+			.then(() => session.setMessage('Successfully deleted'))
+			.catch((e) => session.setError(e))
 		)
 	}
 }
 
-function controlPost(url,id) {
+function controlPost(url, redirect) {
 	return (e) => {
-		(session.postByRole(id ? url+'/' + id : url, session.extract(e))
-		.then(() => id === 0 ? (session.message = 'Successfully saved' && session.history.goBack()) : session.setMessage('Successfully Saved'))
-		.catch((e) => session.setError(e))
+		(session.post(url, session.extract(e))
+			.then((d) => redirect ? (session.message = 'Successfully saved' && redirect(d)) : session.setMessage('Successfully saved'))
+			.catch((e) => session.setError(e))
 		)
 	}
 }
 
-function CheckRole ({role, children}) {
+function CheckRole({ role, children }) {
 	return !session.login || session.login.role !== role ? <Redirect to="/login" /> : children;
 }
 
 function AssignID({ component }) {
 	const id = useParams('id');
-	return React.createElement(component, {id: id});
+	return React.createElement(component, { id: id });
 }
+
+const Input = ({ name, value, id, ...props }) => (
+	<TextField
+		name={name}
+		id={id || name}
+		variant="outlined"
+		fullWidth
+		defaultValue={value}
+		margin="normal"
+		{...props} />
+)
+
+const Form = ({ action, redirect, onSubmit, children }) => {
+	return (
+		<Box width="100%" marginTop={1} clone>
+			<form onSubmit={onSubmit || controlPost(action, redirect)}>
+				{children}
+			</form>
+		</Box>)
+}
+
+const Submit = ({ label, color, variant, ...props }) => (
+	<Box my={2} clone>
+		<Button
+			type="submit"
+			fullWidth
+			variant={variant || "contained"}
+			color={color || "primary"}
+			disabled={session.fetching}
+			{...props}
+		>{label || "Submit"}</Button>
+	</Box>
+)
+
+const Checkbox = ({ name, id, checked, value, color, label, ...props }) => (
+	<Box textAlign="left" marginY={1} width="100%" clone>
+	<FormControlLabel
+			control={<MUICheckbox
+				name={name}
+				id={id || name}
+				defaultChecked={checked}
+				value={value || "y"}
+				color={color || "primary"}
+				{...props}
+			/>}
+            label={label}
+          />
+	</Box>
+)
 
 export {
 	controlError,
@@ -288,4 +346,8 @@ export {
 	controlDelete,
 	CheckRole,
 	AssignID,
+	Input,
+	Form,
+	Submit,
+	Checkbox,
 }

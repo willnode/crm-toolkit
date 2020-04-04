@@ -3,7 +3,6 @@ import Page from '../../widget/page';
 import {
 	controlInput, controlSubmit, controlBack, controlPost
 } from '../../widget/controls';
-import { useParams } from 'react-router-dom';
 
 
 export default function ({ id }) {

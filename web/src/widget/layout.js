@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './header';
 import Footer from './footer';
 import session from '../main/Session';
+import Alert from '@material-ui/lab/Alert';
 
 function Notification() {
 
@@ -12,16 +13,10 @@ function Notification() {
 
 	return <>
 			{
-				message ?
-				<div className="alert alert-primary">
-				{''+message}
-			</div> : ''
+				message ? <Alert severity="success" color="info">{''+message}</Alert> : ''
 			}
 			{
-				error ?
-				<div className="alert alert-danger">
-					{''+error}
-				</div> : ''
+				error ? <Alert severity="error">{''+error}</Alert> : ''
 			}
 		</>
 }

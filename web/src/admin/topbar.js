@@ -7,6 +7,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import session from '../main/Session';
+import Dashboard from '@material-ui/icons/Dashboard';
+import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 
 const AvatarMenu = (props) => <Menu
@@ -22,23 +24,28 @@ const AvatarMenu = (props) => <Menu
 	}}
 />;
 
-export default function () {
-	const [open, setOpen] = React.useState(false);
+const AvatarMenuItem = ({ to, icon, title }) => (
+	<MenuItem component={Link} to={to}>
+		<ListItemIcon>
+			{React.createElement(icon, {fontSize: 'small'})}
+		</ListItemIcon>
+		<Typography variant="inherit" noWrap>
+			{title}
+		</Typography>
+	</MenuItem>
+)
 
+export default function () {
+	const [open, setOpen] = React.useState(null);
 	return (
 		<>
-			<IconButton onClick={(e) => setOpen(open ? null : e.target)}>
+			<IconButton disableRipple size="small" onClick={(e) => setOpen(open ? null : e.currentTarget)}>
 				<Avatar alt={session.login.name} src={session.getAvatarUrl()} />
 			</IconButton>
 			<AvatarMenu anchorEl={open} open={!!open} onClose={() => setOpen(null)} >
-				<MenuItem component={Link} to="/logout">
-					<ListItemIcon>
-						<ExitToApp fontSize="small" />
-					</ListItemIcon>
-					<Typography variant="inherit" noWrap>
-						A very long text that overflows
-         			</Typography>
-				</MenuItem>
+				<AvatarMenuItem to="/admin/" icon={Dashboard} title="Dashboard"/>
+				<AvatarMenuItem to="/admin/profile/" icon={SupervisedUserCircle} title="Profile"/>
+				<AvatarMenuItem to="/logout" icon={ExitToApp} title="Logout"/>
 			</AvatarMenu>
 		</>
 	)

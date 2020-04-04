@@ -25,14 +25,14 @@ const RoleRooms = (props) => (
 
 const RoleSidebars = (props) => (
   <Switch>
-    <Route path="/admin" component={AdminSidebar} />
+    <Route path="/admin" component={session.login && AdminSidebar} />
     <Route {...props} />
   </Switch>
 )
 
 const RoleTopbars = (props) => (
   <Switch>
-    <Route path="/admin" component={AdminTopbar} />
+    <Route path="/admin" component={session.login && AdminTopbar} />
     <Route {...props} />
   </Switch>
 )
@@ -45,19 +45,21 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      counter: 0.5
+      counter: 0.5,
+      fetching: false,
     }
   }
   componentDidMount() {
     session.history = this.props.history;
     session.counter = this.state.counter;
+    session.fetching = this.state.fetching;
     session.roll = () => this.forceUpdate();
     session.setCounter = (v) => this.setState({ counter: v });
-  }
-  componentDidUpdate() {
-    session.counter = this.state.counter;
+    session.setFetching = (v) => this.setState({ fetching: v });
   }
   render() {
+    session.counter = this.state.counter;
+    session.fetching = this.state.fetching;
     return (
       <Layout key={this.state.counter}>
         <Switch>

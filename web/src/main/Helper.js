@@ -47,10 +47,12 @@ const serverHandler = async (url,method,body) => {
 				body = data;
 			}
 		}
+		session.setFetching(true);
 		const result = await fetch(url, {
 			headers: {
-				...(session.auth ? { 'Authorization': session.auth, 'Accept': 'application/json' } : {}),
+				...(session.auth ? { 'Authorization': session.auth } : {}),
 				'X-Requested-With': 'xmlhttprequest',
+				'Accept': 'application/json',
 			},
 			method,
 			body,
@@ -62,7 +64,8 @@ const serverHandler = async (url,method,body) => {
 		session.history.push(`/offline?reason=${e}&uri=${u}`);
 		throw error;
 	} finally {
-		if (response.status !== 'Error') {
+		session.setFetching(false);
+		if (response.status === 'OK') {
 			return response;
 		} else {
 			session.error = response.message;

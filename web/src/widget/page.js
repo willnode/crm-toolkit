@@ -7,12 +7,6 @@ import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-const ErrorPrompt = () => (
-	<>
-		<Typography variant="h2" gutterBottom>Error :(</Typography>
-		<Typography variant="body1">Sorry you might be offline. Check your connection.</Typography>
-	</>
-)
 class Page extends Component {
 	constructor() {
 		super()
@@ -44,24 +38,35 @@ class Page extends Component {
 	componentWillUnmount() {
 		this.mounted = false;
 	}
+	Container = ({ children }) => {
+		return this.props.noStyle ? children :(
+			<Container maxWidth={this.props.maxWidth}>
+				<Box p={3} my={5} clone
+					{...(this.props.center ? {
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'center',
+						textAlign: 'center'
+					} : {})}>
+					<Paper>{children}</Paper>
+				</Box>
+			</Container>
+		)
+	}
+	ErrorPrompt = () => (
+		<>
+			<Typography variant="h2" gutterBottom>Error :(</Typography>
+			<Typography variant="body1">Sorry you might be offline. Check your connection.</Typography>
+		</>
+	)
 	render() {
-		switch (this.state.status) {
-			case 'loading': return <Skeleton />;
-			case 'ok': return (this.props.noStyle ? this.props.children :
-				<Container>
-					<Box p={3} my={5} clone textAlign={this.props.center ? 'center' : null}>
-						<Paper>{this.props.children}</Paper>
-					</Box>
-				</Container>
-			)
-			case 'error': default: return (this.props.noStyle ? <ErrorPrompt /> :
-				<Container>
-					<Box p={3} my={5} clone>
-						<Paper><ErrorPrompt /></Paper>
-					</Box>
-				</Container>
-			)
-		}
+		return <this.Container>
+			{
+				this.state.status === 'loading' ? <Skeleton animation="wave" variant="rect" width="100%" height={200}/> :
+				this.state.status === 'ok' ? this.props.children :
+				<this.ErrorPrompt />
+			}
+		</this.Container>
 	}
 }
 
