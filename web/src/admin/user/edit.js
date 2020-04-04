@@ -7,9 +7,6 @@ import { useParams } from 'react-router-dom';
 
 
 export default function ({ id }) {
-	if (id === null || id === undefined) {
-		id = useParams().id;
-	}
 	const [d, setData] = useState(null);
 	const data = (d && d.data);
 	return (

@@ -1,42 +1,29 @@
 import React from 'react';
 import Dashboard from './dashboard';
 import Profile from './profile';
-import User from './user/list';
-import UserEdit from './user/edit';
+import User from './user';
 import Page404 from '../static/404';
+import Sidebar from './sidebar';
+import Topbar from './topbar';
 import {
-	Redirect,
 	Switch,
 	Route,
-	useParams
 } from 'react-router-dom';
-import session from '../Session';
-
-function P() {
-	const { id } = useParams();
-	return <TransaksiDetail  id={id} key={id}/>
-}
+import { CheckRole } from '../widget/controls';
+import { Container, Paper, Box } from '@material-ui/core';
+import Page from '../widget/page';
 
 export default function () {
-	return !session.login || session.login.role !== 'admin' ? <Redirect to="/login" /> : (
-		<div className="container mt-4">
+	return (
+		<CheckRole role='admin'>
 			<Switch>
-				<Route exact path="/admin">
-					<Dashboard />
-				</Route>
-				<Route exact path="/admin/profile">
-					<Profile />
-				</Route>
-				<Route exact strict path="/admin/user/">
-					<User />
-				</Route>
-				<Route strict path="/admin/user/edit/:id">
-					<UserEdit />
-				</Route>
-				<Route>
-					<Page404/>
-				</Route>
+				<Route exact path="/admin" component={Dashboard} />
+				<Route path="/admin/profile" component={Profile} />
+				<Route path="/admin/user" component={User} />
+				<Route component={Page404} />
 			</Switch>
-		</div>
+		</CheckRole>
 	)
 }
+
+export { Sidebar, Topbar }

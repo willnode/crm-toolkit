@@ -11,7 +11,9 @@ class CORS implements FilterInterface
     {
         $request = Services::request();
 		if (!$request->isAJAX())
-			return;
+		{
+			//return;
+		}
 		$frontUrl = $request->config->frontURL;
 		if (is_array($frontUrl)) {
 			$vary = true;

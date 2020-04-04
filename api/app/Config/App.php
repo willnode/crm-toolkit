@@ -21,9 +21,18 @@ class App extends BaseConfig
 	| environments.
 	|
 	*/
-	public $baseURL = 'http://localhost:8080/';
+	public $baseURL = 'http://localhost:4000/';
 
-	public $frontURL = 'http://localhost:3000/';
+	/*
+	|--------------------------------------------------------------------------
+	| Front URL
+	|--------------------------------------------------------------------------
+	|
+	| URL to your Frontend origin. This will used as a way for your front
+	| to bypass CORS. DO NOT use a trailing slash.
+	|
+	*/
+	public $frontURL = 'http://localhost:3000';
 
 	/*
 	|--------------------------------------------------------------------------

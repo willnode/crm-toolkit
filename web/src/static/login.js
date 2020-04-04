@@ -2,7 +2,6 @@ import session from '../main/Session';
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -11,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { useStyles } from '../main/Style';
+import { useStyles } from '../main/Helper';
 
 
 async function form_login(e) {
@@ -21,7 +20,7 @@ async function form_login(e) {
     const { login } = await session.get('login');
     session.login = login;
     session.history.push('/' + login.role);
-    const storage = window.$('rememberMe').val() ? localStorage : sessionStorage;
+    const storage = data.has('rememberme') ? localStorage : sessionStorage;
     storage.setItem('appauth', session.auth);
     storage.setItem('applogin', JSON.stringify(login));
   } catch {
@@ -35,7 +34,6 @@ export default function Login() {
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -67,8 +65,8 @@ export default function Login() {
             autoComplete="current-password"
           />
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
+            control={<Checkbox name="rememberme" value="remember" color="primary" />}
+            label="Remember Me"
           />
           <Button
             type="submit"

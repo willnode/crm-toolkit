@@ -1,39 +1,7 @@
+import {serverHandler} from  './Helper';
+import { imageAvatarUrl, uploadsUrl } from './Config';
 
-
-const serverUrl = process.env.NODE_ENV === 'production' ? 'YOUR  PRODUCTION URL' : 'http://localhost:8080';
-
-const serverHandler = async (url,method,body) => {
-	let response;
-	try {
-		if (body && !(body instanceof FormData)) {
-			if (body instanceof Event) {
-				body = session.extract(body);
-			} else {
-				var data = new FormData();
-				Object.entries(body).forEach(([k,v])=>data.append(k, v));
-				body = data;
-			}
-		}
-		const result = await fetch(url, {
-			headers: {
-				...(session.auth ? { 'Authorization': session.auth, 'Accept': 'application/json' } : {})
-			},
-			method,
-			body,
-		});
-		response = await result.json();
-	} catch (error) {
-		session.history.push('/offline?reason='+encodeURIComponent(error));
-		throw error;
-	} finally {
-		if (response.status !== 'Error') {
-			return response;
-		} else {
-			session.error = response.message;
-			throw session.error;
-		}
-	}
-}
+const serverUrl = process.env.NODE_ENV === 'production' ? 'YOUR PRODUCTION URL' : 'http://localhost:4000';
 
 const session = {
 	auth: null,
@@ -42,12 +10,8 @@ const session = {
 	counter: null,
 	message: null,
 	error: null,
-	formatRupiah: ((formatter) => (rp) => formatter.format(rp))(new Intl.NumberFormat('id-ID', {
-		style: 'currency',
-		currency: 'IDR',
-	  })),
-	formatID: (id) => 'SE20'+(id+'').padStart(5, '0'),
 	reload: () => session.setCounter(Math.random()),
+	getAvatarUrl: () => session.login && session.login.avatar ? uploadsUrl +'avatar/'+session.login.avatar : imageAvatarUrl,
 	setMessage(v) {
 		session.message = v;
 		session.reload();

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Page from '../widget/page';
 import { controlInput, controlImage, controlSubmit, controlDiv } from '../widget/controls';
-import session from '../Session';
+import session from '../main/Session';
 
 function submit(e) {
 	const data = session.extract(e);

@@ -4,8 +4,9 @@ import {
 } from '@material-ui/core';
 import {
 useStyles
-} from '../main/Style';
-import { Link } from 'react-router-dom';
+} from '../main/Helper';
+import { Link, Switch, Route } from 'react-router-dom';
+import { RoleSidebars, RoleTopbars } from '../main/App';
 
 // function HeaderLogon() {
 //   return <>
@@ -54,8 +55,15 @@ export default function Header() {
         <Typography variant="h6" className={classes.title}>
           CRM Toolkit
         </Typography>
-        <Button component={Link} to="/" color="inherit">Home</Button>
-        <Button component={Link} to="/login" color="inherit">Login</Button>
+        <Switch>
+          {
+            RoleTopbars()
+          }
+          <Route>
+            <Button component={Link} to="/" color="inherit">Home</Button>
+            <Button component={Link} to="/login" color="inherit">Login</Button>
+          </Route>
+        </Switch>
       </Toolbar>
     </AppBar>
   )

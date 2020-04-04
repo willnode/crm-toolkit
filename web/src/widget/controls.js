@@ -1,7 +1,7 @@
 import {renderToStaticMarkup} from 'react-dom/server'
 import React from 'react';
 import session from '../main/Session';
-import { Link, Router } from 'react-router-dom';
+import { Link, Router, Redirect, useParams } from 'react-router-dom';
 
 function controlError() {
 	return ''; //TODO
@@ -262,6 +262,15 @@ function controlPost(url,id) {
 	}
 }
 
+function CheckRole ({role, children}) {
+	return !session.login || session.login.role !== role ? <Redirect to="/login" /> : children;
+}
+
+function AssignID({ component }) {
+	const id = useParams('id');
+	return React.createElement(component, {id: id});
+}
+
 export {
 	controlError,
 	controlAttrs,
@@ -276,7 +285,8 @@ export {
 	controlFile,
 	controlImage,
 	controlButtons,
-	controlTable,
 	controlPost,
 	controlDelete,
+	CheckRole,
+	AssignID,
 }

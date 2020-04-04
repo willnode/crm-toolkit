@@ -29,15 +29,11 @@ function Notification() {
 export default function Layout({ children }) {
 
 	return (
-		<div id="wrapper">
-			<div id="content-wrapper" className="d-flex flex-column">
-				<div id="content">
-					<Header/>
-					<Notification/>
-					{children}
-					<Footer/>
-				</div>
-			</div>
-		</div>
+		<>
+			<Header/>
+			<Notification/>
+			{children}
+			<Footer/>
+		</>
 	)
 }
