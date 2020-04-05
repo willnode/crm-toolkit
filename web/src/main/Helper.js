@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
 		display: 'flex',
 	},
 	appBar: {
-		zIndex:( theme.zIndex.drawer + 1) + ' !important',
+		zIndex: (theme.zIndex.drawer + 1) + ' !important',
 	},
 	drawer: {
 		width: drawerWidth,
@@ -66,7 +66,8 @@ const serverHandler = async (url, method, body) => {
 				body = data;
 			}
 		}
-		session.setFetching(true);
+		if (session.setFetching)
+			session.setFetching(true);
 		const result = await fetch(url, {
 			headers: {
 				...(session.auth ? { 'Authorization': session.auth } : {}),
@@ -83,7 +84,8 @@ const serverHandler = async (url, method, body) => {
 		session.history.push(`/offline?reason=${e}&uri=${u}`);
 		throw error;
 	} finally {
-		session.setFetching(false);
+		if (session.setFetching)
+			session.setFetching(false);
 		if (response.status === 'OK') {
 			return response;
 		} else {

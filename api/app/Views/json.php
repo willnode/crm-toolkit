@@ -40,7 +40,7 @@ use Config\Services;
 						   Method: <b><?=strtoupper($metadata->method)?></b></p>
 						<p>What do you want to do?</p>
 						<?php if ($metadata->method !== GET) : ?>
-							<a href="<?=$request->uri?>">Back to GET</a>
+							<a href="<?=preg_replace('/\?delete=y$/', '', $request->uri) ?>">Back to GET</a>
 						<?php elseif ($metadata->id === NULL) : ?>
 							<details>
 								<summary>Setup QUERY</summary>

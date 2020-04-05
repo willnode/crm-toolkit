@@ -11,7 +11,10 @@ const session = {
 	message: null,
 	error: null,
 	reload: () => session.setCounter(Math.random()),
-	getAvatarUrl: () => session.login && session.login.avatar ? uploadsUrl +'avatar/'+session.login.avatar : imageAvatarUrl,
+	getAvatarUrl: (avatar) => {
+		avatar = avatar === undefined ? (session.login && session.login.avatar) : avatar;
+		return avatar ? uploadsUrl +'avatar/'+avatar : imageAvatarUrl
+	},
 	setMessage(v) {
 		session.message = v;
 		session.reload();

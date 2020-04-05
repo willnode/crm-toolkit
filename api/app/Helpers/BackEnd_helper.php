@@ -134,7 +134,7 @@ function get_default_values($table, $field_key = NULL, $select = '*') {
 			}
 		}
 	}
-	return (object)$values;
+	return $values;
 }
 
 function get_values_at($table, $where) {
@@ -196,6 +196,9 @@ function load_info($data = []) {
  * Return JSON of PHP data
  */
 function load_ok($data = []) {
+	if (is_string($data)) {
+		$data = [ 'message' => $data ];
+	}
 	$data['status'] = 'OK';
 	return load_json($data);
 }
@@ -207,9 +210,10 @@ function load_error($message, $code = NULL) {
 	if ($code) {
 		Services::response()->setStatusCode($code);
 	}
-	return load_json([
-		'status'=>'Error',
-		'message' => $message
-	]);
+	if (is_string($message)) {
+		$message = [ 'message' => $message ];
+	}
+	$message['status'] = 'Error';
+	return load_json($message);
 }
 

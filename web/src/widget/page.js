@@ -25,9 +25,12 @@ class Page extends Component {
 						status: 'ok'
 					});
 				}
-			}).catch(_ => this.setState({
-				status: 'error'
-			}));
+			}).catch(e => {
+				console.log(e);
+				this.setState({
+					status: 'error'
+				})
+			});
 		} else {
 			this.setState({
 				status: 'ok'
@@ -39,7 +42,7 @@ class Page extends Component {
 		this.mounted = false;
 	}
 	Container = ({ children }) => {
-		return this.props.noStyle ? children :(
+		return this.props.noStyle ? children : (
 			<Container maxWidth={this.props.maxWidth}>
 				<Box p={3} my={5} clone
 					{...(this.props.center ? {
@@ -62,9 +65,9 @@ class Page extends Component {
 	render() {
 		return <this.Container>
 			{
-				this.state.status === 'loading' ? <Skeleton animation="wave" variant="rect" width="100%" height={200}/> :
-				this.state.status === 'ok' ? this.props.children :
-				<this.ErrorPrompt />
+				this.state.status === 'loading' ? <Skeleton animation="wave" variant="rect" width="100%" height={200} /> :
+					(this.state.status === 'ok' ? this.props.children :
+						<this.ErrorPrompt />)
 			}
 		</this.Container>
 	}

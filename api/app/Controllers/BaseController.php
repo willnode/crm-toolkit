@@ -51,7 +51,7 @@ class BaseController extends Controller
 		// Preload any models, libraries, etc, here.
 		//--------------------------------------------------------------------
 
-		$this->login = $request->login;
+		$this->login = $request->login ?? null;
 
 	}
 

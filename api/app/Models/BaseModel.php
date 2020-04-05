@@ -203,7 +203,7 @@ class BaseModel extends Model
 		{
 			if (is_array($this->select) AND
 				array_search($orderBy, $this->select,
-				TRUE) === NULL)
+				TRUE) === FALSE)
 				$orderBy = NULL;
 			else if ($orderDirection === NULL)
 				$orderDirection = 'asc';
@@ -262,7 +262,7 @@ class BaseModel extends Model
 		if ($method === GET) {
 			if ($id !== NULL) {
 				// Specific Index
-				if ($id === 0) {
+				if ($id == 0) {
 					$data = get_default_values(
 						$this->table, $this->primaryKey,
 						$this->select);
@@ -270,7 +270,7 @@ class BaseModel extends Model
 					$cursor->select($this->select);
 					$data = $this->find($id);
 				}
-					if ($data !== NULL) {
+				if ($data !== NULL) {
 					return load_ok([
 						'data' => $data,
 						'id' => $id,
@@ -292,13 +292,7 @@ class BaseModel extends Model
 			] = $this->processGetQuery($request->getGet());
 
 			$cursor->select($this->select);
-			if ($page !== NULL) {
-				$cursor->limit($pageSize);
-				$cursor->offset($pageSize * $page);
-			}
-			if ($orderBy !== NULL) {
-				$cursor->orderBy($orderBy, $orderDirection);
-			}
+
 			if ($search !== NULL) {
 				$cursor->groupStart();
 				foreach ($this->searchable as $col) {
@@ -314,9 +308,22 @@ class BaseModel extends Model
 				$cursor->groupEnd();
 			}
 
+			$count = $cursor->countAllResults(false);
+
+			if ($page !== NULL) {
+				$cursor->limit($pageSize);
+				$cursor->offset($pageSize * $page);
+			}
+
+			if ($orderBy !== NULL) {
+				$cursor->orderBy($orderBy, $orderDirection);
+			}
+
 			$data = $this->find();
 			return load_ok([
-				'data' => $data
+				'data' => $data,
+				'page' => $page,
+				'totalCount' => $count,
 			]);
 		} else if ($method === POST || $method === PUT) {
 			try {
