@@ -1,9 +1,28 @@
 import { makeStyles } from '@material-ui/core/styles';
 import session from './Session';
 
+const drawerWidth = 240;
+
 const useStyles = makeStyles((theme) => ({
 	root: {
+		display: 'flex',
+	},
+	appBar: {
+		zIndex:( theme.zIndex.drawer + 1) + ' !important',
+	},
+	drawer: {
+		width: drawerWidth,
+		flexShrink: 0,
+	},
+	drawerPaper: {
+		width: drawerWidth,
+	},
+	drawerContainer: {
+		overflow: 'auto',
+	},
+	content: {
 		flexGrow: 1,
+		padding: theme.spacing(3),
 	},
 	blockButton: {
 		marginTop: theme.spacing(2),
@@ -35,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const serverHandler = async (url,method,body) => {
+const serverHandler = async (url, method, body) => {
 	let response;
 	try {
 		if (body && !(body instanceof FormData)) {
@@ -43,7 +62,7 @@ const serverHandler = async (url,method,body) => {
 				body = session.extract(body);
 			} else {
 				var data = new FormData();
-				Object.entries(body).forEach(([k,v])=>data.append(k, v));
+				Object.entries(body).forEach(([k, v]) => data.append(k, v));
 				body = data;
 			}
 		}
@@ -59,8 +78,8 @@ const serverHandler = async (url,method,body) => {
 		});
 		response = await result.json();
 	} catch (error) {
-		const e = encodeURIComponent((error+''));
-		const u = encodeURIComponent((url+'').replace(session.baseUrl(''), ''));
+		const e = encodeURIComponent((error + ''));
+		const u = encodeURIComponent((url + '').replace(session.baseUrl(''), ''));
 		session.history.push(`/offline?reason=${e}&uri=${u}`);
 		throw error;
 	} finally {

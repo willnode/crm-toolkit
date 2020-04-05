@@ -308,7 +308,7 @@ const Submit = ({ label, color, variant, ...props }) => (
 			color={color || "primary"}
 			disabled={session.fetching}
 			{...props}
-		>{label || "Submit"}</Button>
+		>{session.fetching ? 'Sending...' : label || "Submit"}</Button>
 	</Box>
 )
 

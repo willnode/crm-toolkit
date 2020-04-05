@@ -24,16 +24,22 @@ const AvatarMenu = (props) => <Menu
 	}}
 />;
 
-const AvatarMenuItem = ({ to, icon, title }) => (
-	<MenuItem component={Link} to={to}>
+const AvatarMenuItem = ({ to, icon, title }) => {
+
+	const renderLink = React.useMemo(
+		() => React.forwardRef((itemProps, ref) => <Link to={to} ref={ref} {...itemProps} />),
+		[to],
+	  );
+
+	return <li><MenuItem component={renderLink}>
 		<ListItemIcon>
 			{React.createElement(icon, {fontSize: 'small'})}
 		</ListItemIcon>
 		<Typography variant="inherit" noWrap>
 			{title}
 		</Typography>
-	</MenuItem>
-)
+	</MenuItem></li>
+}
 
 export default function () {
 	const [open, setOpen] = React.useState(null);

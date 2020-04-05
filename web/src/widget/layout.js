@@ -1,8 +1,11 @@
 import React from 'react';
 import Header from './header';
+import Drawer from './drawer';
 import Footer from './footer';
 import session from '../main/Session';
 import Alert from '@material-ui/lab/Alert';
+import Toolbar from '@material-ui/core/Toolbar';
+import { useStyles } from '../main/Helper';
 
 function Notification() {
 
@@ -22,13 +25,21 @@ function Notification() {
 }
 
 export default function Layout({ children }) {
-
+	let classes = useStyles();
+	let ref = React.useRef();
+	let [drawerOpen, setDrawerOpen] = React.useState(false);
+	session.drawerOpen = drawerOpen;
+	session.toggleDrawerOpen = () => setDrawerOpen(!drawerOpen);
 	return (
-		<>
+		<div ref={ref} className={classes.root}>
 			<Header/>
-			<Notification/>
-			{children}
-			<Footer/>
-		</>
+			<Drawer container={ref}/>
+			<main className={classes.content}>
+				<Toolbar/>
+				<Notification/>
+				{children}
+				<Footer/>
+			</main>
+		</div>
 	)
 }

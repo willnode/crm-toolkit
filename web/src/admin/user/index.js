@@ -8,6 +8,6 @@ export default ({ match }) => (
 	<Switch>
 		<Route exact path={match.url+'/'} component={List}/>
 		<Route exact path={match.url+'/create'} component={Edit}/>
-		<Route exact path={match.url+'/edit/:id'} component={<AssignID component={Edit}/>}/>
+		<Route exact path={match.url+'/edit/:id'} children={<AssignID component={Edit}/>} />
 	</Switch>
 )

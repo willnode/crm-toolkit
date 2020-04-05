@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom';
-import React, { StrictMode } from 'react';
+import React from 'react';
 import { BrowserRouter } from "react-router-dom";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -20,14 +20,12 @@ function MainApp() {
   );
 
   return (
-    <StrictMode>
       <ThemeProvider theme={theme}>
        <CssBaseline />
         <BrowserRouter forceRefresh={false} basename={baseUrl}>
           <App />
         </BrowserRouter>
       </ThemeProvider>
-    </StrictMode>
   );
 }
 
