@@ -1,15 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
-import session from '../main/Session';
 import Dashboard from '@material-ui/icons/Dashboard';
-import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
+import People from '@material-ui/icons/People';
 import ExitToApp from '@material-ui/icons/ExitToApp';
+import { getAvatarUrl, login, doLogout, history } from '../main/Helper';
+import { ListItemText } from '@material-ui/core';
 
 const AvatarMenu = (props) => <Menu
 	{...props} elevation={4}
@@ -24,34 +25,26 @@ const AvatarMenu = (props) => <Menu
 	}}
 />;
 
-const AvatarMenuItem = ({ to, icon, title }) => {
-
-	const renderLink = React.useMemo(
-		() => React.forwardRef((itemProps, ref) => <Link to={to} ref={ref} {...itemProps} />),
-		[to],
-	  );
-
-	return <li><MenuItem component={renderLink}>
-		<ListItemIcon>
-			{React.createElement(icon, {fontSize: 'small'})}
-		</ListItemIcon>
-		<Typography variant="inherit" noWrap>
-			{title}
-		</Typography>
-	</MenuItem></li>
-}
-
 export default function () {
 	const [open, setOpen] = React.useState(null);
 	return (
 		<>
 			<IconButton disableRipple size="small" onClick={(e) => setOpen(open ? null : e.currentTarget)}>
-				<Avatar alt={session.login.name} src={session.getAvatarUrl()} />
+				<Avatar alt={login().name} src={getAvatarUrl()} />
 			</IconButton>
 			<AvatarMenu anchorEl={open} open={!!open} onClose={() => setOpen(null)} >
-				<AvatarMenuItem to="/admin/" icon={Dashboard} title="Dashboard"/>
-				<AvatarMenuItem to="/admin/profile/" icon={SupervisedUserCircle} title="Profile"/>
-				<AvatarMenuItem to="/logout" icon={ExitToApp} title="Logout"/>
+				<MenuItem component={Link} to="/admin">
+					<ListItemIcon children={<Dashboard/>}/>
+					<ListItemText children="Dashboard"/>
+				</MenuItem>
+				<MenuItem component={Link} to="/admin/profile">
+					<ListItemIcon children={<People/>}/>
+					<ListItemText children="Profile"/>
+				</MenuItem>
+				<MenuItem onClick={doLogout}>
+					<ListItemIcon children={<ExitToApp/>}/>
+					<ListItemText children="Logout"/>
+				</MenuItem>
 			</AvatarMenu>
 		</>
 	)

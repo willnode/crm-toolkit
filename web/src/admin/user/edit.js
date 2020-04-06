@@ -11,7 +11,7 @@ export default function () {
 	const [d, setData] = useState(null);
 	const data = (d && d.data);
 	return (
-		<Page src={'user/' + id} dataCallback={setData}>
+		<Page src={'admin/user/' + id} dataCallback={setData}>
 			{!data ? '' : (
 			<Form action={"admin/user/"+id}>
 				<Input name="username" required label="Username" value={data.username}/>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import Toolbar from '@material-ui/core/Toolbar';
 import Hidden from '@material-ui/core/Hidden';
@@ -7,8 +7,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { RoleSidebars } from '../main/App';
 import { useStyles } from '../main/Helper';
-import session from '../main/Session';
+import { Context } from '../main/Contexts';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
 
 const DrawerListItem = ({ to, icon, label }) => (
@@ -20,6 +21,9 @@ const DrawerListItem = ({ to, icon, label }) => (
 
 function DrawerComponent({ children }) {
 	let classes = useStyles();
+	let drawerOpen = useState(false);
+	Context.bind('drawerOpen', drawerOpen);
+	useEffect(() => (() => Context.unbind('drawerOpen')), [])
 	return (
 		<nav>
 			<Hidden smUp implementation="css">
@@ -28,8 +32,8 @@ function DrawerComponent({ children }) {
 					classes={{
 						paper: classes.drawerPaper,
 					}}
-					open={session.drawerOpen}
-					onClose={session.toggleDrawerOpen}
+					open={Context.get('drawerOpen')}
+					onClose={() => Context.set('drawerOpen', false)}
 					ModalProps={{
 						keepMounted: true, // Better open performance on mobile.
 					}}
@@ -54,7 +58,8 @@ function DrawerComponent({ children }) {
 					</div>
 				</Drawer>
 			</Hidden>
-		</nav>)
+		</nav>
+	)
 }
 export default function () {
 	return <RoleSidebars>

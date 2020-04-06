@@ -1,45 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from './header';
 import Drawer from './drawer';
 import Footer from './footer';
-import session from '../main/Session';
 import Alert from '@material-ui/lab/Alert';
 import Toolbar from '@material-ui/core/Toolbar';
 import { useStyles } from '../main/Helper';
+import { Context } from '../main/Contexts';
 
 function Notification() {
-
-	const message = session.message;
-	const error = session.error;
-	session.message = '';
-	session.error = '';
-
+	Context.bind('message', useState(null));
+	Context.bind('error', useState(null));
 	return <>
-			{
-				message ? <Alert severity="success" color="info">{''+message}</Alert> : ''
-			}
-			{
-				error ? <Alert severity="error">{''+error}</Alert> : ''
-			}
+			{(x => x ? <Alert severity="success" color="info">{x}</Alert> : null)(Context.get('message'))}
+			{(x => x ? <Alert severity="error">{x}</Alert> : null)(Context.get('error'))}
 		</>
 }
 
 export default function Layout({ children }) {
 	let classes = useStyles();
-	let ref = React.useRef();
-	let [drawerOpen, setDrawerOpen] = React.useState(false);
-	session.drawerOpen = drawerOpen;
-	session.toggleDrawerOpen = () => setDrawerOpen(!drawerOpen);
 	return (
-		<div ref={ref} className={classes.root}>
-			<Header/>
-			<Drawer container={ref}/>
-			<main className={classes.content}>
-				<Toolbar/>
-				<Notification/>
-				{children}
-				<Footer/>
-			</main>
-		</div>
+		<>
+			<Header />
+			<div className={classes.root}>
+				<Drawer />
+				<main className={classes.content}>
+					<Toolbar />
+					<Notification />
+					{children}
+					<Footer />
+				</main>
+			</div>
+		</>
 	)
 }

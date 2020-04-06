@@ -9,7 +9,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { useStyles } from '../main/Helper';
 import { Link } from 'react-router-dom';
 import { RoleTopbars } from '../main/App';
-import session from '../main/Session';
+import { Context } from '../main/Contexts';
 
 export default function Header() {
   const classes = useStyles();
@@ -21,7 +21,7 @@ export default function Header() {
             color="inherit"
             aria-label="open drawer"
             edge="start"
-            onClick={session.toggleDrawerOpen}
+            onClick={() => Context.set('drawerOpen', !Context.get('drawerOpen'))}
             className={classes.menuButton}
           >
             <MenuIcon />

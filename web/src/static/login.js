@@ -1,26 +1,26 @@
-import session from '../main/Session';
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { useStyles } from '../main/Helper';
+import { useStyles, serverGet, history, extractForm } from '../main/Helper';
 import Page from '../widget/page';
 import { Input, Form, Submit, Checkbox } from '../widget/controls';
+import { Context } from '../main/Contexts';
+import { appKey } from '../main/Config';
 
 
 async function form_login(e) {
-  const data = session.extract(e);
-  session.auth = 'Basic ' + btoa(data.get('username') + ':' + data.get('password'));
+  const data = extractForm(e);
+  Context.set('auth', 'Basic ' + btoa(data.get('username') + ':' + data.get('password')));
   try {
-    const { login } = await session.get('login');
-    session.login = login;
-    session.history.push('/' + login.role);
+    const { login } = await serverGet('login');
+    history().push('/' + login.role);
+    Context.set('login', login);
     const storage = data.has('rememberme') ? localStorage : sessionStorage;
-    storage.setItem('appauth', session.auth);
-    storage.setItem('applogin', JSON.stringify(login));
+    storage.setItem(appKey + 'appauth', Context.get('auth'));
+    storage.setItem(appKey + 'applogin', JSON.stringify(login));
   } catch {
-    session.auth = null;
-    session.reload();
+    Context.set('auth', null);
   }
 }
 
@@ -36,8 +36,8 @@ export default function Login() {
           Sign in
         </Typography>
         <Form onSubmit={form_login}>
-          <Input name="username" required autoComplete="username"/>
-          <Input name="password" required autoComplete="current-password" type="password"/>
+          <Input name="username" required label="Username" />
+          <Input name="password" required label="Password" autoComplete="current-password" type="password"/>
           <Checkbox name="rememberme" label="Remember me"  />
           <Submit label="Sign In" />
         </Form>

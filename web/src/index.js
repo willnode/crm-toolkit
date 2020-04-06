@@ -1,31 +1,41 @@
 import ReactDOM from 'react-dom';
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter } from "react-router-dom";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import * as serviceWorker from './serviceWorker';
 import { baseUrl } from './main/Config';
 import App from './main/App';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Context } from './main/Contexts';
+
+function GenerateTheme(theme) {
+  return createMuiTheme({
+    overrides: {
+      MuiFormLabel: {
+        asterisk: {
+          display: "none", // Disable asterisk on required
+        }
+      }
+    },
+    palette: {
+      type: theme, // Autochoose dark mode
+    },
+  })
+}
 
 function MainApp() {
-  const prefersDarkMode = false;// useMediaQuery('(prefers-color-scheme: dark)');
-  const theme = React.useMemo(
-    () =>
-      createMuiTheme({
-        palette: {
-          type: prefersDarkMode ? 'dark' : 'light',
-        },
-      }),
-    [prefersDarkMode],
-  );
+  const [theme, setTheme] = useState(useMediaQuery('(prefers-color-scheme: dark)') ? 'dark' : 'light');
+  const generated = React.useMemo(() => GenerateTheme(theme), [theme]);
+  Context.bind('theme', [theme, setTheme]);
 
   return (
-      <ThemeProvider theme={theme}>
-       <CssBaseline />
-        <BrowserRouter forceRefresh={false} basename={baseUrl}>
-          <App />
-        </BrowserRouter>
-      </ThemeProvider>
+    <ThemeProvider theme={generated}>
+      <CssBaseline />
+      <BrowserRouter forceRefresh={false} basename={baseUrl}>
+        <App />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
