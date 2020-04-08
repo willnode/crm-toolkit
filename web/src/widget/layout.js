@@ -11,10 +11,6 @@ import { useEffect } from 'react';
 function Notification() {
 	Context.bind('message', useState(null));
 	Context.bind('error', useState(null));
-	useEffect(() => {
-		TemporaryContext.pushError = null;
-		TemporaryContext.pushMessage = null;
-	})
 	return <>
 			{(x => x ? <Alert severity="success" color="info">{x}</Alert> : null)(Context.get('message'))}
 			{(x => x ? <Alert severity="error">{x}</Alert> : null)(Context.get('error'))}

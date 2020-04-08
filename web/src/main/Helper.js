@@ -86,11 +86,10 @@ const serverHandler = async (url, method, body) => {
 		throw error;
 	} finally {
 		Context.set('fetching', false);
-		if (response.status === 'OK') {
+		if (response && response.status === 'OK') {
 			return response;
 		} else {
-			setError(response.message);
-			throw response.message;
+			throw (response && response.message) || 'Unknown Error';
 		}
 	}
 }
@@ -110,7 +109,7 @@ const doLogin = async (username, password, rememberme) => {
 		storage.setItem(appKey + 'applogin', JSON.stringify(login));
 		history().push('/' + login.role);
 		return login;
-	} catch(e) {
+	} catch (e) {
 		Context.set('auth', null);
 		throw e;
 	}
@@ -136,8 +135,20 @@ const prefixBaseUrl = url => `${serverUrl}/${url}`;
 const prefixRole = url => `${login().role}/${url}`;
 const history = () => TemporaryContext.history;
 const login = () => Context.get('login');
-const setError = (s) => Context.set('error', TemporaryContext.pushError = s);
-const setMessage = (s) => Context.set('message', TemporaryContext.pushMessage = s);
+const setError = (s) => Context.set('error', s);
+const setMessage = (s) => Context.set('message', s);
+const doReload = () => {
+	Context.set('counter', Context.get('counter') + 1);
+};
+
+const popMessages = () => {
+	 {
+		setError(null);
+	}
+	{
+		setMessage(null);
+	}
+}
 
 export {
 	useStyles, serverHandler,
@@ -145,5 +156,7 @@ export {
 	serverGet, serverPost,
 	serverDelete, prefixRole,
 	setError, setMessage,
-	history, login, doLogin, doLogout
+	history, login, doLogin,
+	doLogout, doReload,
+	popMessages,
 };

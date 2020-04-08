@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 function useValidator(...fun) {
 	const [valid, setValid] = useState('');
@@ -14,10 +14,21 @@ function checkAllValidators(validators)  {
 	return validatorCallbacks.every(x => !x[0]);
 }
 
+function useHandleControlValidator(validator, ref) {
+	if (validator) {
+		validator[2].current = () => validator[1]({ target: ref.current });
+	}
+	useEffect(() => {
+		if (validator)
+			validator[2].current();
+	}, []);
+}
+
 const required = () => e => e.target.value ? '' : 'This field is required';
 const minLength = (length) => e => !e.target.value || e.target.value.length >= length ? '' : `This field must be at least ${length} characters in length`;
-const validEmail = () => e => !e.target.value || /\S+@\S+\.\S+/.test(e.target.value) ? '' : `This field must be a valid email`;
-const matchesValue = (value) => e => !e.target.value ||  e.target.value === value ? '' : `This field is not match`;
+const validEmail = () => e => !e.target.value || /^\S+@\S+\.\S+$/.test(e.target.value) ? '' : `This field must be a valid email`;
+const matchesRegex = (regex) => e => !e.target.value || regex.test(e.target.value) ? '' : `This field isn't satisfy the specified format`;
+const matchesValue = (value) => e => !e.target.value || e.target.value === value ? '' : `This field is not match`;
 const matchesField = (name) => e => e.target.value === e.target.form[name].value ? '' : `This field is not match`;
 const requireField = (name) => e => !e.target.value ||  e.target.form[name].value ? '' : `The other field is required`;
 const combine = (rules) => e => {
@@ -32,6 +43,8 @@ const combine = (rules) => e => {
 export {
 	useValidator,
 	checkAllValidators,
+	useHandleControlValidator,
+	matchesRegex,
 	required,
 	minLength,
 	validEmail,

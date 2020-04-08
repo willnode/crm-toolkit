@@ -6,21 +6,28 @@ import TextField from '@material-ui/core/TextField';
 import MUISelect from '@material-ui/core/Select';
 import MUICheckbox from '@material-ui/core/Checkbox';
 import MenuItem from '@material-ui/core/MenuItem';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Box from '@material-ui/core/Box';
 import {
 	setMessage, setError, login, serverGet,
-	serverDelete, serverPost, history, extractForm
+	serverDelete, serverPost, history, extractForm, popMessages
 } from '../main/Helper';
 import { Context } from '../main/Contexts';
 import MaterialTable from 'material-table';
 import { useRef } from 'react';
+import { useHandleControlValidator } from './validators';
+import { uploadsUrl } from '../main/Config';
 
-function controlDelete(url) {
+function controlDelete(url, redirect) {
+	popMessages();
 	return (_) => {
 		(serverDelete(url)
-			.then(() => setMessage('Successfully deleted'))
+			.then(() => {
+				if (redirect) redirect(url)
+				window.setTimeout(() => setMessage('Successfully deleted'));
+			})
 			.catch((e) => setError(e))
 		)
 	}
@@ -28,11 +35,12 @@ function controlDelete(url) {
 
 function controlPost(url, redirect) {
 	return (e) => {
-		const data = extractForm(e);
-		(serverPost(url, data)
-			.then((d) => {
-				setMessage('Successfully saved');
-				if (redirect) redirect(data, d)
+		const form = extractForm(e);
+		popMessages();
+		(serverPost(url, form)
+			.then((json) => {
+				if (redirect) redirect(json, form)
+				window.setTimeout(() => setMessage('Successfully saved'));
 			}).catch((e) => setError(e))
 		)
 	}
@@ -43,15 +51,6 @@ function CheckRole({ role, children }) {
 	return !login() || login().role !== role ? <Redirect to="/login" /> : children;
 }
 
-function useHandleControlValidator(validator, ref) {
-	if (validator) {
-		validator[2].current = () => validator[1]({ target: ref.current });
-	}
-	useEffect(() => {
-		if (validator)
-			validator[2].current();
-	}, []);
-}
 
 const Input = ({ name, autoComplete, validator, ...props }) => {
 	const ref = useRef();
@@ -94,19 +93,15 @@ const Select = ({ name, label, options, validator, ...props }) => {
 }
 
 const Form = ({ action, redirect, onSubmit, children }) => {
-	const builtinSubmit = e => {
-		if (document && document.activeElement) document.activeElement.blur();
-		controlPost(action, redirect)(e);
-	}
 	return (
 		<Box width="100%" marginTop={1} clone>
-			<form onSubmit={onSubmit ? (e) => onSubmit(e, builtinSubmit) : builtinSubmit}>
+			<form action={action} onSubmit={onSubmit || controlPost(action, redirect)}>
 				{children}
 			</form>
 		</Box>)
 }
 
-const Submit = ({ label, color, variant, ...props }) => (
+const Submit = ({ label, color, variant, disabled, ...props }) => (
 	<Button
 		style={{
 			marginTop: 8,
@@ -116,17 +111,16 @@ const Submit = ({ label, color, variant, ...props }) => (
 		type="submit"
 		variant={variant || "contained"}
 		color={color || "primary"}
-		disabled={Context.get('fetching')}
+		disabled={Context.get('fetching') || disabled}
 		{...props}
 	>{Context.get('fetching') ? 'Sending...' : label || "Submit"}</Button>
 )
 
-const Checkbox = ({ name, id, checked, value, color, label, ...props }) => (
+const Checkbox = ({ name, checked, value, color, label, ...props }) => (
 	<Box textAlign="left" marginY={1} width="100%" clone>
 		<FormControlLabel
 			control={<MUICheckbox
 				name={name}
-				id={id || name}
 				defaultChecked={checked}
 				value={value || "y"}
 				color={color || "primary"}
@@ -137,6 +131,69 @@ const Checkbox = ({ name, id, checked, value, color, label, ...props }) => (
 	</Box>
 )
 
+const CommandButton = ({ name, value, label, color, variant, disabled }) => {
+	const ref = useRef();
+	return <Box margin={1}>
+		<input name={name} ref={ref} type="checkbox" value={value || 'y'} hidden />
+		<Button type="submit" color={color || 'default'}
+			variant={variant || 'outlined'}
+			onClick={() => ref.current.checked = true}
+			disabled={Context.get('fetching') || disabled}
+		>{label}</Button>
+	</Box>
+}
+
+const CommandButtonGroup = ({ label, children }) => {
+	return <Box className="MuiFormControl-marginNormal" display="flex">
+		<Box flexGrow={1} className="MuiInputBase-root">{label}</Box>
+		{children}
+	</Box>
+}
+
+const File = ({ name, label, defaultValue, folder, readOnly, ...props }) => {
+	const delRef = useRef();
+	const [file, hasFile] = useState();
+	return (
+		<CommandButtonGroup label={label}>
+			<input name={name + "_delete"} ref={delRef} hidden />
+			<ButtonGroup>
+				{
+					[
+						...(file ? [<Button type="button" color="primary">1 File</Button>] : [])
+						,
+						<Button key="upload" disabled={readOnly} type="button"
+							variant={file ? 'contained' : 'outlined'} color="primary" component="label">
+							Upload
+							<input
+								name={name}
+								type="file"
+								hidden
+								onChange={(e) => hasFile(e.target.files.length)}
+								{...props}
+							/>
+						</Button>,
+						...(
+							defaultValue ? [
+								<Button key="download" type="button"
+									target="_blank" rel="noreferrer noopener" download
+									href={`${uploadsUrl}/${folder || name}/${defaultValue}`}>
+									View
+									</Button>
+								,
+								<Button key="delete" type="submit" color="secondary"
+									onClick={() => delRef.current.value = 'y'}
+									disabled={Context.get('fetching')}
+								>Delete</Button>
+							] : []
+						)
+
+					]
+				}
+			</ButtonGroup>
+		</CommandButtonGroup>
+	)
+}
+
 const BackButton = ({ label, color, variant, ...props }) => (
 	<Button
 		style={{
@@ -145,7 +202,7 @@ const BackButton = ({ label, color, variant, ...props }) => (
 			width: '100%',
 		}}
 		type="button"
-		variant={variant || "contained"}
+		variant={variant || "outlined"}
 		color={color || "secondary"}
 		disabled={Context.get('fetching')}
 		onClick={() => history().goBack()}
@@ -155,6 +212,7 @@ const BackButton = ({ label, color, variant, ...props }) => (
 
 function RemoteTable({ src, itemKey, itemLabel, predefinedActions, title, actions, options, columns, data, ...props }) {
 	let mounted = useRef(true);
+	let tableRef = useRef();
 	useEffect(() => (() => mounted.current = false), []);
 	actions = useMemo(() => {
 		return [...(actions || []), ...([
@@ -174,7 +232,10 @@ function RemoteTable({ src, itemKey, itemLabel, predefinedActions, title, action
 			}, {
 				icon: 'delete',
 				tooltip: 'Delete ' + itemLabel,
-				onClick: (e, row) => window.confirm(`Are you sure you want to delete this ${itemLabel}?`) && controlDelete(`${src}/${row[itemKey]}`)(),
+				onClick: (e, row) => (
+					window.confirm(`Are you sure you want to delete this ${itemLabel}?`) &&
+					controlDelete(`${src}/${row[itemKey]}`,
+						(() => tableRef.current.onQueryChange()))()),
 			}
 		].filter(x => (predefinedActions || []).includes(x.icon)))];
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -199,7 +260,7 @@ function RemoteTable({ src, itemKey, itemLabel, predefinedActions, title, action
 	})); // Already sync with our server
 	options = options || {};
 	options.actionsColumnIndex = -1;
-	props = { ...props, actions, columns, options, data, title }
+	props = { ...props, actions, columns, options, data, title, tableRef }
 	return <MaterialTable {...props} />
 }
 
@@ -208,9 +269,12 @@ export {
 	controlPost,
 	controlDelete,
 	CheckRole,
+	CommandButton,
+	CommandButtonGroup,
 	Input,
 	Select,
 	Form,
+	File,
 	Submit,
 	Checkbox,
 	BackButton,

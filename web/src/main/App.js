@@ -4,7 +4,7 @@ import Admin, { Sidebar as AdminSidebar, Topbar as AdminTopbar } from '../admin'
 import StaticRooms from '../static/';
 import Layout from '../widget/layout';
 import { Context, TemporaryContext } from './Contexts';
-import { setError, setMessage, login } from './Helper';
+import { popMessages, login } from './Helper';
 import { appKey } from './Config';
 
 
@@ -34,22 +34,12 @@ class App extends Component {
     auth: sessionStorage.getItem(appKey + 'appauth') || localStorage.getItem(appKey + 'appauth') || null,
     login: JSON.parse(sessionStorage.getItem(appKey + 'applogin') || localStorage.getItem(appKey + 'applogin') || "null"),
     fetching: false,
+    counter: 1,
   }
   componentDidMount() {
     TemporaryContext.history = this.props.history;
     this.props.history.listen(() => {
-      if (TemporaryContext.pushError) {
-        setError('' + TemporaryContext.pushError);
-        TemporaryContext.pushError = null;
-      } else {
-        setError(null);
-      }
-      if (TemporaryContext.pushMessage) {
-        setMessage('' + TemporaryContext.pushMessage);
-        TemporaryContext.pushMessage = null;
-      } else {
-        setMessage(null);
-      }
+      popMessages();
     }); // Think we don't need unmount, eh?
   }
   generateBinding(key) {
@@ -59,9 +49,10 @@ class App extends Component {
     Context.bind('fetching', this.generateBinding('fetching'));
     Context.bind('auth', this.generateBinding('auth'));
     Context.bind('login', this.generateBinding('login'));
+    Context.bind('counter', this.generateBinding('counter'));
     return (
-      <Layout key={this.state.counter}>
-        <RoleRooms component={StaticRooms} />
+      <Layout>
+        <RoleRooms key={this.state.counter} component={StaticRooms} />
       </Layout>
     );
   }
