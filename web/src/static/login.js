@@ -3,7 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { useStyles, serverGet, history, extractForm } from '../main/Helper';
-import Page from '../widget/page';
+import Page, { SEO } from '../widget/page';
 import { Input, Form, Submit, Checkbox } from '../widget/controls';
 import { Context } from '../main/Contexts';
 import { appKey } from '../main/Config';
@@ -29,18 +29,19 @@ export default function Login() {
 
   return (
     <Page maxWidth="sm" center>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
+      <SEO title="Login to CRM Toolkit" />
+      <Avatar className={classes.avatar}>
+        <LockOutlinedIcon />
+      </Avatar>
+      <Typography component="h1" variant="h5">
+        Sign in
         </Typography>
-        <Form onSubmit={form_login}>
-          <Input name="username" required label="Username" />
-          <Input name="password" required label="Password" autoComplete="current-password" type="password"/>
-          <Checkbox name="rememberme" label="Remember me"  />
-          <Submit label="Sign In" />
-        </Form>
+      <Form onSubmit={form_login}>
+        <Input name="username" required label="Username" />
+        <Input name="password" required label="Password" autoComplete="current-password" type="password" />
+        <Checkbox name="rememberme" label="Remember me" />
+        <Submit label="Sign In" />
+      </Form>
     </Page>
   );
 }

@@ -4,6 +4,7 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { useStyles, history } from '../main/Helper';
+import Page, { SEO } from '../widget/page';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -17,7 +18,8 @@ export default function Offline() {
 		'Sorry, there\'s an unexpected error. Please try again later.';
 	let classes = useStyles();
 	return (
-		<Container component="main" maxWidth="xs">
+		<Page maxWidth="xs">
+			<SEO title="Offline :(" />
 			<div className={classes.paper}>
 				<Typography variant="h2" gutterBottom>Error :(</Typography>
 				<Typography variant="body1">{message}</Typography>
@@ -25,5 +27,5 @@ export default function Offline() {
 				<Typography variant="overline" color="textSecondary">{reason}</Typography>
 				<Typography variant="overline" color="textSecondary">{uri}</Typography>
 			</div>
-		</Container>)
+		</Page>)
 }

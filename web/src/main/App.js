@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, withRouter } from "react-router-dom";
 import Admin, { Sidebar as AdminSidebar, Topbar as AdminTopbar } from '../admin';
+import User, { Sidebar as UserSidebar, Topbar as UserTopbar } from '../user';
 import StaticRooms from '../static/';
 import Layout from '../widget/layout';
 import { Context, TemporaryContext } from './Contexts';
@@ -11,6 +12,7 @@ import { appKey } from './Config';
 const RoleRooms = (props) => (
   <Switch>
     <Route path="/admin" component={Admin} />
+    <Route path="/user" component={User} />
     <Route {...props} />
   </Switch>
 )
@@ -18,6 +20,7 @@ const RoleRooms = (props) => (
 const RoleSidebars = (props) => (
   <Switch>
     <Route path="/admin" component={login() && AdminSidebar} />
+    <Route path="/user" component={login() && UserSidebar} />
     <Route {...props} />
   </Switch>
 )
@@ -25,6 +28,7 @@ const RoleSidebars = (props) => (
 const RoleTopbars = (props) => (
   <Switch>
     <Route path="/admin" component={login() && AdminTopbar} />
+    <Route path="/user" component={login() && UserTopbar} />
     <Route {...props} />
   </Switch>
 )

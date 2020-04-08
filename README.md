@@ -1,21 +1,22 @@
 # CRM Toolkit
 
-CRM Toolkit is a full MVC-based web application starter kit that includes:
-+ CodeIgniter 4 for the *Model*
-+ React for the *Controller*
-+ Material-UI for the *View*
+<p style="text-align:center"><img src="./web/public/assets/splash.png" style="max-width:300px" alt=""></p>
 
-## How?
+CRM Toolkit is your starting template for bootstrapping any web application project!
 
-We use CodeIgniter as the base framework for backend. PHP is most popular language to running backend programs.
+Back in the hood, CRM Toolkit uses [CodeIgniter 4](https://codeigniter.com/), [React 16](https://reactjs.org/) and [Material-UI 4](https://material-ui.com/). We have opinions why you will love this mix:
 
-The communication between React and CodeIgniter is fully done with AJAX. We also use Material-UI as the base template for the design, along with CRA to create Single Page Web Application.  
++ `PHP` is one of the most popular language to write backend. And while there are few frameworks to pick, `CodeIgniter` is great option because it has minimum boilerplate and small learning curve.
++ `React` is the of the most popular `JavaScript` framework. Sure while you can deploy web app with just CodeIgniter, the separation between front-end and back-end has a clear benefit. For instance, your app can load fast and still run even user disconnected, thanks to [Progressive Web Apps](https://web.dev/progressive-web-apps/). You can implement PWA in your web app fairly easy if you choose to separate back-end and front-end, like we did in CRM Toolkit.
++ If you're fan of [Material Design](https://material.io/), you'll love `Material-UI`. It's a design system packed with lots of React components that follows Material Design principles.
+
+Packed together, CRM Toolkit provides built-in tools and functions to make it easy for you to get started with.
 
 ## Install
 
 Prequirements during development:
-1. XAMPP or preinstalled PHP, MariaDB and SQL Client (HeidiSQL / PhpMyAdmin)
-2. Node.JS
+1. A running PHP and MariaDB/MySQL server.
+2. Node.JS.
 
 Production server requirement:
 + Any Apache hosting server running atleast PHP 7.2.
@@ -23,9 +24,11 @@ Production server requirement:
 Development installation:
 1. Clone this repo
 2. Run `cd web` then `npm install`
-3. Create database `crmtoolkit`, run `cd api` then `php spark migrate` 
+3. Create database `crmtoolkit`, run `cd api` then `php spark migrate`
 
 ## Run
 
 + For backend: `php spark serve`
 + For frontend: `npm start`
+
+In you're in windows, `start.bat` provides convenient shortcut to run both in a click.

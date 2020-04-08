@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { serverUrl, uploadsUrl, baseUrl, imageAvatarUrl, appKey } from './Config';
+import { serverUrl, uploadsUrl, publicUrl, imageAvatarUrl, appKey } from './Config';
 import { Context, TemporaryContext } from './Contexts';
 
 const drawerWidth = 240;
@@ -81,7 +81,7 @@ const serverHandler = async (url, method, body) => {
 		response = await result.json();
 	} catch (error) {
 		const e = encodeURIComponent((error + ''));
-		const u = encodeURIComponent((url + '').replace(baseUrl, ''));
+		const u = encodeURIComponent((url + '').replace(publicUrl, ''));
 		history().push(`/offline?reason=${e}&uri=${u}`);
 		throw error;
 	} finally {

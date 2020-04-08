@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import * as serviceWorker from './serviceWorker';
-import { baseUrl } from './main/Config';
+import { publicUrl } from './main/Config';
 import App from './main/App';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Context } from './main/Contexts';
@@ -32,7 +32,7 @@ function MainApp() {
   return (
     <ThemeProvider theme={generated}>
       <CssBaseline />
-      <BrowserRouter forceRefresh={false} basename={baseUrl}>
+      <BrowserRouter forceRefresh={false} basename={publicUrl}>
         <App />
       </BrowserRouter>
     </ThemeProvider>
