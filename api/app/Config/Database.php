@@ -8,6 +8,8 @@
 
 class Database extends \CodeIgniter\Database\Config
 {
+	/* Don't Edit Here. Edit in your .env File! */
+
 	/**
 	 * The directory that holds the Migrations
 	 * and Seeds directories.

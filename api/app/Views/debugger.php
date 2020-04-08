@@ -29,7 +29,7 @@ $request = Services::request();
           <h2>Available Routes</h2>
           <ul>
             <?php foreach ($json['routes'] as $route) : ?>
-              <li><a href="<?= $route ?>"><?= $route ?></a></li>
+              <li><a href="<?= base_url($route) ?>"><?= $route ?></a></li>
             <?php endforeach ?>
           </ul>
         <?php endif ?>

@@ -1,0 +1,12 @@
+# Generally you wouldn't point your server at api root.
+# Althought it works, always configure your server
+# correctly when you're doing production!
+
+# That's enough warning. If you put this directory
+# on subdirectory, please configure that to here.
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^$ /public/index.php/home/index [L]
+RewriteRule ^(.*)$ /public/$1 [L]
+</IfModule>

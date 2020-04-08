@@ -44,6 +44,12 @@ class Home extends BaseController
 		}
 	}
 
+	public function hash($hash)
+	{
+	    echo password_hash($hash, PASSWORD_BCRYPT);
+	    exit;
+	}
+
 	public function uploads($folder, $file)
 	{
 		$path = WRITEPATH.'uploads'.DIRECTORY_SEPARATOR.$folder.DIRECTORY_SEPARATOR.$file;
