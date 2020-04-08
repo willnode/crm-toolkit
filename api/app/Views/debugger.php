@@ -38,11 +38,11 @@ $request = Services::request();
           <div class="text-center">
             <h2><?= basename(str_replace('\\', '/', $metadata->name)) ?></h2>
             <p>Object-ID: <b><?= $metadata->id ?? 'NULL' ?></b>
-              <a class="btn btn-sm btn-secondary" href="<?= dirname($request->uri) ?>/">Up</a> &bullet;
+              <a class="btn btn-sm btn-secondary" href="<?= base_url(dirname($request->uri->getPath())) ?>/">Up</a> &bullet;
               Method: <b><?= strtoupper($metadata->method) ?></b></p>
             <p>What do you want to do?</p>
             <?php if ($metadata->method !== GET) : ?>
-              <a href="<?= preg_replace('/\?delete=y$/', '/', $request->uri) ?>">Back to GET</a>
+              <a href="<?= preg_replace('/\?delete=y$/', '/', $request->uri->getPath()) ?>">Back to GET</a>
             <?php elseif ($metadata->id === NULL) : ?>
               <details>
                 <summary>Setup QUERY</summary>

@@ -5,8 +5,7 @@ import Footer from './footer';
 import Alert from '@material-ui/lab/Alert';
 import Toolbar from '@material-ui/core/Toolbar';
 import { useStyles } from '../main/Helper';
-import { Context, TemporaryContext } from '../main/Contexts';
-import { useEffect } from 'react';
+import { Context } from '../main/Contexts';
 
 function Notification() {
 	Context.bind('message', useState(null));

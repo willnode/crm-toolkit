@@ -21,6 +21,7 @@ function useHandleControlValidator(validator, ref) {
 	useEffect(() => {
 		if (validator)
 			validator[2].current();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 }
 

@@ -10,7 +10,7 @@ class Auth implements FilterInterface
     public function before(RequestInterface $request)
     {
 		$request->login = new \App\Models\LoginModel();
-		$request->room = explode('/', $request->uri->getPath())[1];
+		$request->room = explode('/', trim($request->uri->getPath(), '/'))[0];
 		// Role Room Precheck
 		if ($request->room && $request->room !== 'login')
 		{

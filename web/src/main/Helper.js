@@ -137,17 +137,11 @@ const history = () => TemporaryContext.history;
 const login = () => Context.get('login');
 const setError = (s) => Context.set('error', s);
 const setMessage = (s) => Context.set('message', s);
-const doReload = () => {
-	Context.set('counter', Context.get('counter') + 1);
-};
+const doReload = () => Context.set('counter', Context.get('counter') + 1);
 
 const popMessages = () => {
-	 {
-		setError(null);
-	}
-	{
-		setMessage(null);
-	}
+	setError(null);
+	setMessage(null);
 }
 
 export {

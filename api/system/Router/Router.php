@@ -230,9 +230,9 @@ class Router implements RouterInterface
 	 */
 	public function methodName(): string
 	{
-		return $this->translateURIDashes
+		return ($this->translateURIDashes
 			? str_replace('-', '_', $this->method)
-			: $this->method;
+			: $this->method) ?: 'index';
 	}
 
 	//--------------------------------------------------------------------
