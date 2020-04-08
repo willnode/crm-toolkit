@@ -12,23 +12,53 @@ Back in the hood, CRM Toolkit uses [CodeIgniter 4](https://codeigniter.com/), [R
 
 Packed together, CRM Toolkit provides built-in tools and functions to make it easy for you to get started with.
 
+## In Depth
+
+**[You can see live server demo here.](https://dev.wellosoft.net/crm-toolkit)**
+
+CRM Toolkit is packed with batteries included. We put login mechanism there so that you can learn how's each function get used and how you should expect to work with them.
+
+If you have explored the live demo. You see that CRM Toolkit has mechanism to:
+
++ Login and manage different type accounts
++ Performing AJAX request with remote page or table data
++ Live Form Validation done in JavaScript
++ REST-fully handle data requests
+
+And a lot more. You will get amazed how simple to extend those basic mechanism to suit your need.
+
 ## Install
 
-Prequirements during development:
-1. A running PHP and MariaDB/MySQL server.
-2. Node.JS.
+Prequirements:
++ PHP atleast 7.2 or more (for running CI)
++ MariaDB/MySQL (for storing application data)
++ NodeJS atleast v10 (for running CRA)
 
-Production server requirement:
-+ Any Apache hosting server running atleast PHP 7.2.
 
-Development installation:
-1. Clone this repo
-2. Run `cd web` then `npm install`
-3. Create database `crmtoolkit`, run `cd api` then `php spark migrate`
+Server setup:
++ Create empty database `crmtoolkit` in your MySQL
++ Spin up the terminal, Go to `cd api`
++ Execute database migration: `php spark migrate`
+
+Website setup:
++ Spin up the terminal, Go to `cd web`
++ Wait until installation finishes
 
 ## Run
 
 + For backend: `php spark serve`
 + For frontend: `npm start`
 
-In you're in windows, `start.bat` provides convenient shortcut to run both in a click.
+## More Reading
+
++ CodeIgniter: [Website](https://codeigniter.com/) [Docs](https://codeigniter4.github.io/CodeIgniter4/)
++ React: [Website](https://reactjs.org/) [Docs](https://reactjs.org/docs/getting-started.html)
++ Material-UI: [Website](https://material-ui.com/) [Docs](https://material-ui.com/getting-started/installation/)
+
+You also might want to read third parties that we also use:
+
++ [react-helmet](https://github.com/nfl/react-helmet)
++ [react-router-dom](https://reacttraining.com/react-router/web/)
++ [material-table](https://material-table.com/)
++ [create-react-app](https://create-react-app.dev/)
+

@@ -8,5 +8,6 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteRule ^$ /public/index.php/home/index [L]
+RewriteRule ^(.*)/$ $1
 RewriteRule ^(.*)$ /public/$1 [L]
 </IfModule>
