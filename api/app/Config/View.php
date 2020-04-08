@@ -10,7 +10,7 @@ class View extends \CodeIgniter\Config\View
 	 * calls so that it is available to all views. If that is the case,
 	 * set $saveData to true.
 	 */
-	public $saveData = true;
+	public $saveData = false;
 
 	/**
 	 * Parser Filters map a filter name with any PHP callable. When the

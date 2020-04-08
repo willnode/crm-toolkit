@@ -383,7 +383,7 @@ class Toolbar
 			}
 
 			$script = PHP_EOL
-					. '<script type="text/javascript" {csp-script-nonce} id="debugbar_loader" '
+					. '<script defer type="text/javascript" {csp-script-nonce} id="debugbar_loader" '
 					. 'data-time="' . $time . '" '
 					. 'src="' . site_url() . '?debugbar"></script>'
 					. '<script type="text/javascript" {csp-script-nonce} id="debugbar_dynamic_script"></script>'

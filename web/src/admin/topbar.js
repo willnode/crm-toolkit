@@ -1,15 +1,14 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Typography from '@material-ui/core/Typography';
 import Dashboard from '@material-ui/icons/Dashboard';
 import People from '@material-ui/icons/People';
 import ExitToApp from '@material-ui/icons/ExitToApp';
-import { getAvatarUrl, login, doLogout, history } from '../main/Helper';
+import { getAvatarUrl, login, doLogout } from '../main/Helper';
 import { ListItemText } from '@material-ui/core';
 
 const AvatarMenu = (props) => <Menu

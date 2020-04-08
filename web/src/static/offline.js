@@ -11,7 +11,7 @@ function useQuery() {
 
 export default function Offline() {
 	let reason = useQuery().get('reason');
-	let uri = '/'+useQuery().get('uri');
+	let uri = useQuery().get('uri').replace(/\?.+/, '');
 	let message = reason.includes('fetch') ? 'Sorry, we can\'t reach to server. Please check your connection.' :
 		reason.includes('Unexpected') ? 'Sorry, we have problems in our server. Try again later.' :
 		'Sorry, there\'s an unexpected error. Please try again later.';

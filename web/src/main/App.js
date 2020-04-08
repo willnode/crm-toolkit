@@ -4,7 +4,7 @@ import Admin, { Sidebar as AdminSidebar, Topbar as AdminTopbar } from '../admin'
 import StaticRooms from '../static/';
 import Layout from '../widget/layout';
 import { Context, TemporaryContext } from './Contexts';
-import { setError, setMessage, login, history } from './Helper';
+import { setError, setMessage, login } from './Helper';
 import { appKey } from './Config';
 
 
@@ -41,12 +41,15 @@ class App extends Component {
       if (TemporaryContext.pushError) {
         setError('' + TemporaryContext.pushError);
         TemporaryContext.pushError = null;
+      } else {
+        setError(null);
       }
       if (TemporaryContext.pushMessage) {
         setMessage('' + TemporaryContext.pushMessage);
         TemporaryContext.pushMessage = null;
+      } else {
+        setMessage(null);
       }
-      console.log(history().location.pathname)
     }); // Think we don't need unmount, eh?
   }
   generateBinding(key) {

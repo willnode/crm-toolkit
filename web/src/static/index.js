@@ -5,7 +5,6 @@ import Offline from './offline';
 import Page404 from './404';
 import { Switch, Route, Redirect } from "react-router-dom";
 import { login } from '../main/Helper';
-import { Context } from '../main/Contexts';
 
 
 function RedirectIfLoggedInOrShow({ component }) {

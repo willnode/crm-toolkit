@@ -77,10 +77,7 @@ function control_file_upload(&$updates, $name, $attr, $existing_row = NULL)
 	$custom_file_name = $attr['custom_file_name'] ?? NULL;
 	$request = Services::request();
 	$file = $request->getFile($name);
-	if ($file !== NULL) {
-		if (!$file->isValid()) {
-			throw new FileException('File seems not valid');
-		}
+	if ($file !== NULL && $file->isValid()) {
 		$full_folder = WRITEPATH."uploads/$folder/";
 		if (!is_dir($full_folder)) {
             mkdir($full_folder, 0777, true);
@@ -91,8 +88,8 @@ function control_file_upload(&$updates, $name, $attr, $existing_row = NULL)
 			throw new FileException('Bad file type');
 		}
 		$filename = is_callable($custom_file_name) ?
-			$custom_file_name($file) : $file->getFilename();
-		if(!$file->move(WRITEPATH.'uploads', $filename, $overwrite)) {
+			$custom_file_name($file) : $file->getName();
+		if(!$file->move(WRITEPATH.'uploads/'.$folder, $filename, $overwrite)) {
 			throw new FileException('Failed to move uploaded file');
 		}
 		$updates[$name] = $file->getName();
@@ -175,10 +172,10 @@ function load_405($msg = 'Method is not Available') {
 function load_json($data) {
 	$request = Services::request();
 	if (CI_DEBUG && !$request->isAJAX()) {
-		return view('json', [
+		return view('debugger', [
 			'json' => $data,
 			'model' => $request->model ?? NULL,
-		]);
+		], ['saveData' => false]);
 	} else {
 		return Services::response()->setJSON($data);
 	}

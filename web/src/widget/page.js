@@ -6,6 +6,27 @@ import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { serverGet } from '../main/Helper';
+import {useTheme} from '@material-ui/core/styles';
+import Helmet from 'react-helmet';
+
+function SEO({ title, description, image, url }) {
+	return <Helmet>
+		{/* General tags */}
+		{title ? <title>{title}</title> : null}
+		{description ? <meta name="description" content={description} /> : null}
+		{image ? <meta name="image" content={image} /> : null}
+		{url ? <link rel="canonical" href={url} /> : null}	{/* OpenGraph tags */}
+		{url ? <meta property="og:url" content={url} /> : null}
+		{title ? <meta property="og:title" content={title} /> : null}
+		{description ? <meta property="og:description" content={description} /> : null}
+		{image ? <meta property="og:image" content={image} /> : null}	{/* Twitter Card tags */}
+		{image ? <meta name="twitter:card" content="summary_large_image" /> : null}
+		{title ? <meta name="twitter:title" content={title} /> : null}
+		{description ? <meta name="twitter:description" content={description} /> : null}
+		{image ? <meta name="twitter:image" content={image} /> : null}
+		<meta name="theme-color" content={useTheme().palette.primary.main} />
+	</Helmet>
+}
 
 class Page extends Component {
 	state = {
@@ -80,3 +101,5 @@ Page.propTypes = {
 }
 
 export default Page;
+
+export { SEO };

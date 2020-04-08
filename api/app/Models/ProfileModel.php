@@ -14,7 +14,7 @@ class ProfileModel extends BaseModel
 		'avatar' => ['types' => ['jpg', 'jpeg', 'png', 'bmp']]
 	];
 	protected $validationRules = [
-		'name' => 'required|min[3]',
+		'name' => 'required|min_length[3]',
 		'email' => 'required|valid_email'
 	];
 
@@ -30,9 +30,13 @@ class ProfileModel extends BaseModel
 		extract($event, EXTR_REFS);
 
 		// Password Change
-		if ($method !== DELETE AND !empty($data['password'])) {
-			if(control_password_update($data)) {
-				$data['otp'] = NULL;
+		if ($method !== DELETE) {
+			if (!empty($data['password'])) {
+				if(control_password_update($data)) {
+					$data['otp'] = NULL;
+				}
+			} else {
+				unset($data['password']);
 			}
 		}
 		return $event;

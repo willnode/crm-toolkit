@@ -7,10 +7,12 @@ import Sidebar from './sidebar';
 import Topbar from './topbar';
 import { Switch, Route } from 'react-router-dom';
 import { CheckRole } from '../widget/controls';
+import { SEO } from '../widget/page';
 
 export default function () {
 	return (
 		<CheckRole role='admin'>
+			<SEO title="Panel Admin"/>
 			<Switch>
 				<Route exact path="/admin" component={Dashboard} />
 				<Route path="/admin/profile" component={Profile} />
