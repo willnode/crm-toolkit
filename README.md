@@ -1,6 +1,6 @@
 # CRM Toolkit
 
-<p align="center"><img src="./web/public/assets/splash.png" width="300px" alt=""></p>
+<p align="center"><img src="./web/public/assets/splash.png" width="400px" alt=""></p>
 
 CRM Toolkit is your starting template for bootstrapping any web application project!
 

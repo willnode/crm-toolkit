@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Page from '../../widget/page';
 import {
 	Form, Input, Submit, BackButton,
-	CommandButton, CommandButtonGroup
+	CommandButton, FlexGroup
 } from '../../widget/controls';
 import { useParams } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
@@ -19,8 +19,8 @@ export default function () {
 	const data = (d && d.data);
 
 	const validators = {
-		username: useValidator(required(), minLength(3), matchesRegex(/^[a-zA-Z0-9]+$/)),
-		name: useValidator(required(), minLength(3), matchesRegex(/^[a-zA-Z0-9\s]+$/)),
+		username: useValidator(required(), minLength(3), matchesRegex(/^\w+$/)),
+		name: useValidator(required(), minLength(3), matchesRegex(/^[\w -'"]+$/)),
 		email: useValidator(required(), validEmail()),
 	}
 
@@ -35,10 +35,10 @@ export default function () {
 						id > 0 ? <>
 							<Box marginTop={5}>If user has trouble logging in, you can give them OTP as temporary login password:</Box>
 							<Input inputProps={{ readOnly: true }} label="OTP" value={data.otp || ''} />
-							<CommandButtonGroup label="Configure OTP">
+							<FlexGroup label="Configure OTP">
 								<CommandButton name="otp_invoke" label="Generate" color="primary" />
 								<CommandButton name="otp_revoke" disabled={!data.otp} label="Revoke" color="secondary" />
-							</CommandButtonGroup>
+							</FlexGroup>
 						</> : <input name="otp_invoke" value="y" readOnly hidden/>
 					}
 					<Submit disabled={!checkAllValidators(validators)} />

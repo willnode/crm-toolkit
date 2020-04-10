@@ -7,7 +7,8 @@ import { doLogin, login, setMessage } from '../main/Helper';
 import { appKey } from '../main/Config';
 import {
 	useValidator, required, minLength, validEmail,
-	matchesValue, matchesField, requireField, checkAllValidators
+	matchesValue, matchesField, requireField,
+	checkAllValidators, matchesRegex
 } from '../widget/validators';
 import Box from '@material-ui/core/Box';
 
@@ -23,7 +24,7 @@ export default function () {
 	const curPassword = useMemo(() => (atob(Context.get('auth').substr(6)).split(':', 2)[1]), []);
 	const form = data && data.data;
 	const validators = {
-		name: useValidator(required(), minLength(3)),
+		name: useValidator(required(), minLength(3), matchesRegex(/^[\w -'"]+$/)),
 		email: useValidator(required(), validEmail()),
 		oldpass: useValidator(matchesValue(curPassword)),
 		password: useValidator(requireField('oldpass'), minLength(8)),

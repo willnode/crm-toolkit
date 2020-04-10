@@ -6,8 +6,8 @@ import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { serverGet } from '../main/Helper';
-import {useTheme} from '@material-ui/core/styles';
-import Helmet from 'react-helmet';
+import { useTheme } from '@material-ui/core/styles';
+import { Helmet } from 'react-helmet';
 
 function SEO({ title, description, image, url }) {
 	return <Helmet>

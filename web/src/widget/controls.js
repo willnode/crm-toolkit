@@ -52,7 +52,7 @@ function CheckRole({ role, children }) {
 }
 
 
-const Input = ({ name, autoComplete, validator, ...props }) => {
+const Input = ({ name, autoComplete, validator, onChange, ...props }) => {
 	const ref = useRef();
 	useHandleControlValidator(validator, ref);
 	return <TextField
@@ -62,25 +62,25 @@ const Input = ({ name, autoComplete, validator, ...props }) => {
 		autoComplete={autoComplete || name}
 		error={validator && !!validator[0]}
 		helperText={validator && validator[0]}
-		onChange={validator && (e => validator[3].current(e))}
+		onChange={(e) => [validator && validator[3].current(e), onChange && onChange(e)]}
 		margin='normal'
 		{...props} />
 }
 
-const Select = ({ name, label, options, validator, ...props }) => {
+const Select = ({ name, label, options, validator, onChange, ...props }) => {
 	const ref = useRef();
 	useHandleControlValidator(validator, ref);
-	return <FormControl margin='normal' fullWidth>
+	return <FormControl margin='normal' fullWidth helperText={validator && validator[0]}>
 		<InputLabel
 			error={validator && !!validator[0]}
-			helperText={validator && validator[0]}
+
 			id={name + '-label'}
 		>{label}</InputLabel>
 		<MUISelect
 			name={name}
 			labelId={name + '-label'}
 			label={label}
-			onChange={validator && (e => validator[3].current(e))}
+			onChange={(e) => [validator && validator[3].current(e), onChange && onChange(e)]}
 			{...props}
 		>
 			{
@@ -143,8 +143,8 @@ const CommandButton = ({ name, value, label, color, variant, disabled }) => {
 	</Box>
 }
 
-const CommandButtonGroup = ({ label, children }) => {
-	return <Box className="MuiFormControl-marginNormal" display="flex">
+const FlexGroup = ({ label, children, ...props }) => {
+	return <Box display="flex" {...props}>
 		<Box flexGrow={1} className="MuiInputBase-root">{label}</Box>
 		{children}
 	</Box>
@@ -154,7 +154,7 @@ const File = ({ name, label, defaultValue, folder, readOnly, ...props }) => {
 	const delRef = useRef();
 	const [file, hasFile] = useState();
 	return (
-		<CommandButtonGroup label={label}>
+		<FlexGroup label={label}>
 			<input name={name + "_delete"} ref={delRef} hidden />
 			<ButtonGroup>
 				{
@@ -190,7 +190,7 @@ const File = ({ name, label, defaultValue, folder, readOnly, ...props }) => {
 					]
 				}
 			</ButtonGroup>
-		</CommandButtonGroup>
+		</FlexGroup>
 	)
 }
 
@@ -270,7 +270,7 @@ export {
 	controlDelete,
 	CheckRole,
 	CommandButton,
-	CommandButtonGroup,
+	FlexGroup,
 	Input,
 	Select,
 	Form,
