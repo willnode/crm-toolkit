@@ -1,9 +1,13 @@
 
-# CRM-Toolkit Documentation
+# CRM-Toolkit
 
-There are various topic and best-practices that available within CRM-Toolkit.
+CRM Toolkit is your starting template for bootstrapping any web application project!
 
-> This documentation is a work in progress
+See [GitHub README](https://github.com/willnode/crm-toolkit#readme) for a gentler introduction.
+
+If you're lazy, there's [Live Server Demo](https://dev.wellosoft.net/crm-toolkit/) available.
+
+## Documentation Contents
 
 + [Know the Basics](basic.md)
 + [Designing the App](design.md)

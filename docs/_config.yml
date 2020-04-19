@@ -1,1 +1,5 @@
-theme: jekyll-theme-leap-day
+theme: jekyll-theme-minimal
+title: CRM-Toolkit
+description: Battery-Included CodeIgniter, React, Material-UI Template
+logo: images/splash.png
+show_downloads: true

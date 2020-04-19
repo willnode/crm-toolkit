@@ -3,7 +3,7 @@
 
 ## Introduction
 
-When you want to start developing a web application, you'll always want to stick with MVC principle. Be it a small or big, CRM-Toolkit has you covered to get start up quick. It builds upon three libraries: CodeIgniter, React, Material-UI. You can read why it's a perfect mix in the [README](../README.md) file.
+When you want to start developing a web application, you'll always want to stick with MVC principle. Be it a small or big, CRM-Toolkit has you covered to get start up quick. It builds upon three libraries: CodeIgniter, React, Material-UI. You can read why it's a perfect mix in the [README](https://github.com/willnode/crm-toolkit#readme) file.
 
 ## Motivation
 

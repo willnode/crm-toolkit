@@ -1,6 +1,6 @@
 # CRM Toolkit
 
-<p align="center"><a href="https://dev.wellosoft.net/crm-toolkit/">Live Demo</a> &bullet; <a href="docs/index.md">Documentation</a></p>
+<p align="center"><a href="https://dev.wellosoft.net/crm-toolkit/">Live Demo</a> &bullet; <a href="https://willnode.github.io/crm-toolkit/">Documentation</a></p>
 
 <p align="center"><img src="./web/public/assets/splash.png" width="400px" alt=""></p>
 
@@ -60,7 +60,7 @@ We provide `serve` script in root folder to spawn both on parallel for convenien
 
 ## More Reading
 
-[See our documentation](docs/index.md) for implementation notes on various topics. (Basics, Design, Server, Client, Deploy, etc.)
+[See our documentation](https://willnode.github.io/crm-toolkit/) for implementation notes on various topics. (Basics, Design, Server, Client, Deploy, etc.)
 
 + CodeIgniter: [Website](https://codeigniter.com/) [Docs](https://codeigniter4.github.io/CodeIgniter4/)
 + React: [Website](https://reactjs.org/) [Docs](https://reactjs.org/docs/getting-started.html)
