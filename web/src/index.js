@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom';
+import { hydrate, render } from 'react-dom';
 import React, { useState } from 'react';
 import { BrowserRouter } from "react-router-dom";
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -39,7 +39,8 @@ function MainApp() {
   );
 }
 
-ReactDOM.render(<MainApp />, document.getElementById('root'));
+let root = document.getElementById('root');
+(root.hasChildNodes() ? hydrate : render)(<MainApp />, root);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

@@ -32,7 +32,7 @@ export default function Header() {
         </Typography>
         <RoleTopbars>
           <Button component={Link} to="/" color="inherit">Home</Button>
-          <Button component={Link} to="/login" color="inherit">Login</Button>
+          <Button component={Link} to="/login/" color="inherit">Login</Button>
         </RoleTopbars>
       </Toolbar>
     </AppBar>
