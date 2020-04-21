@@ -30,7 +30,7 @@ export default function () {
 		passconf: useValidator(matchesField('password')),
 	}
 	return (
-		<Page src="admin/profile" maxWidth="md" dataCallback={setData} >
+		<Page src="admin/profile" maxWidth="sm" dataCallback={setData} >
 			<Typography variant="h4">Edit Profile</Typography>
 			{
 				data ? (

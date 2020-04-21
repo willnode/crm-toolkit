@@ -6,8 +6,8 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import * as serviceWorker from './serviceWorker';
 import { publicUrl } from './main/Config';
 import App from './main/App';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Context } from './main/Contexts';
+import './style.css';
 
 function GenerateTheme(theme) {
   return createMuiTheme({
@@ -25,9 +25,8 @@ function GenerateTheme(theme) {
 }
 
 function MainApp() {
-  const [theme, setTheme] = useState(useMediaQuery('(prefers-color-scheme: dark)') ? 'dark' : 'light');
+  const theme = Context.bind('theme', useState('light'))[0];
   const generated = React.useMemo(() => GenerateTheme(theme), [theme]);
-  Context.bind('theme', [theme, setTheme]);
 
   return (
     <ThemeProvider theme={generated}>

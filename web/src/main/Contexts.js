@@ -23,6 +23,7 @@ class ContextInstance {
 	// Send useState() values here every render call
 	bind(param, state) {
 		this.states[param] = state;
+		return state;
 	}
 	// Prevent state leaks by calling this before unmount.
 	unbind(param) {
@@ -38,8 +39,6 @@ window.Context = Context;
 
 // Temporary holding vars. Either it is read only or always be deferred.
 const TemporaryContext = {
-	pushMessage: null,
-	pushError: null,
 	history: null,
 }
 

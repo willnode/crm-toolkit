@@ -1,15 +1,18 @@
 import React from 'react';
+import List from '@material-ui/core/List';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import { Switch, Route } from 'react-router-dom';
 import Dashboard from './dashboard';
 import Profile from './profile';
 import User from './user';
-import Page404 from '../static/404';
-import Sidebar from './sidebar';
-import Topbar from './topbar';
-import { Switch, Route } from 'react-router-dom';
-import { CheckRole } from '../widget/controls';
-import { SEO } from '../widget/page';
+import Page404 from 'static/404';
+import { CheckRole } from 'widget/controls';
+import { SEO } from 'widget/page';
+import { LoginMenu } from 'widget/header';
+import { DrawerComponent, DrawerListItem } from 'widget/drawer';
 
-export default function () {
+function Main () {
 	return (
 		<CheckRole role='admin'>
 			<SEO title="Panel Admin"/>
@@ -23,4 +26,26 @@ export default function () {
 	)
 }
 
-export { Sidebar, Topbar }
+function LeftBar() {
+	return (
+		<DrawerComponent>
+			<List>
+				<DrawerListItem to="/admin/" icon={DashboardIcon} label="Dashboard"/>
+				<DrawerListItem to="/admin/user" icon={SupervisedUserCircleIcon} label="Users"/>
+			</List>
+		</DrawerComponent>
+	)
+}
+
+function TopBar() {
+	return (
+		<LoginMenu />
+	);
+}
+
+export default {
+	role: 'admin',
+	main: Main,
+	top: TopBar,
+	left: LeftBar,
+}

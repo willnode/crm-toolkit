@@ -243,6 +243,8 @@ Now the complexity reduces into, how much customization CRM-Toolkit can offers?
 
 ### Theme
 
+The \ax sz
+
 ### Header
 
 ### Sidebar
@@ -253,5 +255,5 @@ Now the complexity reduces into, how much customization CRM-Toolkit can offers?
 
 ## Next
 
-+ Read [Designing the App](design.md)
++ Read [Building a Server App](server.md)
 + Back to the [Main Page](index.md)

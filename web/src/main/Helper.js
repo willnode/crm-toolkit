@@ -1,59 +1,5 @@
-import { makeStyles } from '@material-ui/core/styles';
 import { serverUrl, uploadsUrl, publicUrl, imageAvatarUrl, appKey } from './Config';
 import { Context, TemporaryContext } from './Contexts';
-
-const drawerWidth = 240;
-
-const useStyles = makeStyles((theme) => ({
-	root: {
-		display: 'flex',
-	},
-	appBar: {
-		zIndex: (theme.zIndex.drawer + 1) + ' !important',
-	},
-	drawer: {
-		width: drawerWidth,
-		flexShrink: 0,
-	},
-	drawerPaper: {
-		width: drawerWidth,
-	},
-	drawerContainer: {
-		overflow: 'auto',
-	},
-	content: {
-		flexGrow: 1,
-		padding: theme.spacing(3),
-	},
-	blockButton: {
-		marginTop: theme.spacing(2),
-		marginBottom: theme.spacing(2),
-	},
-	menuButton: {
-		marginRight: theme.spacing(2),
-	},
-	title: {
-		flexGrow: 1,
-	},
-	paper: {
-		marginTop: theme.spacing(8),
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-		textAlign: 'center',
-	},
-	avatar: {
-		margin: theme.spacing(1),
-		backgroundColor: theme.palette.secondary.main,
-	},
-	form: {
-		width: '100%', // Fix IE 11 issue.
-		marginTop: theme.spacing(1),
-	},
-	submit: {
-		margin: theme.spacing(3, 0, 2),
-	},
-}));
 
 const serverHandler = async (url, method, body) => {
 	let response;
@@ -107,7 +53,6 @@ const doLogin = async (username, password, rememberme) => {
 		const storage = rememberme ? localStorage : sessionStorage;
 		storage.setItem(appKey + 'appauth', Context.get('auth'));
 		storage.setItem(appKey + 'applogin', JSON.stringify(login));
-		history().push('/' + login.role);
 		return login;
 	} catch (e) {
 		Context.set('auth', null);
@@ -145,7 +90,7 @@ const popMessages = () => {
 }
 
 export {
-	useStyles, serverHandler,
+	serverHandler,
 	extractForm, getAvatarUrl,
 	serverGet, serverPost,
 	serverDelete, prefixRole,

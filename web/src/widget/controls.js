@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import MUISelect from '@material-ui/core/Select';
@@ -9,7 +10,20 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import InputIcon from '@material-ui/icons/Input';
+import FilterIcon from '@material-ui/icons/Filter';
+import SearchIcon from '@material-ui/icons/Search';
+import ClearIcon from '@material-ui/icons/Clear';
+import SortIcon from '@material-ui/icons/ArrowUpward';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import LastPageIcon from '@material-ui/icons/LastPage';
+import NextPageIcon from '@material-ui/icons/NavigateNext';
+import PrevPageIcon from '@material-ui/icons/NavigateBefore';
 import Box from '@material-ui/core/Box';
+
 import {
 	setMessage, setError, login, serverGet,
 	serverDelete, serverPost, history, extractForm, popMessages
@@ -70,7 +84,7 @@ const Input = ({ name, autoComplete, validator, onChange, ...props }) => {
 const Select = ({ name, label, options, validator, onChange, ...props }) => {
 	const ref = useRef();
 	useHandleControlValidator(validator, ref);
-	return <FormControl margin='normal' fullWidth helperText={validator && validator[0]}>
+	return <FormControl margin='normal' fullWidth>
 		<InputLabel
 			error={validator && !!validator[0]}
 
@@ -89,6 +103,7 @@ const Select = ({ name, label, options, validator, onChange, ...props }) => {
 				))
 			}
 		</MUISelect>
+		<FormHelperText>{validator && validator[0]}</FormHelperText>
 	</FormControl>
 }
 
@@ -150,45 +165,32 @@ const FlexGroup = ({ label, children, ...props }) => {
 	</Box>
 }
 
-const File = ({ name, label, defaultValue, folder, readOnly, ...props }) => {
+const File = ({ name, label, defaultValue, folder, readOnly, required, ...props }) => {
 	const delRef = useRef();
 	const [file, hasFile] = useState();
 	return (
 		<FlexGroup label={label}>
 			<input name={name + "_delete"} ref={delRef} hidden />
 			<ButtonGroup>
-				{
-					[
-						...(file ? [<Button type="button" color="primary">1 File</Button>] : [])
-						,
-						<Button key="upload" disabled={readOnly} type="button"
-							variant={file ? 'contained' : 'outlined'} color="primary" component="label">
-							Upload
-							<input
-								name={name}
-								type="file"
-								hidden
-								onChange={(e) => hasFile(e.target.files.length)}
-								{...props}
-							/>
-						</Button>,
-						...(
-							defaultValue ? [
-								<Button key="download" type="button"
-									target="_blank" rel="noreferrer noopener" download
-									href={`${uploadsUrl}/${folder || name}/${defaultValue}`}>
-									View
-									</Button>
-								,
-								<Button key="delete" type="submit" color="secondary"
-									onClick={() => delRef.current.value = 'y'}
-									disabled={Context.get('fetching')}
-								>Delete</Button>
-							] : []
-						)
-
-					]
-				}
+				{file && <Button type="button">1 File</Button>}
+				{!readOnly && <Button key="upload" disabled={readOnly} type="button"
+					variant={file ? 'contained' : 'outlined'} component="label">
+					Upload
+					<input
+						name={name}	type="file"	hidden {...props}
+						onChange={(e) => hasFile(e.target.files.length)}
+						required={required && !defaultValue}
+					/>
+				</Button>}
+				{defaultValue && <Button key="download" type="button"
+					target="_blank" rel="noreferrer noopener" download
+					href={`${uploadsUrl}/${folder || name}/${defaultValue}`}>
+					View
+									</Button>}
+				{defaultValue && !readOnly && !required && <Button key="delete" type="submit"
+					onClick={() => delRef.current.value = 'y'}
+					disabled={Context.get('fetching')}
+				>Delete</Button>}
 			</ButtonGroup>
 		</FlexGroup>
 	)
@@ -217,27 +219,31 @@ function RemoteTable({ src, itemKey, itemLabel, predefinedActions, title, action
 	actions = useMemo(() => {
 		return [...(actions || []), ...([
 			{
-				icon: 'add',
+				key: 'add',
+				icon: () => <AddIcon />,
 				tooltip: 'Add ' + itemLabel,
 				isFreeAction: true,
 				onClick: () => history().push(`/${src}/create`)
 			}, {
-				icon: 'detail',
+				key: 'detail',
+				icon: () => <InputIcon />,
 				tooltip: 'Open ' + itemLabel,
 				onClick: (e, row) => history().push(`/${src}/detail/` + row[itemKey]),
 			}, {
-				icon: 'edit',
+				key: 'edit',
+				icon: () => <EditIcon />,
 				tooltip: 'Edit ' + itemLabel,
 				onClick: (e, row) => history().push(`/${src}/edit/` + row[itemKey]),
 			}, {
-				icon: 'delete',
+				key: 'delete',
+				icon: () => <DeleteIcon />,
 				tooltip: 'Delete ' + itemLabel,
 				onClick: (e, row) => (
 					window.confirm(`Are you sure you want to delete this ${itemLabel}?`) &&
 					controlDelete(`${src}/${row[itemKey]}`,
 						(() => tableRef.current.onQueryChange()))()),
 			}
-		].filter(x => (predefinedActions || []).includes(x.icon)))];
+		].filter((x) => (predefinedActions || []).includes(x.key)))];
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []) // Always only updated once
 	columns = useMemo(() => {
@@ -260,7 +266,21 @@ function RemoteTable({ src, itemKey, itemLabel, predefinedActions, title, action
 	})); // Already sync with our server
 	options = options || {};
 	options.actionsColumnIndex = -1;
-	props = { ...props, actions, columns, options, data, title, tableRef }
+	let icons = {
+		Add: AddIcon,
+		Edit: EditIcon,
+		Delete: DeleteIcon,
+		Filter: FilterIcon,
+		Search: SearchIcon,
+		Clear: ClearIcon,
+		ResetSearch: ClearIcon,
+		SortArrow: SortIcon,
+		FirstPage: FirstPageIcon,
+		LastPage: LastPageIcon,
+		NextPage: NextPageIcon,
+		PreviousPage: PrevPageIcon,
+	}
+	props = { ...props, actions, columns, options, data, title, icons, tableRef }
 	return <MaterialTable {...props} />
 }
 

@@ -1,0 +1,36 @@
+@import "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap";
+
+/* See App.js for CSS variables */
+
+.layout-root {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+.layout-side, .appbar-title {
+	flex-grow: 1;
+}
+.layout-side {
+	padding-left: var(--layout-left-padding);
+}
+.appbar-root {
+	z-index: var(--z-index-appbar) !important;
+}
+.drawer-paper {
+	width: var(--drawer-width);
+	flex-shrink: 0;
+}
+.avatar {
+	margin: 0.5em;
+}
+.block-button {
+	display: block;
+	margin: 1em 0;
+}
+.paper {
+	margin-top: 4em;
+	display: 'flex';
+	flex-direction: 'column';
+	align-items: 'center';
+	text-align: 'center';
+}
