@@ -1,7 +1,6 @@
 import React from 'react';
 import Page, { SEO } from '../widget/page';
 import GitHubIcon from '@material-ui/icons/GitHub'
-import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import { publicUrl } from '../main/Config';
 
@@ -18,6 +17,6 @@ export default function Home() {
 		<p>To begin exploring, login with username <code>admin</code> or <code>user</code>. The password
 		for both account is equal with corresponding username.</p>
 		<p>Check out our repo: <Button href="http://github.com/willnode/crm-toolkit" target="_blank"
-			rel="noopener noreferrer"><GitHubIcon /> <Box marginLeft={1}>GitHub</Box></Button></p>
+			rel="noopener noreferrer"><GitHubIcon /> <span style={{marginLeft: '0.5em'}}>GitHub</span></Button></p>
 	</Page>)
 }

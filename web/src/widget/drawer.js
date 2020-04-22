@@ -23,7 +23,7 @@ function DrawerComponent({ children }) {
   let classes = { paper: 'drawer-paper' }
   return (
     <nav>
-      <Hidden smUp>
+      <Hidden smUp implementation="css">
         <Drawer
           variant="temporary"
           classes={classes}
@@ -36,7 +36,7 @@ function DrawerComponent({ children }) {
           </div>
         </Drawer>
       </Hidden>
-      <Hidden xsDown>
+      <Hidden xsDown implementation="css">
         <Drawer
           classes={classes}
           variant="permanent"
