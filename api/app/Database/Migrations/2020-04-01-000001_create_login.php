@@ -17,11 +17,15 @@ class CreateLogin extends \CodeIgniter\Database\Migration {
 					'type'           => 'VARCHAR',
 					'constraint'     => '255',
 					'unique'         => TRUE,
+					'default'        => NULL,
+					'null'           => TRUE,
 				],
 				'email'              => [
 					'type'           => 'VARCHAR',
 					'constraint'     => '255',
 					'unique'         => TRUE,
+					'default'        => NULL,
+					'null'           => TRUE,
 				],
 				'password'           => [
 					'type'           => 'CHAR',

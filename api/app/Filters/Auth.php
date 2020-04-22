@@ -12,7 +12,7 @@ class Auth implements FilterInterface
 		$request->login = new \App\Models\LoginModel();
 		$request->room = explode('/', trim($request->uri->getPath(), '/'))[0];
 		// Role Room Precheck
-		if ($request->room && $request->room !== 'login')
+		if ($request->room && !in_array ($request->room, ['login', 'register', 'forgot'], TRUE))
 		{
 			if (empty($request->login->data) OR $request->login->data->role !== $request->room) {
 				$response = Services::response();

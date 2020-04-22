@@ -134,15 +134,15 @@ function get_default_values($table, $field_key = NULL, $select = '*') {
 	return $values;
 }
 
-function get_values_at($table, $where) {
-	return Database::connect()->table($table)->where($where)->get()->getRow();
+function get_values_at($table, $where, $select = '*') {
+	return Database::connect()->table($table)->select($select)->where($where)->get()->getRow();
 }
 
 /**
  * Like load_404, but for 204 (PUT's OK)
  */
 function load_204($msg = 'No Content') {
-	return load_error($msg, 204);
+	return load_ok($msg, 204);
 }
 
 function load_404($msg = 'Not Found') {

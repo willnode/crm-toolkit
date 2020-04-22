@@ -19,7 +19,6 @@ class UserModel extends BaseModel
 	protected $validationRules = [
 		'name' => 'required|min_length[3]|alpha_numeric_space',
 		'email' => 'required|valid_email',
-		'username' => 'required|min_length[3]|alpha_numeric'
 	];
 
 	function executeBeforeExecute($event)

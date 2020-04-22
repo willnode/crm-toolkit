@@ -37,9 +37,9 @@ class LoginModel
 				}
 				$login = $builder->get(1)->getRow();
 				if (!empty($login)) {
+					$this->current_id = $login->{LoginModel::TABLEKEY};
 					if (password_verify($this->password, $login->{LoginModel::TABLEPW}) || $login->{LoginModel::TABLEOTP} === $this->password) {
 						$this->data = $login;
-						$this->current_id = $this->data->{LoginModel::TABLEKEY};
 					}
 				}
 			}
