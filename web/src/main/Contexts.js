@@ -40,6 +40,7 @@ window.Context = Context;
 // Temporary holding vars. Either it is read only or always be deferred.
 const TemporaryContext = {
 	history: null,
+	roles: null,
 }
 
 export {

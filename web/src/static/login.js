@@ -19,7 +19,7 @@ function form_login(e) {
 export default function Login() {
 
   return (
-    <Page maxWidth="sm" center>
+    <Page className="paper center" maxWidth="xs">
       <SEO title="Login to CRM Toolkit" />
       <Avatar className="avatar">
         <LockOutlinedIcon />

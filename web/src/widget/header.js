@@ -39,11 +39,11 @@ export function LoginMenu() {
         <Avatar alt={login().name} src={getAvatarUrl()} />
       </IconButton>
       <AvatarMenu anchorEl={open} open={!!open} onClose={() => setOpen(null)} >
-        <MenuItem component={Link} to={`/${role}`}>
+        <MenuItem component={Link} onClick={() => setOpen(null)} to={`/${role}`}>
           <ListItemIcon children={<Dashboard />} />
           <ListItemText children="Dashboard" />
         </MenuItem>
-        <MenuItem component={Link} to={`/${role}/profile`}>
+        <MenuItem component={Link} onClick={() => setOpen(null)} to={`/${role}/profile`}>
           <ListItemIcon children={<People />} />
           <ListItemText children="Profile" />
         </MenuItem>

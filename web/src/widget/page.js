@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
-import Skeleton from '@material-ui/lab/Skeleton';
 import { serverGet } from '../main/Helper';
 import { useTheme } from '@material-ui/core/styles';
 import { Helmet } from 'react-helmet';
@@ -62,19 +61,20 @@ class Page extends Component {
     this.mounted = false;
   }
   Container = ({ children }) => {
-    return this.props.noStyle ? children : (
-      <Container maxWidth={this.props.maxWidth}>
-        <Box p={3} my={5} clone
-          {...(this.props.center ? {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center'
-          } : {})}>
-          <Paper>{children}</Paper>
-        </Box>
-      </Container>
-    )
+    let { className, maxWidth, props } = this.props;
+    if (this.state.status === 'loading') {
+      return !className ? <div className="paper loading">children</div> : (
+        <Container maxWidth={maxWidth}>
+            <Paper className="paper loading" {...props}>{children}</Paper>
+        </Container>
+      )
+    } else {
+      return !className ? children : (
+        <Container maxWidth={maxWidth}>
+            <Paper className={className} {...props}>{children}</Paper>
+        </Container>
+      )
+    }
   }
   ErrorPrompt = () => (
     <>
@@ -85,7 +85,7 @@ class Page extends Component {
   render() {
     return <this.Container>
       {
-        this.state.status === 'loading' ? <Skeleton animation="wave" variant="rect" width="100%" height={200} /> :
+        this.state.status === 'loading' ? <CircularProgress style={{ margin: 'auto'}}/> :
           (this.state.status === 'ok' ? this.props.children :
             <this.ErrorPrompt />)
       }
@@ -97,7 +97,7 @@ Page.propTypes = {
   dataCallback: propTypes.func,
   src: propTypes.string,
   noStyle: propTypes.bool,
-  center: propTypes.bool,
+  loading: propTypes.bool,
 }
 
 export default Page;

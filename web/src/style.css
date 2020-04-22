@@ -21,16 +21,34 @@
 	flex-shrink: 0;
 }
 .avatar {
-	margin: 0.5em;
+	margin: 1em;
+}
+.avatar.dashboard {
+	width: 200px;
+	height: 200px;
+	border-radius: 100%;
+	object-fit: cover;
 }
 .block-button {
 	display: block;
 	margin: 1em 0;
 }
 .paper {
-	margin-top: 4em;
-	display: 'flex';
-	flex-direction: 'column';
-	align-items: 'center';
-	text-align: 'center';
+	padding: 2em;
+	margin: 2em 0;
+}
+.paper.justify {
+	text-align: justify;
+}
+.paper.table {
+	padding: 0;
+}
+.paper.center, .paper.loading {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+}
+.paper-loading {
+	min-height: 10em;
 }

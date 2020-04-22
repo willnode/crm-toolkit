@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 
 
 const DrawerListItem = ({ to, icon, label }) => (
-  <ListItem component={Link} button to={to}>
+  <ListItem component={Link} onClick={() => Context.set('drawerOpen', false)} button to={to}>
     <ListItemIcon>{React.createElement(icon)}</ListItemIcon>
     <ListItemText primary={label} />
   </ListItem>

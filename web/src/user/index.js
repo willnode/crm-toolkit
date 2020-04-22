@@ -3,7 +3,7 @@ import List from '@material-ui/core/List';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import { Switch, Route } from 'react-router-dom';
 import Dashboard from './dashboard';
-import Profile from './profile';
+import Profile from 'shared/profile';
 import Page404 from 'static/404';
 import { CheckRole } from 'widget/controls';
 import { SEO } from 'widget/page';

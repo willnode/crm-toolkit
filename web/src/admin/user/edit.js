@@ -25,7 +25,7 @@ export default function () {
 	}
 
 	return (
-		<Page src={'admin/user/' + id} dataCallback={setData}>
+		<Page className="paper" maxWidth="sm" src={'admin/user/' + id} dataCallback={setData}>
 			{!data ? '' : (
 				<Form action={"admin/user/" + id} redirect={id > 0 ? doReload : (json) => history().push('/admin/user/edit/'+json.id)}>
 					<Input validator={validators.username} name="username" required label="Username" defaultValue={data.username} />

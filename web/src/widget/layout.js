@@ -15,7 +15,7 @@ function Notification() {
   </>
 }
 
-function RouteByRole({ roles, component }) {
+export function RouteByRole({ roles, component }) {
   return <Switch>{roles.map(x => <Route key={x.role} path={'/' + x.role} component={x[component]} />)}</Switch>
 }
 
@@ -29,10 +29,10 @@ export default function Layout({ roles }) {
           <Toolbar />
           <Notification />
           <RouteByRole component="main" roles={roles} />
+          <Footer children={<RouteByRole component="bottom" roles={roles} />} />
         </main>
         <RouteByRole component="right" roles={roles} />
       </div>
-      <Footer children={<RouteByRole component="bottom" roles={roles} />} />
     </div>
   )
 }

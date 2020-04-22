@@ -27,6 +27,7 @@ class App extends Component {
   }
   render() {
     document.body.className = this.props.classes.root;
+    TemporaryContext.roles = [Admin, User, Static];
     Context.bind('fetching', this.generateBinding('fetching'));
     Context.bind('auth', this.generateBinding('auth'));
     Context.bind('login', this.generateBinding('login'));
@@ -34,7 +35,7 @@ class App extends Component {
     return (
       <Layout
         key={this.state.counter}
-        roles={[Admin, User, Static]}
+        roles={TemporaryContext.roles}
       />
     );
   }

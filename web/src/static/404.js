@@ -5,12 +5,12 @@ import Page, { SEO } from '../widget/page';
 import { history } from '../main/Helper';
 
 export default function () {
-	return (
-		<Page center>
-			<SEO title="404 Not Found :(" />
-			<Typography variant="h2" gutterBottom>Error :(</Typography>
-			<p>Sorry this page this unavailable</p>
-			<Button variant="contained" onClick={() => history().goBack()}>Go Back</Button>
-		</Page>
-	)
+  return (
+    <Page className="paper center">
+      <SEO title="404 Not Found :(" />
+      <Typography variant="h2" gutterBottom>Error :(</Typography>
+      <p>Sorry this page this unavailable</p>
+      <Button variant="contained" onClick={() => history().goBack()}>Go Back</Button>
+    </Page>
+  )
 }
