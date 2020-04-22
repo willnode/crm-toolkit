@@ -16,7 +16,7 @@ function Main () {
 			<SEO title="Panel User"/>
 			<Switch>
 				<Route exact path="/user" component={Dashboard} />
-				<Route path="/user/profile" component={Profile} />
+				<Route path="/user/profile/" component={Profile} />
 				<Route component={Page404} />
 			</Switch>
 		</CheckRole>

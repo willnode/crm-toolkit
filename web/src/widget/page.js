@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import propTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -11,18 +10,18 @@ import { Helmet } from 'react-helmet';
 function SEO({ title, description, image, url }) {
   return <Helmet>
     {/* General tags */}
-    {title ? <title>{title}</title> : null}
-    {description ? <meta name="description" content={description} /> : null}
-    {image ? <meta name="image" content={image} /> : null}
-    {url ? <link rel="canonical" href={url} /> : null}	{/* OpenGraph tags */}
-    {url ? <meta property="og:url" content={url} /> : null}
-    {title ? <meta property="og:title" content={title} /> : null}
-    {description ? <meta property="og:description" content={description} /> : null}
-    {image ? <meta property="og:image" content={image} /> : null}	{/* Twitter Card tags */}
-    {image ? <meta name="twitter:card" content="summary_large_image" /> : null}
-    {title ? <meta name="twitter:title" content={title} /> : null}
-    {description ? <meta name="twitter:description" content={description} /> : null}
-    {image ? <meta name="twitter:image" content={image} /> : null}
+    {title && <title>{title}</title>}
+    {description && <meta name="description" content={description} />}
+    {image && <meta name="image" content={image} />}
+    {url && <link rel="canonical" href={url} />}	{/* OpenGraph tags */}
+    {url && <meta property="og:url" content={url} />}
+    {title && <meta property="og:title" content={title} />}
+    {description && <meta property="og:description" content={description} />}
+    {image && <meta property="og:image" content={image} />}	{/* Twitter Card tags */}
+    {image && <meta name="twitter:card" content="summary_large_image" />}
+    {title && <meta name="twitter:title" content={title} />}
+    {description && <meta name="twitter:description" content={description} />}
+    {image && <meta name="twitter:image" content={image} />}
     <meta name="theme-color" content={useTheme().palette.primary.main} />
   </Helmet>
 }
@@ -63,7 +62,7 @@ class Page extends Component {
   Container = ({ children }) => {
     let { className, maxWidth, props } = this.props;
     if (this.state.status === 'loading') {
-      return !className ? <div className="paper loading">children</div> : (
+      return !className ? <div className="paper loading">{children}</div> : (
         <Container maxWidth={maxWidth}>
             <Paper className="paper loading" {...props}>{children}</Paper>
         </Container>
@@ -91,13 +90,6 @@ class Page extends Component {
       }
     </this.Container>
   }
-}
-
-Page.propTypes = {
-  dataCallback: propTypes.func,
-  src: propTypes.string,
-  noStyle: propTypes.bool,
-  loading: propTypes.bool,
 }
 
 export default Page;
