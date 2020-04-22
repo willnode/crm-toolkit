@@ -1,6 +1,7 @@
 import React from 'react';
 import List from '@material-ui/core/List';
 import Button from '@material-ui/core/Button';
+import Hidden from '@material-ui/core/Hidden';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import CreateIcon from '@material-ui/icons/Create';
@@ -51,9 +52,11 @@ function LeftBar() {
 
 function TopBar() {
   return <>
-    <Button component={Link} to="/" color="inherit">Home</Button>
-    <Button component={Link} to="/login/" color="inherit">Login</Button>
-    <Button component={Link} to="/register/" color="inherit">Register</Button>
+    <Hidden xsDown implementation="css">
+      <Button component={Link} to="/" color="inherit">Home</Button>
+      <Button component={Link} to="/login/" color="inherit">Login</Button>
+      <Button component={Link} to="/register/" color="inherit">Register</Button>
+    </Hidden>
   </>
 }
 
