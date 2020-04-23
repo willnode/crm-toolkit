@@ -1,7 +1,7 @@
 {
-  "short_name": "Create-React-App",
-  "name": "Create-React-App",
-  "description": "Create-React-App",
+  "short_name": "CRM Toolkit",
+  "name": "CRM Toolkit",
+  "description": "CRM Toolkit is your starting template for bootstrapping any web application project",
   "icons": [
     {
     "src": "assets/logo-192.png",
@@ -14,9 +14,9 @@
     "sizes": "512x512"
     }
   ],
-  "start_url": "login",
-  "background_color": "#09d9fe",
+  "start_url": "./",
+  "background_color": "#3f51b5",
   "display": "standalone",
   "scope": "/",
-  "theme_color": "#09d9fe"
+  "theme_color": "#3f51b5"
 }
