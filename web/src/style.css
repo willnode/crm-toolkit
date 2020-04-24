@@ -33,8 +33,8 @@
 	object-fit: cover;
 }
 .block-button {
-	display: block;
-	margin: 1em 0;
+	display: block !important;
+	margin: 1em 0 !important;
 }
 .paper {
 	padding: 2em;

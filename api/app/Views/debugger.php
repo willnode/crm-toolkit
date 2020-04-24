@@ -29,7 +29,7 @@ $request = Services::request();
           <h2>Available Routes</h2>
           <ul>
             <?php foreach ($json['routes'] as $route) : ?>
-              <li><a href="<?= base_url($route) ?>"><?= $route ?></a></li>
+              <li><a href="<?= base_url($route) ?>/"><?= $route ?></a></li>
             <?php endforeach ?>
           </ul>
         <?php endif ?>
@@ -94,7 +94,8 @@ $request = Services::request();
                 <summary>UPDATE this item</summary>
                 <form method="POST" enctype="multipart/form-data" class="my-2">
                   <?php foreach ($metadata->fields as $key => $value) : ?>
-                    <input placeholder="<?= $key ?>" title="<?= $key ?>" class="form-control form-control-sm h-auto my-1" name="<?= $key ?>" type="<?= $value ?>" value="<?= esc($json['data'][$key] ?? '', 'attr') ?>">
+                    <input placeholder="<?= $key ?>" title="<?= $key ?>" class="form-control form-control-sm h-auto my-1" name="<?= $key ?>" type="<?= $value ?>" value="<?=
+                      isset($json['data'][$key]) && !is_array($json['data'][$key]) &&  !is_object($json['data'][$key]) ? esc($json['data'][$key] ?? '', 'attr') : ''?>">
                   <?php endforeach ?>
                   <p><input type="submit" class="btn btn-primary btn-sm"></p>
                 </form>

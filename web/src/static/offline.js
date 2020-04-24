@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { history } from '../main/Helper';
-import Page, { SEO } from '../widget/page';
+import { Page, SEO } from '../widget/page';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -19,7 +19,7 @@ export default function Offline() {
     <Page className="paper center" maxWidth="xs">
       <SEO title="Offline :(" />
       <Typography variant="h2" gutterBottom>Error :(</Typography>
-      <Typography variant="body1">{message}</Typography>
+      <Typography variant="body1" gutterBottom>{message}</Typography>
       <Button variant="contained" className="block-button" onClick={() => history().goBack()}>Go Back</Button>
       <Typography variant="overline" color="textSecondary">{reason}</Typography>
       <Typography variant="overline" color="textSecondary">{uri}</Typography>

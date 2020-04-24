@@ -10,13 +10,13 @@ const imageBrandUrl = publicUrl + '/assets/logo.png';
 const imageNavbarUrl = publicUrl + '/assets/logo-navbar.png';
 
 export {
-	appKey,
-	appTitle,
-	isProduction,
-	publicUrl,
-	serverUrl,
-	uploadsUrl,
-	imageAvatarUrl,
-	imageBrandUrl,
-	imageNavbarUrl,
+  appKey,
+  appTitle,
+  isProduction,
+  publicUrl,
+  serverUrl,
+  uploadsUrl,
+  imageAvatarUrl,
+  imageBrandUrl,
+  imageNavbarUrl,
 }

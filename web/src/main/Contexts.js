@@ -9,26 +9,26 @@
 // or more state with same name at a time. Enjoy.
 
 class ContextInstance {
-	// Inner variable
-	states = {}
-	// Get current state
-	get = (param) => (x => x && x[0])(this.states[param])
-	// Set value of state. Source hook will be triggered.
-	set(param, val) {
-		if (this.states[param]) {
-			this.states[param][0] = val;
-			this.states[param][1](val);
-		}
-	}
-	// Send useState() values here every render call
-	bind(param, state) {
-		this.states[param] = state;
-		return state;
-	}
-	// Prevent state leaks by calling this before unmount.
-	unbind(param) {
-		delete this.states[param];
-	}
+  // Inner variable
+  states = {}
+  // Get current state
+  get = (param) => (x => x && x[0])(this.states[param])
+  // Set value of state. Source hook will be triggered.
+  set(param, val) {
+    if (this.states[param]) {
+      this.states[param][0] = val;
+      this.states[param][1](val);
+    }
+  }
+  // Send useState() values here every render call
+  bind(param, state) {
+    this.states[param] = state;
+    return state;
+  }
+  // Prevent state leaks by calling this before unmount.
+  unbind(param) {
+    delete this.states[param];
+  }
 }
 
 // Singleton.
@@ -39,11 +39,11 @@ window.Context = Context;
 
 // Temporary holding vars. Either it is read only or always be deferred.
 const TemporaryContext = {
-	history: null,
-	roles: null,
+  history: null,
+  roles: null,
 }
 
 export {
-	Context,
-	TemporaryContext,
+  Context,
+  TemporaryContext,
 }

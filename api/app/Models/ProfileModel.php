@@ -17,13 +17,7 @@ class ProfileModel extends BaseModel
 		'name' => 'required|min_length[3]',
 		'email' => 'required|valid_email'
 	];
-
-	protected function executeBeforeExecute($event)
-	{
-		if ($event['method'] === DELETE)
-			$event['response'] = load_405();
-		return $event;
-	}
+	protected $only_flag = [ SELECT, UPDATE ];
 
 	protected function executeBeforeChange($event)
 	{

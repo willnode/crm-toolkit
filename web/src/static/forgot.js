@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { history, setMessage, doLogin } from '../main/Helper';
-import Page, { SEO } from '../widget/page';
+import { Page, SEO } from '../widget/page';
 import { Input, Form, Submit } from '../widget/controls';
 import {
   useValidator, required, minLength, validEmail,

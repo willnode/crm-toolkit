@@ -58,6 +58,21 @@ class BaseModel extends Model
 	 */
 	protected $indexable = [];
 	/**
+	 * Set columns that is need to be expanded up
+	 * @var array
+	 */
+	protected $expandableUp = [];
+	/**
+	 * Set columns that is need to be expanded down
+	 * @var array
+	 */
+	protected $expandableDown = [];
+	/**
+	 * Composite key name (for handling M2M table)
+	 */
+	protected $compositeKey = NULL;
+
+	/**
 	 * Callbacks for afterFind.
 	 * (Useful for subquering, etc).
 	 * e => ['data', 'index']
@@ -74,7 +89,7 @@ class BaseModel extends Model
 	 * specified (NOT RECOMMENDED).
 	 * @var int[]|null
 	 */
-	protected $enforcedPaginations = [100];
+	protected $enforcedPaginations = [100, 50, 25, 20, 10, 5];
 
 	// ----------------------------------------
 	// POST VERB PROPS
@@ -134,9 +149,16 @@ class BaseModel extends Model
 	protected $beforeDelete = [];
 	protected $afterDelete = [];
 
+	protected $query_flag = NULL;
+	protected $depth_flag = 0;
+	protected $only_flag = NULL;
+	protected $where_flag = NULL;
+
 	public function __construct(ConnectionInterface &$db = null, ValidationInterface $validation = null)
 	{
 		parent::__construct($db, $validation);
+		$this->afterFind[] = 'executeExpandable';
+		$this->afterFind[] = 'executeAfterFind';
 		$this->beforeExecute[] = 'executeBeforeExecute';
 		$this->beforeChange[] = 'executeBeforeChange';
 		$this->afterChange[] = 'executeAfterChange';
@@ -146,7 +168,15 @@ class BaseModel extends Model
 		$this->afterUpdate[] = 'executeAfterUpdate';
 		$this->beforeDelete[] = 'executeBeforeDelete';
 		$this->afterDelete[] = 'executeAfterDelete';
-		Services::request()->model = $this;
+	}
+
+	public function only($flags) {
+		$this->only_flag = $flags;
+		return $this;
+	}
+	public function where($flags) {
+		$this->where_flag = $flags;
+		return $this;
 	}
 
 	public function getMetadata()
@@ -159,7 +189,7 @@ class BaseModel extends Model
 		return (object)[
 			'name' => static::class,
 			'id' => $this->id ?? NULL,
-			'query' => isset($this->query) ? array_merge($queryCan, $this->query) : NULL,
+			'query' => $this->query_flag ? array_merge($queryCan, $this->query_flag) : NULL,
 			'fields' => $fields,
 			'method' => $this->method,
 			'files' => $this->fileUploadRules,
@@ -212,6 +242,19 @@ class BaseModel extends Model
 		$result['orderBy'] = $orderBy;
 		$result['orderDirection'] = $orderDirection;
 
+		// Group By
+		$groupBy = $query['groupBy'] ?? NULL;
+		$groupBy = $groupBy ?: NULL;
+		if ($groupBy)
+		{
+			if (is_array($this->indexable) AND
+				array_search($groupBy, $this->indexable,
+				TRUE) === FALSE)
+				$groupBy = NULL;
+		}
+		$result['groupBy'] = $groupBy;
+
+
 		// Search
 		if (empty($this->searchable)) {
 			$search = NULL;
@@ -227,6 +270,9 @@ class BaseModel extends Model
 				$query,
 				array_flip($this->indexable)
 			);
+			if (count($result['filters']) === 0) {
+				$result['filters'] = NULL;
+			}
 		} else {
 			$result['filters'] = NULL;
 		}
@@ -243,11 +289,27 @@ class BaseModel extends Model
 		$request = Services::request();
 		$method = $request->getMethod();
 		if (ENVIRONMENT === 'development') {
+			$request->model = $this;
 			// Workaround because debugger can't submit DELETE on HTML.
 			// Turned off during production for good.
 			if ($method === GET AND $request->getGet('delete')) {
 				$method = DELETE;
 			}
+		}
+		if ($id === "") {
+			$id = NULL;
+		}
+		if (is_array($this->only_flag)) {
+			if ($method === GET && array_search(SELECT, $this->only_flag) === false) {
+				return load_405();
+			} else if ($method === POST && array_search($id === NULL ? CREATE : UPDATE, $this->only_flag) === false) {
+				return load_405();
+			} else if ($method === DELETE && array_search(DELETE, $this->only_flag) === false) {
+				return load_405();
+			}
+		}
+		if (is_array($this->where_flag)) {
+			$cursor->where($this->where_flag);
 		}
 		$event = $this->trigger('beforeExecute', [
 			'builder' => $cursor,
@@ -263,7 +325,7 @@ class BaseModel extends Model
 		if ($method === GET) {
 			if ($id !== NULL) {
 				// Specific Index
-				if ($id == 0) {
+				if ($id === "0") {
 					$data = get_default_values(
 						$this->table, $this->primaryKey,
 						$this->select);
@@ -283,9 +345,10 @@ class BaseModel extends Model
 			// These keys name has been matched with
 			// Material-UI's table remote data query.
 			// Notice: the page starts from zero
-			$this->query = [
+			$this->query_flag = [
 				'page' => $page,
 				'pageSize' => $pageSize,
+				'groupBy' => $groupBy,
 				'orderBy' => $orderBy,
 				'orderDirection' => $orderDirection,
 				'search' => $search,
@@ -308,7 +371,10 @@ class BaseModel extends Model
 				}
 				$cursor->groupEnd();
 			}
-
+			// echo $cursor->countAllResults(); exit;
+			if ($groupBy !== NULL) {
+				$cursor->groupBy($groupBy);
+			}
 			$count = $cursor->countAllResults(false);
 
 			if ($page !== NULL) {
@@ -365,9 +431,37 @@ class BaseModel extends Model
 		return load_405();
 	}
 
+	/** @return mixed */
+	public function executeNested($flags) {
+		extract($flags, EXTR_REFS);
+		if (!$data) {
+			return $data;
+		}
+		// In GET, $data is ID
+		$cursor = $this->builder();
+		$this->depth_flag = $depth;
+		if ($method === GET) {
+			if ($mode === 'up') {
+				$cursor->select($this->select);
+				return $this->find($data);
+			}
+			else if ($mode === 'down') {
+				$cursor->select($this->select);
+				$cursor->where($data);
+				return $this->find();
+			}
+		}
+		return $data;
+	}
+
 	protected function executeBeforeInsert($event) {
 		foreach ($this->fileUploadRules as $name => $attr) {
 			control_file_upload($event['data'], $name, $attr, NULL);
+		}
+		if (is_array($this->where_flag)) {
+			foreach ($this->where_flag as $key => $value) {
+				$event['data'][$key] = $value;
+			}
 		}
 		$event['data'] = $this->trigger('beforeChange', [
 			'id'=> 0,
@@ -384,6 +478,11 @@ class BaseModel extends Model
 			throw new ValidationException("Not Found");
 		foreach ($this->fileUploadRules as $name => $attr) {
 			control_file_upload($event['data'], $name, $attr, $existing);
+		}
+		if (is_array($this->where_flag)) {
+			foreach ($this->where_flag as $key => $value) {
+				$event['data'][$key] = $value;
+			}
 		}
 		$event['data'] = $this->trigger('beforeChange', [
 			'id'=> $id,
@@ -439,6 +538,62 @@ class BaseModel extends Model
 		$event['data'] = NULL;
 		$event['method'] = DELETE;
 		$this->trigger('afterChange', $event);
+		return $event;
+	}
+
+	protected function executeExpandable($event) {
+		// Ensure this is a individual object query
+		if (!$this->query_flag) {
+			if (count($this->expandableUp) > 0 && $this->depth_flag >= 0 && $this->depth_flag < 5) {
+				foreach ($this->expandableUp as $key => $value) {
+					if ($event['data'][$key] ?? NULL) {
+						$event['data'][$key] = (new $value())->executeNested([
+							'mode' => 'up',
+							'data' => $event['data'][$key],
+							'method' => GET,
+							'depth' => $this->depth_flag + 1
+						]);
+					}
+				}
+			}
+			if (count($this->expandableDown) > 0 && $this->depth_flag <= 0 && $this->depth_flag > -5) {
+				foreach ($this->expandableDown as $key => $value) {
+					$model = new $value();
+					if (isset($event['id'])) {
+						if ($model->compositeKey) {
+							$event['data'][$key] = array_map(function($v) use ($model) {
+								$v[$model->compositeKey] = $v[$model->compositeKey][0];
+								return $v;
+							}, $model->executeNested([
+								'mode' => 'down',
+								'data' => [ $model->primaryKey => $event['id'] ],
+								'method' => GET,
+								'depth' => $this->depth_flag - 1
+							]));
+						} else {
+							$event['data'][$key] = $model->executeNested([
+								'mode' => 'down',
+								'data' => [ $key => $event['id'] ],
+								'method' => GET,
+								'depth' => $this->depth_flag - 1
+							]);
+						}
+					} else {
+						foreach ($event['data'] as &$value) {
+							$value[$this->compositeKey ?: $key] = $model->executeNested([
+								'mode' => 'down',
+								'data' => [ $key => $value[$this->compositeKey ?: $this->primaryKey] ],
+								'method' => GET,
+								'depth' => $this->depth_flag - 1
+							]);
+						}
+					}
+				}
+			}
+		}
+		return $event;
+	}
+	protected function executeAfterFind($event) {
 		return $event;
 	}
 }

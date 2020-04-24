@@ -2,8 +2,8 @@ import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { history, extractForm, doLogin } from '../main/Helper';
-import Page, { SEO } from '../widget/page';
+import { history, extractForm, doLogin, setError } from '../main/Helper';
+import { Page, SEO } from '../widget/page';
 import { Input, Form, Submit, Checkbox } from '../widget/controls';
 
 
@@ -13,7 +13,7 @@ function form_login(e) {
     data.get('username'),
     data.get('password'),
     data.has('rememberme')
-  ).then((login) => history().push('/' + login.role))
+  ).then((login) => history().push('/' + login.role)).catch((e) => setError(e))
 }
 
 export default function Login() {

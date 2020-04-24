@@ -1,15 +1,15 @@
-import React, { useState, useMemo } from 'react';
-import Page from '../widget/page';
-import { Form, Input, Submit, File } from '../widget/controls';
+import React, { useMemo } from 'react';
+import { Page } from 'widget/page';
+import { Form, Input, Submit, File } from 'widget/controls';
 import Typography from '@material-ui/core/Typography';
-import { Context } from '../main/Contexts';
-import { doLogin, login, setMessage } from '../main/Helper';
-import { appKey } from '../main/Config';
+import { Context } from 'main/Contexts';
+import { doLogin, login, setMessage } from 'main/Helper';
+import { appKey } from 'main/Config';
 import {
   useValidator, required, minLength, validEmail,
   matchesValue, matchesField, requireField,
   checkAllValidators, matchesRegex
-} from '../widget/validators';
+} from 'widget/validators';
 import Box from '@material-ui/core/Box';
 
 function submit(_, data) {
@@ -20,10 +20,8 @@ function submit(_, data) {
 }
 
 export default function () {
-  const [data, setData] = useState(null);
   const role = login().role;
   const curPassword = useMemo(() => (atob(Context.get('auth').substr(6)).split(':', 2)[1]), []);
-  const form = data && data.data;
   const validators = {
     name: useValidator(required(), minLength(3), matchesRegex(/^[\w -'"]+$/)),
     email: useValidator(required(), validEmail()),
@@ -32,21 +30,20 @@ export default function () {
     passconf: useValidator(matchesField('password')),
   }
   return (
-    <Page className="paper" maxWidth="sm" src={`${role}/profile`} dataCallback={setData} >
-      <Typography variant="h4">Edit Profile</Typography>
-      {
-        data ? (
-          <Form action={`${role}/profile`} redirect={submit}>
-            <Input validator={validators.name} name="name" label="Name" defaultValue={form.name} required />
-            <Input validator={validators.email} name="email" label="Email" defaultValue={form.email} required type="email" />
-            <File folder="avatar" name="avatar" label="Avatar" defaultValue={form.avatar} accept="image/*"/>
-            <Box marginTop={5}>If you need to change your password, enter the new password:</Box>
-            <Input validator={validators.oldpass} name="oldpass" label="Current Password" type="password" autoComplete="current-password" />
-            <Input validator={validators.password} name="password" label="New Password" type="password" autoComplete="new-password" />
-            <Input validator={validators.passconf} name="passconf" label="Re-enter New Password" type="password" autoComplete="new-password" />
-            <Submit disabled={!checkAllValidators(validators)} />
-          </Form>
-        ) : null
-      }
-    </Page>)
+    <Page className="paper" maxWidth="sm" src={`${role}/profile`}>
+      {({ data }) => (
+        <Form action={`${role}/profile`} redirect={submit}>
+          <Typography variant="h4">Edit Profile</Typography>
+          <Input validator={validators.name} name="name" label="Name" defaultValue={data.name} required />
+          <Input validator={validators.email} name="email" label="Email" defaultValue={data.email} required type="email" />
+          <File folder="avatar" name="avatar" label="Avatar" defaultValue={data.avatar} accept="image/*" />
+          <Box marginTop={5}>If you need to change your password, enter the new password:</Box>
+          <Input validator={validators.oldpass} name="oldpass" label="Current Password" type="password" autoComplete="current-password" />
+          <Input validator={validators.password} name="password" label="New Password" type="password" autoComplete="new-password" />
+          <Input validator={validators.passconf} name="passconf" label="Re-enter New Password" type="password" autoComplete="new-password" />
+          <Submit disabled={!checkAllValidators(validators)} />
+        </Form>
+      )}
+    </Page>
+  )
 }

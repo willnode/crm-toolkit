@@ -1,17 +1,39 @@
 import { useState, useRef, useEffect } from "react";
 
 function useValidator(...fun) {
-  const [valid, setValid] = useState('');
+  const [valid, setValid] = useState(null);
   const thedom = useRef();
   const thecallback = useRef();
-  return [valid, (e) => setValid(combine(fun)(e)), thedom, thecallback]
+  // validator contents
+  // 0: Boolean if content valid
+  // 1: Function to check & set validity
+  // 2: Ref to function that trigger change
+  // 3: Ref to function that change on all input
+  return [valid, (e) => {
+    let r = combine(fun)(e);
+    if (r === undefined) {
+      r = '';
+    }
+    if (r === '') {
+      e.target.didHasFocus = true;
+    }
+    setValid(e.target.didHasFocus ? r : null)
+  }, thedom, thecallback]
 }
 
 function checkAllValidators(validators) {
   const validatorCallbacks = Object.values(validators);
   const harmonyCallback = combine(validatorCallbacks.map(x => x[2].current))
   validatorCallbacks.forEach(x => x[3].current = harmonyCallback);
-  return validatorCallbacks.every(x => !x[0]);
+  return validatorCallbacks.every(x => x[0] !== null && !x[0]);
+}
+
+function useHandlePropagateError(ref) {
+  // this injects didHaveFocus to DOM for quick cache
+  return ref.current && (
+    ref.current.didHaveFocus || (
+      ref.current.didHaveFocus = document.activeElement === ref.current)
+  );
 }
 
 function useHandleControlValidator(validator, ref) {
@@ -45,6 +67,7 @@ export {
   useValidator,
   checkAllValidators,
   useHandleControlValidator,
+  useHandlePropagateError,
   matchesRegex,
   required,
   minLength,

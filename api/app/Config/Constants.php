@@ -23,6 +23,7 @@ define('GET', 'get');
 define('POST', 'post');
 define('PUT', 'put');
 define('OPTIONS', 'options');
+define('SELECT', 'select');
 define('DELETE', 'delete');
 define('UPDATE', 'update');
 define('CREATE', 'create');

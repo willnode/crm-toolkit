@@ -44,7 +44,7 @@ function LeftBar() {
         <DrawerListItem to="/" icon={DashboardIcon} label="Home" />
         <DrawerListItem to="/login/" icon={VpnKeyIcon} label="Login" />
         <DrawerListItem to="/register/" icon={CreateIcon} label="Register" />
-        <DrawerListItem to="/forgot/" icon={HistoryIcon} label="Recover Password" />
+        <DrawerListItem to="/forgot/" icon={HistoryIcon} label="Recover" />
       </List>
     </DrawerComponent>
   )

@@ -31,8 +31,9 @@ export function LoginMenu() {
       horizontal: 'center',
     }}
   />;
-  const role = login().role;
+  const role = login() && login().role;
   const [open, setOpen] = React.useState(null);
+  if (!role) return <></>
   return (
     <>
       <IconButton disableRipple size="small" onClick={(e) => setOpen(open ? null : e.currentTarget)}>
