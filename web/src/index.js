@@ -7,6 +7,7 @@ import * as serviceWorker from './serviceWorker';
 import { publicUrl } from './main/Config';
 import App from './main/App';
 import { Context } from './main/Contexts';
+import { ErrorBoundary } from './static/offline';
 import './style.css';
 
 function GenerateTheme(theme) {
@@ -32,7 +33,9 @@ function MainApp() {
     <ThemeProvider theme={generated}>
       <CssBaseline />
       <BrowserRouter forceRefresh={false} basename={publicUrl}>
-        <App />
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
       </BrowserRouter>
     </ThemeProvider>
   );

@@ -15,6 +15,8 @@ import Offline from './offline';
 import Page404 from './404';
 import { login } from 'main/Helper';
 import { DrawerComponent, DrawerListItem } from 'widget/drawer';
+import { HeaderComponent } from 'widget/header';
+import { FooterComponent } from 'widget/footer';
 
 function RedirectIfLoggedInOrShow({ component }) {
   return login() ? <Redirect to={'/' + login().role + '/'} /> : React.createElement(component);
@@ -51,13 +53,19 @@ function LeftBar() {
 }
 
 function TopBar() {
-  return <>
-    <Hidden xsDown implementation="css">
-      <Button component={Link} to="/" color="inherit">Home</Button>
-      <Button component={Link} to="/login/" color="inherit">Login</Button>
-      <Button component={Link} to="/register/" color="inherit">Register</Button>
-    </Hidden>
-  </>
+  return (
+    <HeaderComponent>
+      <Hidden xsDown implementation="css">
+        <Button component={Link} to="/" color="inherit">Home</Button>
+        <Button component={Link} to="/login/" color="inherit">Login</Button>
+        <Button component={Link} to="/register/" color="inherit">Register</Button>
+      </Hidden>
+    </HeaderComponent>
+  )
+}
+
+function BottomBar() {
+  return <FooterComponent />
 }
 
 export default {
@@ -65,4 +73,5 @@ export default {
   main: Main,
   top: TopBar,
   left: LeftBar,
+  bottom: BottomBar
 }

@@ -37,6 +37,9 @@ function DrawerComponent({ children }) {
         </Drawer>
       </Hidden>
       <Hidden xsDown implementation="css">
+        <div className="drawer-paper">
+          {/* Dummy div for holding the fixed drawer */}
+        </div>
         <Drawer
           classes={classes}
           variant="permanent"

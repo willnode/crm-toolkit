@@ -1,0 +1,62 @@
+/*
+	This is a utility that uses part of Bootstrap functionality.
+	Like any other features this is an opt-in: Uncomment the
+	import line in ../style.css to enable it. See Documentation FAQ
+	for use case and more details.
+*/
+
+@import "~bootstrap/dist/css/bootstrap-grid.css";
+
+.w-100 {
+	width: 100%;
+}
+
+.text-primary {
+	color: var(--primary);
+}
+.text-secondary {
+	color: var(--secondary);
+}
+.text-white {
+	color: white;
+}
+.text-black {
+	color: black;
+}
+.bg-primary {
+	background-color: var(--primary-dark);
+}
+.bg-secondary {
+	background-color: var(--secondary-dark);
+}
+.bg-background {
+	background-color: var(--background);
+}
+.bg-paper {
+	background-color: var(--paper);
+}
+
+.text-left {
+	text-align: left !important;
+}
+.text-right {
+	text-align: right !important;
+}
+.text-center {
+	text-align: center !important;
+}
+.text-justify {
+	text-align: justify !important;
+}
+
+.text-wrap {
+	white-space: normal !important;
+}
+.text-nowrap {
+	white-space: nowrap !important;
+}
+.text-truncate {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}

@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import Header from './header';
-import Footer from './footer';
 import Alert from '@material-ui/lab/Alert';
-import Toolbar from '@material-ui/core/Toolbar';
 import { Context } from 'main/Contexts';
 import { Switch, Route } from 'react-router-dom';
 
@@ -22,14 +19,13 @@ export function RouteByRole({ roles, component }) {
 export default function Layout({ roles }) {
   return (
     <div className="layout-root">
-      <Header children={<RouteByRole component="top" roles={roles} />} />
+      <RouteByRole component="top" roles={roles} />
       <div className="layout-side">
         <RouteByRole component="left" roles={roles} />
         <main className="layout-content">
-          <Toolbar />
           <Notification />
           <RouteByRole component="main" roles={roles} />
-          <Footer children={<RouteByRole component="bottom" roles={roles} />} />
+          <RouteByRole component="bottom" roles={roles} />
         </main>
         <RouteByRole component="right" roles={roles} />
       </div>

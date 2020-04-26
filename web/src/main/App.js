@@ -49,12 +49,12 @@ export default withRouter(withStyles((theme) => ({
     '--background': theme.palette.background.default,
     '--paper': theme.palette.background.paper,
     '--primary': theme.palette.primary.main,
+    '--primary-light': theme.palette.primary.light,
+    '--primary-dark': theme.palette.primary.dark,
     '--secondary': theme.palette.secondary.main,
+    '--secondary-light': theme.palette.secondary.light,
+    '--secondary-dark': theme.palette.secondary.dark,
     '--z-index-appbar': (theme.zIndex.drawer + 1),
     '--drawer-width': '240px',
-    '--layout-left-padding': 0,
-    [`@media(min-width: ${theme.breakpoints.values.sm}px)`] : {
-      '--layout-left-padding': 'var(--drawer-width)',
-    }
   }, // a style rule
 }))(App));

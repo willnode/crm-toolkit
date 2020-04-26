@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { appTitle } from 'main/Config';
 
-export default function Footer({ children }) {
+export function FooterComponent({ children }) {
   return (<div className="layout-footer">
     {children}
     <Typography variant="body2" color="textSecondary" align="center">

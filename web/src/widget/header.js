@@ -57,11 +57,11 @@ export function LoginMenu() {
   )
 }
 
-export default function Header({ children }) {
+export function HeaderComponent({ children }) {
   return (
-    <AppBar position="fixed" className="appbar-root">
+    <AppBar position="sticky" className="appbar-root">
       <Toolbar>
-        <Hidden smUp>
+        <Hidden smUp implementation="css">
           <IconButton
             color="inherit"
             aria-label="open drawer"
