@@ -33,7 +33,7 @@ export function LoginMenu() {
   />;
   const role = login() && login().role;
   const [open, setOpen] = React.useState(null);
-  if (!role) return <></>
+  if (!role) return null;
   return (
     <>
       <IconButton disableRipple size="small" onClick={(e) => setOpen(open ? null : e.currentTarget)}>

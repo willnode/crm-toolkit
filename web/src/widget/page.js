@@ -58,11 +58,11 @@ const Page = React.memo(({ src, className, maxWidth, children, ...props }) => {
         <Typography variant="body1">Sorry you might be offline. Check your connection.</Typography>
       </div>
     ) : typeof children === "function" ? children(data) : children;
-    return (
+    return className ? (
       <Container maxWidth={maxWidth}>
         <Paper className={className} {...props}>{page}</Paper>
       </Container>
-    );
+    ) : page;
   }
 });
 

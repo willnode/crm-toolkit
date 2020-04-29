@@ -68,6 +68,8 @@ const doLogout = () => {
   history().push('/login');
 }
 
+const getQueryParam = (param) => new URLSearchParams(window.location.search).get(param);
+
 const getAvatarUrl = (avatar) => {
   avatar = avatar === undefined ? (x => x && x.avatar)(login()) : avatar;
   return avatar ? uploadsUrl + '/avatar/' + avatar : imageAvatarUrl
@@ -97,5 +99,6 @@ export {
   setError, setMessage,
   history, login, doLogin,
   doLogout, doReload,
+  getQueryParam,
   popMessages,
 };

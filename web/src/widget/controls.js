@@ -27,7 +27,7 @@ import NextPageIcon from '@material-ui/icons/NavigateNext';
 import PrevPageIcon from '@material-ui/icons/NavigateBefore';
 
 import {
-  setMessage, setError, login, serverGet,
+  setMessage, setError, login, serverGet, history,
   serverDelete, serverPost, history, extractForm, popMessages
 } from '../main/Helper';
 import { Context } from '../main/Contexts';
@@ -64,7 +64,7 @@ function controlPost(url, redirect) {
 
 
 function CheckRole({ role, children }) {
-  return !login() || login().role !== role ? <Redirect to="/login" /> : children;
+  return !login() || login().role !== role ? <Redirect to={"/login/?redirect=" + encodeURIComponent(history().location.pathname)} /> : children;
 }
 
 

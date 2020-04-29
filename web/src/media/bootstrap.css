@@ -8,32 +8,48 @@
 @import "~bootstrap/dist/css/bootstrap-grid.css";
 
 .w-100 {
-	width: 100%;
+	width: 100% !important;
 }
-
+.float-right {
+	float: right !important;
+}
+.float-left {
+	float: left !important;
+}
 .text-primary {
-	color: var(--primary);
+	color: var(--primary) !important;
 }
 .text-secondary {
-	color: var(--secondary);
+	color: var(--secondary) !important;
 }
 .text-white {
-	color: white;
+	color: white !important;
 }
 .text-black {
-	color: black;
+	color: black !important;
 }
+
 .bg-primary {
-	background-color: var(--primary-dark);
+	background-color: var(--primary-dark) !important;
 }
 .bg-secondary {
-	background-color: var(--secondary-dark);
+	background-color: var(--secondary-dark) !important;
 }
 .bg-background {
-	background-color: var(--background);
+	background-color: var(--background) !important;
 }
 .bg-paper {
-	background-color: var(--paper);
+	background-color: var(--paper) !important;
+}
+
+.font-weight-light {
+	font-weight: 300 !important;
+}
+.font-weight-normal {
+	font-weight: 400 !important;
+}
+.font-weight-bold {
+	font-weight: 700 !important;
 }
 
 .text-left {

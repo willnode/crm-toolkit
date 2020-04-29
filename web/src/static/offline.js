@@ -2,13 +2,9 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { history } from '../main/Helper';
+import { history, getQueryParam } from '../main/Helper';
 import { Page, SEO } from '../widget/page';
 import { isProduction } from 'main/Config';
-
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -29,8 +25,8 @@ class ErrorBoundary extends React.Component {
 }
 
 export default function Offline({ reason }) {
-  reason = (useQuery().get('reason') || reason || '');
-  let uri = (useQuery().get('uri') || '').replace(/\?.+/, '');
+  reason = (getQueryParam('reason') || reason || '');
+  let uri = (getQueryParam('uri') || '').replace(/\?.+/, '');
   let message = reason.includes('fetch') ? 'Sorry, we can\'t reach to server. Please check your connection.' :
     reason.includes('Unexpected') ? 'Sorry, we have problems in our server. Try again later.' :
       'Sorry, there\'s an unexpected error going on. Please try again later.';
