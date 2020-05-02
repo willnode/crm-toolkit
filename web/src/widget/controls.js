@@ -22,13 +22,16 @@ import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
 import SortIcon from '@material-ui/icons/ArrowUpward';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArchiveIcon from '@material-ui/icons/Archive';
+import ArchiveRIcon from '@material-ui/icons/ArchiveRounded';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import NextPageIcon from '@material-ui/icons/NavigateNext';
 import PrevPageIcon from '@material-ui/icons/NavigateBefore';
 
 import {
   setMessage, setError, login, serverGet, history,
-  serverDelete, serverPost, history, extractForm, popMessages
+  serverDelete, serverPost, extractForm, popMessages, getQueryParam
 } from '../main/Helper';
 import { Context } from '../main/Contexts';
 import MaterialTable from 'material-table';
@@ -224,6 +227,18 @@ function RemoteTable({ src, itemKey, itemLabel, predefinedActions, title, action
   actions = useMemo(() => {
     return [...(actions || []), ...([
       {
+        key: 'back',
+        icon: () => <ArrowBackIcon />,
+        tooltip: 'Go Back',
+        isFreeAction: true,
+        onClick: () => history().goBack(),
+      }, {
+        key: 'archive',
+        icon: () => getQueryParam('archive') ? <ArchiveRIcon /> : <ArchiveIcon />,
+        tooltip: 'Toggle Archive',
+        isFreeAction: true,
+        onClick: () => history().replace(`?archive=${getQueryParam('archive') ? '' : '1'}`),
+      }, {
         key: 'add',
         icon: () => <AddIcon />,
         tooltip: 'Add ' + itemLabel,
@@ -267,6 +282,7 @@ function RemoteTable({ src, itemKey, itemLabel, predefinedActions, title, action
   }, []); // Always only updated once
   data = data || (query => new Promise((resolve, reject) => {
     let url = src + '?' + new URLSearchParams(query).toString();
+    if (window.location.search) url += '&' + window.location.search.substr(1);
     serverGet(url).then(r => mounted.current && resolve(r));
   })); // Already sync with our server
   options = options || {};

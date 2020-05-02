@@ -512,12 +512,23 @@ class BaseModel extends Model
 	}
 
 
+	/**
+	 *  @param array $event = ['builder', 'id', 'request', 'method']
+	 */
 	protected function executeBeforeExecute($event) {
 		return $event;
 	}
+
+	/**
+	 * @param array $event = ['id', 'data', 'existing', 'method']
+	 */
 	protected function executeBeforeChange($event) {
 		return $event;
 	}
+
+	/**
+	 * @param array $event = ['id', 'data', 'method']
+	 */
 	protected function executeAfterChange($event) {
 		return $event;
 	}
