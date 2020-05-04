@@ -13,6 +13,7 @@ function SEO({ title, description, image, url }) {
     {title && <title>{title}</title>}
     {description && <meta name="description" content={description} />}
     {image && <meta name="image" content={image} />}
+    {image && <meta name="thumbnail" content={image} />}
     {url && <link rel="canonical" href={url} />}
     <meta name="theme-color" content={useTheme().palette.primary.main} />
     {/* OpenGraph tags */}
