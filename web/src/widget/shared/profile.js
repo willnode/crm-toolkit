@@ -1,22 +1,22 @@
 import React, { useMemo } from 'react';
-import { Page } from 'widget/page';
-import { Form, Input, Submit, File } from 'widget/controls';
+import { Page } from '../../widget/page';
+import { Form, Input, Submit, File } from '../../widget/controls';
 import Typography from '@material-ui/core/Typography';
-import { Context } from 'main/Contexts';
-import { doLogin, login, setMessage } from 'main/Helper';
-import { appKey } from 'main/Config';
+import { Context } from '../../main/Contexts';
+import { doLogin, login, setMessage, doReload } from '../../main/Helper';
+import { appKey } from '../../main/Config';
 import {
   useValidator, required, minLength, validEmail,
   matchesValue, matchesField, requireField,
   checkAllValidators, matchesRegex
-} from 'widget/validators';
+} from '../../widget/validators';
 import Box from '@material-ui/core/Box';
 
 function submit(_, data) {
   doLogin(
     (data.get('email') || login().email),
     (data.get('password') || (atob(Context.get('auth').substr(6)).split(':', 2)[1])),
-    Boolean(localStorage.getItem(appKey + 'appauth'))).then(() => setMessage('Successfully Saved'));
+    Boolean(localStorage.getItem(appKey + 'appauth'))).then(() => [doReload(), setMessage('Successfully Saved')]);
 }
 
 export default function () {
@@ -34,8 +34,8 @@ export default function () {
       {({ data }) => (
         <Form action={`${role}/profile`} redirect={submit}>
           <Typography variant="h4">Edit Profile</Typography>
-          <Input validator={validators.name} name="name" label="Name" defaultValue={data.name} required />
-          <Input validator={validators.email} name="email" label="Email" defaultValue={data.email} required type="email" />
+          <Input validator={validators.name} name="name" label="Name" defaultValue={data.name} />
+          <Input validator={validators.email} name="email" label="Email" defaultValue={data.email} type="email" />
           <File folder="avatar" name="avatar" label="Avatar" defaultValue={data.avatar} accept="image/*" />
           <Box marginTop={5}>If you need to change your password, enter the new password:</Box>
           <Input validator={validators.oldpass} name="oldpass" label="Current Password" type="password" autoComplete="current-password" />

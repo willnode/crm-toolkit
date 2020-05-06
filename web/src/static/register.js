@@ -1,14 +1,14 @@
 import React from 'react';
-import { Page, SEO } from 'widget/page';
+import { Page, SEO } from '../widget/page';
 import Avatar from '@material-ui/core/Avatar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { Form, Input, Submit, Checkbox } from 'widget/controls';
+import { Form, Input, Submit, Checkbox } from '../widget/controls';
 import Typography from '@material-ui/core/Typography';
-import { doLogin, setMessage, history } from 'main/Helper';
+import { doLogin, setMessage, history } from '../main/Helper';
 import {
   useValidator, required, minLength, validEmail,
   checkAllValidators, matchesRegex, matchesField
-} from 'widget/validators';
+} from '../widget/validators';
 
 function submit(_, data) {
   doLogin(

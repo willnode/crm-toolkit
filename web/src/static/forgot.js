@@ -10,7 +10,7 @@ import {
   useValidator, required, minLength, validEmail,
   checkAllValidators, matchesField
 } from '../widget/validators';
-import { Context } from 'main/Contexts';
+import { Context } from '../main/Contexts';
 
 function InnerForm({ onOk }) {
   const actionRef = useRef();

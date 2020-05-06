@@ -13,10 +13,10 @@ import Forgot from './forgot';
 import Register from './register';
 import Offline from './offline';
 import Page404 from './404';
-import { login } from 'main/Helper';
-import { DrawerComponent, DrawerListItem } from 'widget/drawer';
-import { HeaderComponent } from 'widget/header';
-import { FooterComponent } from 'widget/footer';
+import { login } from '../main/Helper';
+import { DrawerComponent, DrawerListItem } from '../widget/drawer';
+import { HeaderComponent } from '../widget/header';
+import { FooterComponent } from '../widget/footer';
 
 function RedirectIfLoggedInOrShow({ component }) {
   return login() ? <Redirect to={'/' + login().role + '/'} /> : React.createElement(component);

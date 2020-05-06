@@ -7,17 +7,19 @@ import { appKey } from './Config';
 import Admin from '../admin';
 import User from '../user';
 import Static from '../static';
-import Layout from 'widget/layout';
+import Layout from '../widget/layout';
 
 class App extends Component {
-  state = {
-    auth: sessionStorage.getItem(appKey + 'appauth') || localStorage.getItem(appKey + 'appauth') || null,
-    login: JSON.parse(sessionStorage.getItem(appKey + 'applogin') || localStorage.getItem(appKey + 'applogin') || "null"),
-    fetching: false,
-    counter: 1,
+  constructor() {
+    super();
+    this.state = {
+      auth: sessionStorage.getItem(appKey + 'appauth') || localStorage.getItem(appKey + 'appauth') || null,
+      login: JSON.parse(sessionStorage.getItem(appKey + 'applogin') || localStorage.getItem(appKey + 'applogin') || "null"),
+      fetching: false,
+      counter: 1,
+    };
   }
   componentDidMount() {
-    TemporaryContext.history = this.props.history;
     this.props.history.listen(() => {
       popMessages();
     }); // Think we don't need unmount, eh?
@@ -27,6 +29,7 @@ class App extends Component {
   }
   render() {
     document.body.className = this.props.classes.root;
+    TemporaryContext.history = this.props.history;
     TemporaryContext.roles = [Admin, User, Static];
     Context.bind('fetching', this.generateBinding('fetching'));
     Context.bind('auth', this.generateBinding('auth'));

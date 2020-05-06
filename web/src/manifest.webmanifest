@@ -4,12 +4,12 @@
   "description": "CRM Toolkit is your starting template for bootstrapping any web application project",
   "icons": [
     {
-    "src": "assets/logo-192.png",
+    "src": "media/logo-192.png",
     "type": "image/png",
     "sizes": "192x192"
     },
     {
-    "src": "assets/logo-512.png",
+    "src": "media/logo-512.png",
     "type": "image/png",
     "sizes": "512x512"
     }

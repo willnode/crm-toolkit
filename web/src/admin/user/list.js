@@ -1,26 +1,26 @@
 import React from 'react';
-import { RemoteTable } from '../../widget/controls';
+import { RemoteTable, actionColumns } from '../../widget/table';
 import { getAvatarUrl } from '../../main/Helper';
 
 export default function () {
   return <RemoteTable
-    title="Users"
-    src="admin/user"
-    itemKey="login_id"
-    itemLabel="User"
-    predefinedActions={['add', 'edit', 'delete']}
+    options={{
+      title: "Users",
+      actions: ['back', 'create'],
+    }}
     columns={{
       avatar: {
         title: 'Avatar',
-        render: row => (
-          <img alt={row.name}
+        render: ({ value }) => (
+          <img alt={value}
             style={{ height: 40, borderRadius: '50%' }}
-            src={getAvatarUrl(row.avatar)}
+            src={getAvatarUrl(value)}
           />
         ),
-        width: '1%',
+        className: 'table-column-dense',
       },
       name: 'Name',
       email: 'Email',
+      login_id: actionColumns(['edit', 'delete'], 'User'),
     }} />
 }

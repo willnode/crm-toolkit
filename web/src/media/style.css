@@ -1,9 +1,12 @@
 @import "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap";
 
 /*
-	If you need bootstrap (for quick styling), uncomment here:
+	If you need bootstrap (for quick styling),
+	do "npm install boostrap" and then
+	uncomment this line:
 
-	@import "./media/bootstrap.css";
+	@import "./bootstrap.css";
+
 */
 
 /* See ./main/App.js for CSS variables */
@@ -63,4 +66,24 @@
 }
 .paper-loading {
 	min-height: 10em;
+}
+.table-title {
+	flex-grow: 1;
+}
+.table-search-bar {
+	width: 300px;
+	flex-shrink: 1;
+}
+.table-column-dense {
+	width: 1px;
+	white-space: nowrap;
+}
+.table-column-right {
+	text-align: right;
+}
+.table-toolbar-gutters {
+	display: flex;
+	flex-grow: 1;
+	padding: 0 1.5em;
+	align-items: center;
 }

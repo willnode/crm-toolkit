@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Alert from '@material-ui/lab/Alert';
-import { Context } from 'main/Contexts';
+import { Context } from '../main/Contexts';
 import { Switch, Route } from 'react-router-dom';
 
 function Notification() {

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import { Redirect } from 'react-router-dom';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -10,31 +10,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import Container from '@material-ui/core/Container';
-import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import InputIcon from '@material-ui/icons/Input';
-import FilterIcon from '@material-ui/icons/Filter';
-import SearchIcon from '@material-ui/icons/Search';
-import ClearIcon from '@material-ui/icons/Clear';
-import SortIcon from '@material-ui/icons/ArrowUpward';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ArchiveIcon from '@material-ui/icons/Archive';
-import ArchiveRIcon from '@material-ui/icons/ArchiveRounded';
-import LastPageIcon from '@material-ui/icons/LastPage';
-import NextPageIcon from '@material-ui/icons/NavigateNext';
-import PrevPageIcon from '@material-ui/icons/NavigateBefore';
 
 import {
   setMessage, setError, login, serverGet, history,
   serverDelete, serverPost, extractForm, popMessages, getQueryParam
 } from '../main/Helper';
 import { Context } from '../main/Contexts';
-import MaterialTable from 'material-table';
 import { useRef } from 'react';
 import { useHandleControlValidator, useHandlePropagateError } from './validators';
 import { uploadsUrl } from '../main/Config';
@@ -71,7 +53,7 @@ function CheckRole({ role, children }) {
 }
 
 
-const Input = ({ name, autoComplete, validator, onChange, ...props }) => {
+const Input = ({ name, validator, onChange, ...props }) => {
   const ref = useRef();
   const propagateError = useHandlePropagateError(ref);
   useHandleControlValidator(validator, ref);
@@ -79,12 +61,13 @@ const Input = ({ name, autoComplete, validator, onChange, ...props }) => {
     name={name}
     inputRef={ref}
     fullWidth
-    autoComplete={autoComplete || name}
+    autoComplete={name}
     error={validator && propagateError && !!validator[0]}
     helperText={validator && propagateError && validator[0]}
     onChange={(e) => [validator && validator[3].current(e), onChange && onChange(e)]}
     onFocus={(e) => [e.target.didHasFocus = true, validator && validator[2].current()]}
-    margin='normal'
+    variant="outlined"
+    margin="normal"
     {...props} />
 }
 
@@ -92,7 +75,7 @@ const Select = ({ name, label, options, validator, onChange, ...props }) => {
   const ref = useRef();
   const propagateError = useHandlePropagateError(ref);
   useHandleControlValidator(validator, ref);
-  return <FormControl margin='normal' fullWidth>
+  return <FormControl margin="normal" variant="outlined" fullWidth>
     <InputLabel
       error={validator && propagateError && !!validator[0]}
       id={name + '-label'}
@@ -175,27 +158,31 @@ const FlexGroup = ({ label, children, ...props }) => {
 
 const File = ({ name, label, defaultValue, folder, readOnly, required, ...props }) => {
   const delRef = useRef();
-  const [file, hasFile] = useState();
+  const [file, hasFile] = React.useState(0);
   return (
     <FlexGroup label={label}>
       <input name={name + "_delete"} ref={delRef} hidden />
+      {file > 0 && <Button type="button" variant="text">1 File</Button>}
       <ButtonGroup>
-        {file && <Button type="button">1 File</Button>}
-        {!readOnly && <Button key="upload" disabled={readOnly} type="button"
-          variant={file ? 'contained' : 'outlined'} component="label">
-          Upload
-					<input
+        {!readOnly && <Button
+          disabled={readOnly}
+          type="button"
+          component="label">
+          {file ? 'Change' : 'Upload'}
+          <input
             name={name} type="file" hidden {...props}
             onChange={(e) => hasFile(e.target.files.length)}
             required={required && !defaultValue}
           />
         </Button>}
-        {defaultValue && <Button key="download" type="button"
-          target="_blank" rel="noreferrer noopener" download
-          href={`${uploadsUrl}/${folder || name}/${defaultValue}`}>
-          View
-									</Button>}
-        {defaultValue && !readOnly && !required && <Button key="delete" type="submit"
+        {defaultValue && (
+          <Button type="button"
+            target="_blank" rel="noreferrer noopener" download
+            href={`${uploadsUrl}/${folder || name}/${defaultValue}`}>
+            View
+          </Button>
+        )}
+        {defaultValue && !readOnly && !required && <Button type="submit"
           onClick={() => delRef.current.value = 'y'}
           disabled={Context.get('fetching')}
         >Delete</Button>}
@@ -220,93 +207,6 @@ const BackButton = ({ label, color, variant, ...props }) => (
   >{label || "Go Back"}</Button>
 )
 
-function RemoteTable({ src, itemKey, itemLabel, predefinedActions, title, actions, options, components, columns, data, ...props }) {
-  let mounted = useRef(true);
-  let tableRef = useRef();
-  useEffect(() => (() => mounted.current = false), []);
-  actions = useMemo(() => {
-    return [...(actions || []), ...([
-      {
-        key: 'back',
-        icon: () => <ArrowBackIcon />,
-        tooltip: 'Go Back',
-        isFreeAction: true,
-        onClick: () => history().goBack(),
-      }, {
-        key: 'archive',
-        icon: () => getQueryParam('archive') ? <ArchiveRIcon /> : <ArchiveIcon />,
-        tooltip: 'Toggle Archive',
-        isFreeAction: true,
-        onClick: () => history().replace(`?archive=${getQueryParam('archive') ? '' : '1'}`),
-      }, {
-        key: 'add',
-        icon: () => <AddIcon />,
-        tooltip: 'Add ' + itemLabel,
-        isFreeAction: true,
-        onClick: () => history().push(`/${src}/create`)
-      }, {
-        key: 'detail',
-        icon: () => <InputIcon />,
-        tooltip: 'Open ' + itemLabel,
-        onClick: (e, row) => history().push(`/${src}/detail/` + row[itemKey]),
-      }, {
-        key: 'edit',
-        icon: () => <EditIcon />,
-        tooltip: 'Edit ' + itemLabel,
-        onClick: (e, row) => history().push(`/${src}/edit/` + row[itemKey]),
-      }, {
-        key: 'delete',
-        icon: () => <DeleteIcon />,
-        tooltip: 'Delete ' + itemLabel,
-        onClick: (e, row) => (
-          window.confirm(`Are you sure you want to delete this ${itemLabel}?`) &&
-          controlDelete(`${src}/${row[itemKey]}`,
-            (() => tableRef.current.onQueryChange()))()),
-      }
-    ].filter((x) => (predefinedActions || []).includes(x.key)))];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) // Always only updated once
-  columns = useMemo(() => {
-    if (typeof columns === 'object') {
-      return Object.entries(columns).map((([field, column]) => {
-        if (typeof column === 'string') {
-          return { title: column, field };
-        } else {
-          return { ...column, field };
-        }
-      }));
-    } else {
-      return columns || [];
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Always only updated once
-  data = data || (query => new Promise((resolve, reject) => {
-    let url = src + '?' + new URLSearchParams(query).toString();
-    if (window.location.search) url += '&' + window.location.search.substr(1);
-    serverGet(url).then(r => mounted.current && resolve(r));
-  })); // Already sync with our server
-  options = options || {};
-  options.actionsColumnIndex = -1;
-  components = components || {};
-  components.Container = (props) => <Container><Paper className="paper table" {...props} /></Container>
-  let icons = {
-    Add: AddIcon,
-    Edit: EditIcon,
-    Delete: DeleteIcon,
-    Filter: FilterIcon,
-    Search: SearchIcon,
-    Clear: ClearIcon,
-    ResetSearch: ClearIcon,
-    SortArrow: SortIcon,
-    FirstPage: FirstPageIcon,
-    LastPage: LastPageIcon,
-    NextPage: NextPageIcon,
-    PreviousPage: PrevPageIcon,
-  }
-  props = { ...props, actions, columns, options, components, data, title, icons, tableRef }
-  return <MaterialTable {...props} />
-}
-
 
 export {
   controlPost,
@@ -321,5 +221,4 @@ export {
   Submit,
   Checkbox,
   BackButton,
-  RemoteTable,
 }

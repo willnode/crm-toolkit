@@ -5,7 +5,7 @@ import Hidden from '@material-ui/core/Hidden';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Context } from 'main/Contexts';
+import { Context } from '../main/Contexts';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 

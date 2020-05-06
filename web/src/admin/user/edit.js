@@ -1,16 +1,17 @@
 import React from 'react';
-import { Page } from 'widget/page';
+import { Page } from '../../widget/page';
 import {
   Form, Input, Submit, BackButton,
   CommandButton, FlexGroup
-} from 'widget/controls';
+} from '../../widget/controls';
 import { useParams } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
-import { doReload, history } from 'main/Helper';
+import { doReload, history } from '../../main/Helper';
 import {
   useValidator, required, minLength,
   matchesRegex, checkAllValidators, validEmail
-} from 'widget/validators';
+} from '../../widget/validators';
+import Typography from '@material-ui/core/Typography';
 
 
 export default function () {
@@ -26,13 +27,14 @@ export default function () {
     <Page className="paper" maxWidth="sm" src={'admin/user/' + id}>
       {({ data }) => (
         <Form action={"admin/user/" + id} redirect={id > 0 ? doReload : (json) => history().push('/admin/user/edit/' + json.id)}>
+          <Typography variant="h5" component="h1">{id > 0 ? 'Edit User' : 'Create User'}</Typography>
           <Input validator={validators.username} name="username" required label="Username" defaultValue={data.username} />
           <Input validator={validators.name} name="name" required label="Name" defaultValue={data.name} />
           <Input validator={validators.email} name="email" required type="email" label="Email" defaultValue={data.email} />
           {
             id > 0 ? <>
               <Box marginTop={5}>If user has trouble logging in, you can give them OTP as temporary login password:</Box>
-              <Input inputProps={{ readOnly: true }} label="OTP" value={data.otp || ''} />
+              <Input inputProps={{ readOnly: true }} placeholder="OTP" value={data.otp || ''} />
               <FlexGroup label="Configure OTP">
                 <CommandButton name="otp_invoke" label="Generate" color="primary" />
                 <CommandButton name="otp_revoke" disabled={!data.otp} label="Revoke" color="secondary" />
@@ -40,7 +42,7 @@ export default function () {
             </> : <input name="otp_invoke" value="y" readOnly hidden />
           }
           <Submit disabled={!checkAllValidators(validators)} />
+          <BackButton />
         </Form>)}
-      <BackButton />
     </Page>)
 }

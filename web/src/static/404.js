@@ -1,8 +1,8 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { Page, SEO } from 'widget/page';
-import { history } from 'main/Helper';
+import { Page, SEO } from '../widget/page';
+import { history } from '../main/Helper';
 
 export default function () {
   return (

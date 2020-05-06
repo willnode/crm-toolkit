@@ -10,9 +10,13 @@
 
 class ContextInstance {
   // Inner variable
-  states = {}
+  constructor() {
+    this.states = {}
+  }
   // Get current state
-  get = (param) => (x => x && x[0])(this.states[param])
+  get(param) {
+    return (x => x && x[0])(this.states[param])
+  }
   // Set value of state. Source hook will be triggered.
   set(param, val) {
     if (this.states[param]) {

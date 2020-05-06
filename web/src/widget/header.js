@@ -14,9 +14,9 @@ import Dashboard from '@material-ui/icons/Dashboard';
 import People from '@material-ui/icons/People';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import { Link } from 'react-router-dom';
-import { appTitle } from 'main/Config';
-import { Context } from 'main/Contexts';
-import { getAvatarUrl, login, doLogout } from 'main/Helper';
+import { appTitle } from '../main/Config';
+import { Context } from '../main/Contexts';
+import { getAvatarUrl, login, doLogout } from '../main/Helper';
 
 export function LoginMenu() {
   const AvatarMenu = (props) => <Menu

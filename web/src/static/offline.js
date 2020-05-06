@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { history, getQueryParam } from '../main/Helper';
 import { Page, SEO } from '../widget/page';
-import { isProduction } from 'main/Config';
+import { isProduction } from '../main/Config';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -17,7 +17,7 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
-    if (isProduction && this.state.err) {
+    if (this.state.err) {
       return <Offline reason={this.state.err}/>;
     }
     return this.props.children;
