@@ -9,7 +9,7 @@ CRM Toolkit is your starting template for bootstrapping any web application proj
 Back in the hood, CRM Toolkit uses [CodeIgniter 4](https://codeigniter.com/), [React 16](https://reactjs.org/) and [Material-UI 4](https://material-ui.com/). We have opinions why you will love this mix:
 
 + `PHP` is one of the most popular language to write Server App. And while there are few frameworks to pick, `CodeIgniter` is a great option because it has minimum boilerplate and small learning curve. We optimize this further such that the PHP code only executes as a Server App that bridges between the Client and Database using AJAX requests.
-+ `React` is the of the most popular `JavaScript` framework. Sure while you can deploy web app with just CodeIgniter, the separation between server and client in code has a clear benefit. For instance, your app can be fully interactive and running offline, thanks to [Progressive Web Apps](https://web.dev/progressive-web-apps/). You can implement PWA in your web-based client app fairly easy if you choose to separate server and client code, like we did in CRM Toolkit.
++ `React` is the of the most popular `JavaScript` framework. Sure while you can deploy web app with just CodeIgniter, the separation between server and client in code has a clear benefit both in development time and user experience in the long run.
 + If you're fan of [Material Design](https://material.io/), you'll love `Material-UI`. It's a design system packed with lots of React components that follows Material Design principles. `Material-UI` is fairly easy to customize and we have improve this with lots of function that simplifies your development for most common cases mentioned in the docs.
 
 Packed together, CRM Toolkit provides built-in tools and functions to make it easy for you to get started with.
@@ -33,30 +33,31 @@ If you have explored the live demo. You see that CRM Toolkit has mechanism to:
 
 And a lot more. You will get amazed how simple to extend those basic mechanism to suit your need.
 
-## Install
+## Usage
 
-Prequirements:
-+ PHP atleast 7.2 or more (for running CI)
-+ MariaDB/MySQL 5.0 (for storing application data)
-+ NodeJS atleast v10 (for running CRA)
+### Prequirements
 
-Server setup:
-+ Create empty database `crmtoolkit` in your MySQL
-+ Spin up the terminal, Go to `cd api`
-+ Execute database migration: `php spark migrate`
++ PHP >= 7.2 (for running api)
++ MariaDB >= 5.1 (for storing application data)
++ NodeJS >= 10 (for running web)
 
-Website setup:
-+ Spin up the terminal, Go to `cd web`
-+ Wait until installation finishes
+Additional notes before installing or running the scripts:
++ Make sure `php` and `npm` is available on your terminal
++ Make sure the SQL server is running (and [it's connection config](api/.env) is correct)
++ Make sure the PHP has sufficient extensions enabled (`intl`, `mbstring`, `json`, `xml`)
 
-## Running
+#### Installation
 
-+ For backend: `php spark serve`
-+ For frontend: `npm start`
+Open [the install script](scripts/install.bat)
 
-By default, the server runs on `localhost:4000` while the client runs on `localhost:3000`.
+The install script contains steps necessary before able to run the web in local environments. If you don't like running script you can run `php spark install` and `npm install` individually.
 
-We provide `serve` script in root folder to spawn both on parallel for convenience.
+#### Running
+
+Open [the run script](scripts/run.bat)
+
+By default, the server runs on `localhost:4000` while the client runs on `localhost:3000`. If you don't like running script you can run `php spark serve` and `npm start` individually.
+
 
 ## More Reading
 
@@ -68,10 +69,11 @@ We provide `serve` script in root folder to spawn both on parallel for convenien
 
 You also might want to read third parties that we also use:
 
++ [parcel](https://parceljs.org/)
 + [react-helmet](https://github.com/nfl/react-helmet)
 + [react-router-dom](https://reacttraining.com/react-router/web/)
-+ [material-table](https://material-table.com/)
-+ [create-react-app](https://create-react-app.dev/)
++ [react-snap](https://github.com/stereobooster/react-snap)
++ [react-table](https://react-table.js.org/)
 
 ## Support Us
 
@@ -79,3 +81,7 @@ You also might want to read third parties that we also use:
 + Spread the word about CRM-Toolkit ✍
 
 You can ask something in [issues](https://github.com/willnode/crm-toolkit/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) or [email me](mailto:willnode@wellosoft.net).
+
+## License
+
+[MIT](LICENSE)
