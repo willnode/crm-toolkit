@@ -33,11 +33,13 @@ class Install extends BaseCommand
 					$db->username,
 					$db->password
 				);
-				$conn->query('CREATE DATABASE IF NOT EXISTS ' . $db->database);
-				$conn->query('USE ' . $db->database);
+				$conn->query("CREATE DATABASE $db->database" .
+					" CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci");
+				$conn->query("USE $db->database");
 				CLI::write('Database created! Running migrations...');
 			} catch (\Throwable $th) {
-				CLI::error(CLI::color('Cannot create database! Did your database server running?', 'red'));
+				CLI::error(CLI::color('Cannot create database!' .
+					' Did your database server running?', 'red'));
 			}
 		} finally {
 			$this->call('migrate');

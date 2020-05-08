@@ -12,14 +12,7 @@ class RegisterModel extends BaseModel
 		'email' => 'required|valid_email',
 		'password' => 'required|min_length[8]',
 	];
-
-	function executeBeforeExecute($event)
-	{
-		if ($event['method'] !== POST) {
-			$event['response'] = load_405();
-		}
-		return $event;
-	}
+	protected $only = [ CREATE ];
 
 	protected function executeBeforeChange($event)
 	{

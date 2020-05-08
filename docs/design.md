@@ -17,7 +17,7 @@ When you're migrating with `php spark migrate`, it creates `login` like this:
 ```sql
 CREATE TABLE `login` (
 	`login_id` INT(11)
-		UNSIGNED NOT NULL AUTO_INCREMENT,
+		NOT NULL AUTO_INCREMENT,
 	`username` VARCHAR(255)
 		NOT NULL,
 	`email` VARCHAR(255)
@@ -50,9 +50,9 @@ For a table that hold articles, I would create a table like this:
 ```sql
 CREATE TABLE `article` (
 	`article_id` INT(11)
-		UNSIGNED NOT NULL AUTO_INCREMENT,
+		NOT NULL AUTO_INCREMENT,
 	`article_login` INT(11)
-		UNSIGNED NOT NULL,
+		NOT NULL,
 	`article_title` VARCHAR(255)
 		NOT NULL DEFAULT '',
 	`article_body` TEXT
@@ -91,19 +91,30 @@ Also when designing relations. You should never have a table that holds `one-to-
 ```sql
 ALTER TABLE `login`
 	ADD COLUMN `description` TEXT
-		NOT NULL DEFAULT '',
+		NOT NULL DEFAULT '' AFTER `avatar`,
 	ADD COLUMN `website` VARCHAR(255)
-		NOT NULL DEFAULT '';
+		NOT NULL DEFAULT '' AFTER `description`;
 ```
 
 And for tables that holds `many-to-many` relationship, like between articles and tags, you should make **both** constraints as single `PRIMARY KEY`. The naming convention also bit rather complex, but I stick with `single_plural` convention, where the `single` belongs to the table that commonly have more rows (or in other word, the `plural` goes to a table which referred as `common groups`). This ends up following table:
 
 ```sql
+-- Tags table
+CREATE TABLE `tag` (
+	`tag_id` INT(11)
+		NOT NULL AUTO_INCREMENT,
+	`tag_title` VARCHAR(255)
+		NULL DEFAULT NULL,
+	PRIMARY KEY (`tag_id`),
+	UNIQUE INDEX (`tag_title`)
+);
+
+-- Article <=> Tags relation table
 CREATE TABLE `article_tags` (
 	`article_id` INT(11)
-		UNSIGNED NOT NULL,
+		NOT NULL,
 	`tag_id` INT(11)
-		UNSIGNED NOT NULL,
+		NOT NULL,
 	`created_at` TIMESTAMP
 		NOT NULL DEFAULT current_timestamp(),
 	PRIMARY KEY (`article_id`, `tag_id`),
@@ -174,6 +185,8 @@ Why we have to design controllers this way? Because most CRUD models have the sa
 This is not the only good news. If we want to create new endpoints for our blogging platform where `/user/article` gives access to articles which belongs to currently logged-in account, while `/admin/article` gives access to all available articles. We can do it like:
 
 ```php
+<?php namespace App\Models;
+
 class ArticleModel extends BaseModel
 {
 	// More options actually available

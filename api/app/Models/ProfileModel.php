@@ -11,20 +11,20 @@ class ProfileModel extends BaseModel
 		'name', 'email', 'avatar', 'password'
 	];
 	protected $fileUploadRules = [
-		'avatar' => ['types' => ['jpg', 'jpeg', 'png', 'bmp']]
+		'avatar' => ['types' => ['jpg', 'png', 'bmp']]
 	];
 	protected $validationRules = [
 		'name' => 'required|min_length[3]',
 		'email' => 'required|valid_email'
 	];
-	protected $only_flag = [ SELECT, UPDATE ];
+	protected $only = [ SELECT, UPDATE ];
 
 	protected function executeBeforeChange($event)
 	{
 		extract($event, EXTR_REFS);
 
 		// Password Change
-		if ($method !== DELETE) {
+		if ($method === UPDATE) {
 			if (!empty($data['password'])) {
 				if(control_password_update($data)) {
 					$data['otp'] = NULL;

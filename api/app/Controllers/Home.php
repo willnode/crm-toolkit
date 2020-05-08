@@ -7,6 +7,11 @@ use App\Models\RegisterModel;
 use Config\Database;
 use Config\Mimes;
 
+/**
+ * This is endpoints to all unaunticated requests.
+ * You should also update the Routes.php if
+ * you have modified some endpoints here.
+ */
 class Home extends BaseController
 {
 

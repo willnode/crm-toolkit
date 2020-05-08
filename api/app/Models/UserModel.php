@@ -14,35 +14,23 @@ class UserModel extends BaseModel
 		'name', 'email', 'avatar', 'username'
 	];
 	protected $fileUploadRules = [
-		'avatar' => ['types' => ['jpg', 'jpeg', 'png', 'bmp']]
+		'avatar' => ['types' => ['jpg', 'png', 'bmp']]
 	];
 	protected $validationRules = [
 		'name' => 'required|min_length[3]|alpha_numeric_space',
 		'email' => 'required|valid_email',
 	];
+	protected $where = [
+		'role' => 'user',
+	];
 
-	function executeBeforeExecute($event)
-	{
-		$event['builder']->where('role', 'user');
-		return $event;
-	}
-
-	function executeAfterChange($event)
+	function executeBeforeChange($event)
 	{
 		extract($event, EXTR_REFS);
-		if ($method !== DELETE) {
-			$otps = get_post_updates(['otp_invoke', 'otp_revoke']);
-			if (!empty($otps)) {
-				if (isset($otps['otp_invoke'])) {
-					$otp = generate_pin();
-				} else if (isset($otps['otp_revoke'])) {
-					$otp = NULL;
-				}
-				$this->db->table($this->table)
-					->update(
-						['otp' => $otp],
-						[$this->primaryKey => $id]);
-			}
+		if ($method === CREATE || $action === 'otp_invoke') {
+			$data['otp'] = generate_pin();
+		} else if ($action === 'otp_revoke') {
+			$data['otp'] = NULL;
 		}
 		return $event;
 	}

@@ -38,8 +38,8 @@ And a lot more. You will get amazed how simple to extend those basic mechanism t
 ### Prequirements
 
 + PHP >= 7.2 (for running api)
-+ MariaDB >= 5.1 (for storing application data)
-+ NodeJS >= 10 (for running web)
++ MariaDB >= 5.5.3 (for storing data)
++ NodeJS >= v10 (for running web)
 
 Additional notes before installing or running the scripts:
 + Make sure `php` and `npm` is available on your terminal
