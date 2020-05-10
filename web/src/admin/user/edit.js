@@ -36,10 +36,10 @@ export default function () {
               <Box marginTop={5}>If user has trouble logging in, you can give them OTP as temporary login password:</Box>
               <Input inputProps={{ readOnly: true }} placeholder="OTP" value={data.otp || ''} />
               <FlexGroup label="Configure OTP">
-                <CommandButton name="otp_invoke" label="Generate" color="primary" />
-                <CommandButton name="otp_revoke" disabled={!data.otp} label="Revoke" color="secondary" />
+                <CommandButton value="otp_invoke" label="Generate" color="primary" />
+                <CommandButton value="otp_revoke" disabled={!data.otp} label="Revoke" color="secondary" />
               </FlexGroup>
-            </> : <input name="otp_invoke" value="y" readOnly hidden />
+            </> : <input value="otp_invoke" readOnly hidden />
           }
           <Submit disabled={!checkAllValidators(validators)} />
           <BackButton />

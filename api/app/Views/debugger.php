@@ -41,7 +41,7 @@ $request = Services::request();
               <a class="btn btn-sm btn-secondary" href="<?= base_url(dirname($request->uri->getPath())) ?>/">Up</a> &bullet;
               Method: <b><?= strtoupper($metadata->method) ?></b></p>
             <p>What do you want to do?</p>
-            <?php if ($metadata->method !== GET) : ?>
+            <?php if ($metadata->method !== SELECT) : ?>
               <a href="<?= preg_replace('/\?delete=y$/', '/', $request->uri->getPath()) ?>">Back to GET</a>
             <?php elseif ($metadata->id === NULL) : ?>
               <details>

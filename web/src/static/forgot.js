@@ -25,29 +25,33 @@ function InnerForm({ onOk }) {
     passconf: useValidator(...(stage < 3 ? [] : [required(), matchesField('password')])),
   }
   return <Form action="forgot" redirect={() => {
-      if (stage === 3) {
-        doLogin(email, password, false).then((login) => [history().push('/' + login.role), setMessage('Your new password has been saved. Welcome back!')]);
-      } else {
-        setStage(stage + 1);
-      }
-    }}>
+    if (stage === 3) {
+      doLogin(email, password, false).then((login) => [history().push('/' + login.role), setMessage('Your new password has been saved. Welcome back!')]);
+    } else {
+      setStage(stage + 1);
+    }
+  }}>
     <input name={'action'} ref={actionRef} hidden />
-    <Input validator={validators.email} name="email" inputProps={{readOnly: stage !== 0}}
+    <Input validator={validators.email} name="email" inputProps={{ readOnly: stage !== 0 }}
       label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-    {stage > 0 && <Input validator={validators.otp} name="otp" inputProps={{readOnly: stage === 3}}
-      label="Token (6 digit)" value={otp} onChange={(e) => setOTP(e.target.value)} />}
-    {stage === 3 && <Input validator={validators.password} name="password"
-      label="New Password" value={password} onChange={(e) => setPassword(e.target.value)}
-      type="password" autoComplete="new-password"/>}
-    {stage === 3 && <Input validator={validators.passconf} name="passconf"
-      label="Re-enter New Password"  type="password" autoComplete="new-password" />}
+    <Box display={stage > 0 ? 'block' : 'none'}>
+      <Input validator={validators.otp} name="otp" inputProps={{ readOnly: stage === 3 }}
+        label="Token (6 digit)" value={otp} onChange={(e) => setOTP(e.target.value)} />
+    </Box>
+    <Box display={stage === 3 ? 'block' : 'none'}>
+      <Input validator={validators.password} name="password"
+        label="New Password" value={password} onChange={(e) => setPassword(e.target.value)}
+        type="password" autoComplete="new-password" />
+      <Input validator={validators.passconf} name="passconf"
+        label="Re-enter New Password" type="password" autoComplete="new-password" />
+    </Box>
     <Submit disabled={!checkAllValidators(validators)} onClick={() => [
       actionRef.current.value = stage > 0 ? 'response' : '',
       stage === 1 && setStage(stage + 1),
       Context.set('auth', 'Basic ' + btoa(email + ":-")),
     ]} />
     {stage === 1 && <Submit variant='outlined' onClick={() => [actionRef.current.value = 'request',
-      Context.set('auth', 'Basic ' + btoa(email + ":-"))]} label="Not Receiving Token? Send Again"/>}
+    Context.set('auth', 'Basic ' + btoa(email + ":-"))]} label="Not Receiving Token? Send Again" />}
     {stage > 0 && <Button onClick={() => setStage(stage - 1)}>Go Back</Button>}
   </Form>
 }

@@ -140,7 +140,7 @@ const Checkbox = ({ name, checked, value, color, label, ...props }) => (
 const CommandButton = ({ name, value, label, color, variant, disabled }) => {
   const ref = useRef();
   return <Box margin={1}>
-    <input name={name} ref={ref} type="checkbox" value={value || 'y'} hidden />
+    <input name={name || 'action'} ref={ref} type="checkbox" value={value || 'y'} hidden />
     <Button type="submit" color={color || 'default'}
       variant={variant || 'outlined'}
       onClick={() => ref.current.checked = true}
