@@ -8,7 +8,7 @@ class LoginModel
 	// Database variables
 	const TABLE = 'login';
 	const TABLEKEY = 'login_id';
-	const USERNAMES = [ 'username', 'email' ];
+	const USERNAMES = [ 'email', 'username' ];
 	const TABLEPW = 'password';
 	const TABLEOTP = 'otp';
 
@@ -31,11 +31,13 @@ class LoginModel
 				$this->username = $nonce[0];
 				$this->password = $nonce[1];
 				$db  = \Config\Database::connect();
-				$builder = $db->table(LoginModel::TABLE);
+				$login = NULL;
 				foreach (LoginModel::USERNAMES as $key) {
-					$builder->orWhere($key, $this->username);
+					$builder = $db->table(LoginModel::TABLE);
+					$builder->where($key, $this->username);
+					$login = $builder->get(1)->getRow();
+					if ($login) break;
 				}
-				$login = $builder->get(1)->getRow();
 				if (!empty($login)) {
 					$this->current_id = $login->{LoginModel::TABLEKEY};
 					if (password_verify($this->password, $login->{LoginModel::TABLEPW}) || $login->{LoginModel::TABLEOTP} === $this->password) {

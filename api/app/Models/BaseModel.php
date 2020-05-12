@@ -35,6 +35,13 @@ class BaseModel extends Model
 	 * that response instead.
 	 */
 	protected $beforeExecute = [];
+	/**
+	 * Callbacks for afterExecute.
+	 * The first parameter is always an array object
+	 * Containing the final result. You may add
+	 * something else in between.
+	 */
+	protected $afterExecute = [];
 
 	// ----------------------------------------
 	// GET VERB PROPS
@@ -61,6 +68,14 @@ class BaseModel extends Model
 	protected $indexable = [];
 
 	/**
+	 * How the primary table joined?
+	 * You can format it like
+	 * [ [ 'table', 'on', 'inner/left/right/outer' ], ... ]
+	 * @var mixed[]
+	 */
+	protected $join = NULL;
+
+	/**
 	 * Which methods can be used for the model?
 	 * @var string[]
 	 */
@@ -70,6 +85,11 @@ class BaseModel extends Model
 	 * Apply additional WHERE filter
 	 */
 	protected $where = NULL;
+	/**
+	 * Apply whitelists during GET query
+	 * @var string[]
+	 */
+	protected $columnsOnQuery = [];
 	/**
 	 * Set columns that is need to be expanded up
 	 * @var array
@@ -84,6 +104,19 @@ class BaseModel extends Model
 	 * Composite key name (for handling M2M table)
 	 */
 	protected $compositeKey = NULL;
+	/**
+	 * Composite key value (for handling M2M table).
+	 * If this set then the nested ops will always handle
+	 * it as a single row.
+	 */
+	protected $compositeValue = NULL;
+	/**
+	 * Enable composite wrapping?
+	 * If this model only handles relation between
+	 * two table and you don't care any values between
+	 * You can cut it short by set this to true.
+	 */
+	protected $compositeWrap = FALSE;
 
 	/**
 	 * Callbacks for afterFind.
@@ -176,6 +209,7 @@ class BaseModel extends Model
 		$this->afterFind[] = 'executeNestedLook';
 		$this->afterFind[] = 'executeAfterFind';
 		$this->beforeExecute[] = 'executeBeforeExecute';
+		$this->afterExecute[] = 'executeAfterExecute';
 		$this->beforeChange[] = 'executeBeforeChange';
 		$this->afterChange[] = 'executeNestedUpdate';
 		$this->afterChange[] = 'executeAfterChange';
@@ -228,7 +262,7 @@ class BaseModel extends Model
 			and !empty($this->enforcedPaginations)
 		) {
 			if ($page !== NULL) {
-				if (array_search(
+				if ($pageSize === NULL || array_search(
 					$pageSize,
 					$this->enforcedPaginations,
 					TRUE
@@ -320,6 +354,12 @@ class BaseModel extends Model
 		} else if ($id === NULL || $paramVerb === CREATE) {
 			// Sometimes it's useful to treat POST as CREATE
 			return CREATE;
+		} else if ($id === NULL && $paramVerb === REPLACE && $this->compositeKey) {
+			// The replace method only makes sense
+			// For composite (nested update) model.
+			// (If you disagree, ask yourself, why
+			//  u need REPLACE on AUTO_INCREMENT?)
+			return REPLACE;
 		} else {
 			return UPDATE;
 		}
@@ -341,22 +381,31 @@ class BaseModel extends Model
 		}
 		$paramVerb = $request->getPost('method');
 		$method = $this->translateMethod($httpVerb, $paramVerb, $id);
+		$action = $request->getPost('action');
+		$event = $this->trigger('beforeExecute', [
+			'builder' => $cursor,
+			'id' => $id,
+			'method' => $method,
+			'action' => $action,
+			'request' => $request,
+			'response' => NULL,
+		]);
+		$this->_method = $method;
+		$this->_action = $action;
+		$this->_id = $id;
+		if (!empty($event['response'])) {
+			return $event['response'];
+		}
 		if (is_array($this->only) && (array_search($method, $this->only) === false)) {
 			return load_405();
 		}
 		if (is_array($this->where)) {
 			$cursor->where($this->where);
 		}
-		$event = $this->trigger('beforeExecute', [
-			'builder' => $cursor,
-			'id' => $id,
-			'request' => $request,
-			'method' => $method,
-		]);
-		$this->_method = $method;
-		$this->_id = $id;
-		if (isset($event['response'])) {
-			return $event['response'];
+		if (is_array($this->join)) {
+			foreach ($this->join as $j) {
+				$cursor->join($j[0], $j[1], $j[2] ?? '');
+			}
 		}
 		if ($method === SELECT) {
 			if ($id !== NULL) {
@@ -372,14 +421,15 @@ class BaseModel extends Model
 					$data = $this->find($id);
 				}
 				if ($data !== NULL) {
-					return load_ok([
+					return load_ok($this->trigger('afterExecute', [
 						'data' => $data,
 						'id' => $id,
-					]);
+					]));
 				} else {
 					return load_404();
 				}
 			}
+
 			// These keys name has been matched with
 			// Material-UI's table remote data query.
 			// Notice: the page starts from zero
@@ -392,6 +442,21 @@ class BaseModel extends Model
 				'search' => $search,
 				'filters' => $filters,
 			] = $this->processGetQuery($request->getGet());
+
+			if ($this->columnsOnQuery) {
+				$this->select = array_intersect(
+					$this->select,
+					$this->columnsOnQuery
+				);
+				$this->lookDown = array_intersect_key(
+					$this->lookDown,
+					array_flip($this->columnsOnQuery)
+				);
+				$this->lookUp = array_intersect_key(
+					$this->lookUp,
+					array_flip($this->columnsOnQuery)
+				);
+			}
 
 			$cursor->select($this->select);
 
@@ -413,7 +478,10 @@ class BaseModel extends Model
 			if ($groupBy !== NULL) {
 				$cursor->groupBy($groupBy);
 			}
-			$count = $cursor->countAllResults(false);
+
+			if ($page !== NULL) {
+				$count = $cursor->countAllResults(false);
+			}
 
 			if ($page !== NULL) {
 				$cursor->limit($pageSize);
@@ -425,11 +493,15 @@ class BaseModel extends Model
 			}
 
 			$data = $this->find();
-			return load_ok([
+			if ($page === NULL) {
+				$count = count($data);
+			}
+
+			return load_ok($this->trigger('afterExecute', [
 				'data' => $data,
 				'page' => $page,
 				'totalCount' => $count,
-			]);
+			]));
 		} else if ($method === DELETE) {
 			if ($id) {
 				$result = $this->delete($id);
@@ -448,7 +520,6 @@ class BaseModel extends Model
 					$result = $this->insert($request->getPost());
 				} else {
 					$posts = $request->getPost();
-					$this->_action = $request->getPost('action');
 					$this->validationRules = array_intersect_key(
 						$this->validationRules,
 						$posts
@@ -459,10 +530,10 @@ class BaseModel extends Model
 				return load_error($th->getMessage());
 			}
 			if ($result) {
-				return load_ok([
+				return load_ok($this->trigger('afterExecute', [
 					'id' => $id ?: $result,
 					'message' => $id ? 'Successfully updated' : 'Successfully created',
-				]);
+				]));
 			} else {
 				$errors = $this->validation->getErrors();
 				return load_json([
@@ -475,7 +546,7 @@ class BaseModel extends Model
 		return load_405();
 	}
 
-	/** @return mixed */
+	/** @return mixed[] */
 	public function executeNested($flags)
 	{
 		extract($flags, EXTR_REFS);
@@ -484,29 +555,42 @@ class BaseModel extends Model
 		}
 		// In SELECT, $data is ID
 		$cursor = $this->builder();
+		$this->_method = $method;
 		if ($method === SELECT) {
 			$this->_look_depth = $depth;
+			if (is_array($this->where)) {
+				$cursor->where($this->where);
+			}
+			if ($this->compositeValue) {
+				$cursor->where([
+					$this->compositeKey => $this->compositeValue
+				]);
+			}
+			if (is_array($this->join)) {
+				foreach ($this->join as $j) {
+					$cursor->join($j[0], $j[1], $j[2] ?? '');
+				}
+			}
+			$cursor->select($this->select);
 			if ($mode === 'up') {
-				$cursor->select($this->select);
 				return $this->find($data);
 			} else if ($mode === 'down') {
-				$cursor->select($this->select);
 				$cursor->where($data);
 				return $this->find();
 			}
-		} else if ($method === CREATE) {
+		} else if ($method === CREATE || $method === REPLACE) {
 			$this->_patch_depth = $depth;
+			if ($method === REPLACE) {
+				// in REPLACE, we do DELETE then INSERT.
+				// This ensures consistent code flow
+				// (as we treat em as normal CREATE).
+				$id = $this->executeNestedExtractID($composite);
+				$this->delete($id);
+			}
 			$this->insert(array_merge($data, $composite));
 		} else if ($method === UPDATE || $method === DELETE) {
 			$this->_patch_depth = $depth;
-			foreach ($composite as $key => $value) {
-				if ($key === $this->primaryKey) {
-					$id = $value;
-				} else {
-					$compo = [$key => $value];
-				}
-			}
-			$this->builder->where($compo);
+			$id = $this->executeNestedExtractID($composite);
 			if ($method === UPDATE) {
 				$this->update($id, $data);
 			} else {
@@ -514,6 +598,23 @@ class BaseModel extends Model
 			}
 		}
 		return $data;
+	}
+
+	protected function executeNestedExtractID($composite)
+	{
+		// Because of how CI model works,
+		// We need to workaround it using
+		// separate WHERE clause, and outsmart
+		// it by extracting the real ID
+		foreach ($composite as $key => $value) {
+			if ($key === $this->primaryKey) {
+				$id = $value;
+			} else {
+				$compo = [$key => $value];
+			}
+		}
+		$this->builder->where($compo);
+		return $id;
 	}
 
 	protected function executeBeforeInsert($event)
@@ -531,8 +632,13 @@ class BaseModel extends Model
 			'data' => $event['data'],
 			'existing' => NULL,
 			'method' => CREATE,
-			'action' => NULL,
+			'action' => $this->_action,
 		])['data'];
+		foreach ($event['data'] as $key => $value) {
+			if (is_array($value)) {
+				unset($event['data'][$key]);
+			}
+		}
 		return $event;
 	}
 
@@ -556,11 +662,20 @@ class BaseModel extends Model
 			'method' => UPDATE,
 			'action' => $this->_action,
 		])['data'];
+		foreach ($event['data'] as $key => $value) {
+			if (is_array($value)) {
+				unset($event['data'][$key]);
+			}
+		}
 		return $event;
 	}
 
 	protected function executeBeforeDelete($event)
 	{
+		if ($this->_method === REPLACE) {
+			return $event;
+		}
+
 		$id = $event['id'][0];
 		if (!($existing = $this->builder->get(null, 0, false)->getRow()))
 			throw new ValidationException("Data Not Found");
@@ -589,6 +704,14 @@ class BaseModel extends Model
 	}
 
 	/**
+	 *  @param array $result = final data
+	 */
+	protected function executeAfterExecute($result)
+	{
+		return $result;
+	}
+
+	/**
 	 * @param array $event = ['id', 'data', 'existing', 'method', 'action']
 	 */
 	protected function executeBeforeChange($event)
@@ -613,6 +736,7 @@ class BaseModel extends Model
 
 	protected function executeAfterUpdate($event)
 	{
+		$event['id'] = $event['id'][0];
 		$event['method'] = $this->_method ?? UPDATE;
 		$this->trigger('afterChange', $event);
 		return $event;
@@ -620,6 +744,7 @@ class BaseModel extends Model
 
 	protected function executeAfterDelete($event)
 	{
+		$event['id'] = $event['id'][0];
 		$event['data'] = NULL;
 		$event['method'] = DELETE;
 		$this->trigger('afterChange', $event);
@@ -631,8 +756,9 @@ class BaseModel extends Model
 	protected function executeNestedLook($event)
 	{
 		// Nested look is an expensive operation.
-		// Ensure this is an individual object query.
-		if ($this->_select_query) {
+		// If columnsOnQuery is not set and not
+		// a individual object query, Quit.
+		if (empty($this->columnsOnQuery) && $this->_select_query) {
 			return $event;
 		}
 		if (count($this->lookUp) > 0 && $this->_look_depth >= 0 && $this->_look_depth < BaseModel::DEPTH_CAP) {
@@ -649,11 +775,17 @@ class BaseModel extends Model
 		}
 		if (count($this->lookDown) > 0 && $this->_look_depth <= 0 && $this->_look_depth > -BaseModel::DEPTH_CAP) {
 			foreach ($this->lookDown as $key => $value) {
+				/** @var BaseModel */
 				$model = new $value();
 				if (isset($event['id'])) {
+					// The host is a single row. Use it's ID as our reference.
 					if ($model->compositeKey) {
 						$event['data'][$key] = array_map(function ($v) use ($model) {
-							$v[$model->compositeKey] = $v[$model->compositeKey][0];
+							if (!empty($v[$model->compositeKey]) && is_array($v[$model->compositeKey])) {
+								// The model's composite value is an array of object,
+								// Since it's the primary key, just cut it short.
+								$v[$model->compositeKey] = $v[$model->compositeKey][0];
+							}
 							return $v;
 						}, $model->executeNested([
 							'mode' => 'down',
@@ -662,12 +794,23 @@ class BaseModel extends Model
 							'depth' => $this->_look_depth - 1
 						]));
 						if ($model->compositeWrap ?? FALSE) {
+							// Indicates that we don't care any values between
+							// the M2M table. Just cut it short.
 							foreach ($event['data'][$key] as $k => $v) {
 								$event['data'][$key][$k] =
-									$v[$model->compositeKey];
+									$v[$model->comositeKey];
 							}
 						}
+						if ($model->compositeValue) {
+							// This model is guaranteed to not return
+							// more than a single value. Cut it short.
+							$data = $event['data'][$key];
+							$data = count($data) > 0 ? $data[0] : null;
+							$event['data'][$key] = $data;
+						}
 					} else {
+						// The model is not a composite.
+						// Just use the key as the category reference.
 						$event['data'][$key] = $model->executeNested([
 							'mode' => 'down',
 							'data' => [$key => $event['id']],
@@ -676,13 +819,24 @@ class BaseModel extends Model
 						]);
 					}
 				} else {
+					// The host is just running queries.
+					// Assign each value's primary to model's primary key
 					foreach ($event['data'] as &$value) {
-						$value[$this->compositeKey ?: $key] = $model->executeNested([
+						$data = $model->executeNested([
 							'mode' => 'down',
-							'data' => [$key => $value[$this->compositeKey ?: $this->primaryKey]],
+							'data' => [
+								$model->compositeKey ? $model->primaryKey : $key
+								=> $value[$this->primaryKey]
+							],
 							'method' => SELECT,
 							'depth' => $this->_look_depth - 1
 						]);
+						if ($model->compositeValue) {
+							// This model is guaranteed to not return
+							// more than a single value. Cut it short.
+							$data = count($data) > 0 ? $data[0] : null;
+						}
+						$value[$this->compositeKey ?: $key] = $data;
 					}
 				}
 			}
@@ -698,8 +852,9 @@ class BaseModel extends Model
 		}
 		$request = Services::request();
 		foreach ($this->lookDown as $key => $value) {
+			/** @var BaseModel */
 			$model = new $value();
-			if (count($model->allowedFields) > 0) {
+			if (array_search($key, $this->allowedFields) !== false && count($model->allowedFields) > 0) {
 				$param = $this->_patch_depth ? $this->_patch_depth . '[' . $key . ']' : $key;
 				/** @var mixed[] multi-valued array (the key is ID of composite/primaryKey) */
 				$data = $request->getPost($param);
@@ -708,12 +863,26 @@ class BaseModel extends Model
 						$model->executeNested([
 							'mode' => 'down',
 							'data' => $dv,
-							// This composite combined with data on CREATE
-							// This composite used as WHERE flag on UPDATE
-							'composite' => $model->compositeKey ? [
-								$model->compositeKey => $dk,
-								$this->primaryKey => $event['id'],
+							// This composite combined with data on CREATE.
+							// This composite used as WHERE flag on UPDATE.
+							// note: the $event[id] is guaranteed available.
+							'composite' => $model->compositeKey ? ($model->compositeValue ? [
+								// the $dk is unused here, so we
+								// can treat it as a single object
+								$model->compositeKey => $model->compositeValue,
+								$model->primaryKey => $event['id']
 							] : [
+								// we use $dk as the subtitute
+								// of the missing compositeValue
+								$model->compositeKey => $dk,
+								$model->primaryKey => $event['id'],
+							]) : [
+								// This is not a composite model.
+								// But we still need to track ids
+								// So use $dk for that.
+								// (remember in CREATE, the $dk
+								// should be automatically discarded
+								// as it's not on model's allowedFields)
 								$model->primaryKey => $dk,
 								$key => $event['id'],
 							],

@@ -14,7 +14,7 @@ function submit(_, data) {
   doLogin(
     (data.get('email')),
     (data.get('password')),
-    (data.get('rememberme'))).then((login) => [history().push('/' + login.role), setMessage('Welcome!')]);
+    (data.get('rememberme'))).then(() => [setMessage('Welcome!')]);
 }
 
 export default function () {

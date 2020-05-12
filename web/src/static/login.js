@@ -13,7 +13,7 @@ function form_login(e) {
     data.get('username'),
     data.get('password'),
     data.has('rememberme')
-  ).then((login) => history().push('/' + login.role)).catch((e) => setError(e))
+  ).catch((e) => setError(e))
 }
 
 export default function Login() {

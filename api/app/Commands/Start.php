@@ -12,6 +12,11 @@ class Start extends BaseCommand
 
 	public function run(array $params)
 	{
-		$this->call('serve', ['-port', '4000']);
+		$_SERVER['argv'][2] = '--port';
+		$_SERVER['argv'][3] = '4000';
+		$_SERVER['argc']    = 4;
+		\CodeIgniter\CLI\CLI::init();
+
+		$this->call('serve');
 	}
 }

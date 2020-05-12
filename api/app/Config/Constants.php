@@ -27,6 +27,7 @@ define('SELECT', 'select');
 define('DELETE', 'delete');
 define('UPDATE', 'update');
 define('CREATE', 'create');
+define('REPLACE', 'replace');
 
 /*
 |--------------------------------------------------------------------------

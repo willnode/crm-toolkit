@@ -26,7 +26,7 @@ function InnerForm({ onOk }) {
   }
   return <Form action="forgot" redirect={() => {
     if (stage === 3) {
-      doLogin(email, password, false).then((login) => [history().push('/' + login.role), setMessage('Your new password has been saved. Welcome back!')]);
+      doLogin(email, password, false).then((login) => [setMessage('Your new password has been saved. Welcome back!')]);
     } else {
       setStage(stage + 1);
     }

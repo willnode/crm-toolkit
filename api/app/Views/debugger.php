@@ -105,7 +105,7 @@ $request = Services::request();
         <?php endif ?>
       </div>
       <div class="col-md-7 col-lg-8 col-xl-9">
-        <pre><code class="json"><?= json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) ?></code></pre>
+        <pre><code class="json"><?= esc(json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) ?></code></pre>
         <p><small>This HTML only appears during development. A minified response of above JSON will returned instead in AJAX request or production environment</small></p>
       </div>
     </div>
