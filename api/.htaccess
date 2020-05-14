@@ -1,9 +1,11 @@
-# Generally you wouldn't point your server at api root.
-# Althought it works, always configure your server
-# correctly when you're doing production!
+# Generally you wouldn't point your server at api root, but for
+# convenience this is a .htaccess file for those who wants 
+# to avoid /public prefix when running local apache server.
+# If you put this on subfolder (e.g. "localhost/crm-toolkir")
+# please replace next 2 line from "/public" to "/your-subfolder/public".
 
-# That's enough warning. If you put this directory
-# on subdirectory, please configure that to here.
+# Remember, this is only for convenience, always configure your 
+# server correctly when you're doing production!
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
