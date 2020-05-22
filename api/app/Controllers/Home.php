@@ -46,12 +46,7 @@ class Home extends BaseController
 	public function not_found()
 	{
 		// Bug, returning response don't send anything.
-		$output = load_404();
-		if (is_string($output)) {
-			echo $output;
-		} else {
-			$output->pretend(false)->send();
-		}
+		sendImmediately(load_404());
 	}
 
 	public function forgot()

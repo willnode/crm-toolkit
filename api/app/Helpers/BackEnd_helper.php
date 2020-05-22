@@ -214,3 +214,18 @@ function load_error($message, $code = NULL) {
 	return load_json($message);
 }
 
+/**
+ * Immedialy send the output and exit.
+ */
+function sendImmediately($output) {
+	$response = Services::response();
+	if (is_string($output)) {
+		$response->setBody($output);
+	} else if ($output instanceof \CodeIgniter\HTTP\Response) {
+		$response = $output;
+	} else {
+		$response->setJSON($output);
+	}
+	$response->pretend(false)->send();
+	exit;
+}

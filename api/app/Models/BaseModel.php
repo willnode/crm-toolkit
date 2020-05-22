@@ -527,7 +527,10 @@ class BaseModel extends Model
 					$result = $this->update($id, $posts);
 				}
 			} catch (\Exception $th) {
-				return load_error($th->getMessage());
+				return load_error([
+					'message' => $this->translateDBErrorMessage($th->getMessage()),
+					'trace' => ENVIRONMENT === 'production' ? null : $th->getTrace(),
+				]);
 			}
 			if ($result) {
 				return load_ok($this->trigger('afterExecute', [
@@ -694,6 +697,12 @@ class BaseModel extends Model
 		return $event;
 	}
 
+	/**
+	 * Hook to translate DB error (e.g. duplicate/lack of key/etc)
+	 */
+	protected function translateDBErrorMessage($err) {
+		return $err;
+	}
 
 	/**
 	 *  @param array $event = ['builder', 'id', 'request', 'method']
@@ -893,6 +902,7 @@ class BaseModel extends Model
 				}
 			}
 		}
+		return $event;
 	}
 
 	protected function executeAfterFind($event)

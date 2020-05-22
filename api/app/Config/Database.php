@@ -40,7 +40,7 @@ class Database extends \CodeIgniter\Database\Config
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
 		'pConnect' => false,
-		'DBDebug'  => (ENVIRONMENT !== 'production'),
+		'DBDebug'  => true, // We need the database to able throw error during CRUD
 		'cacheOn'  => false,
 		'cacheDir' => '',
 		'charset'  => 'utf8mb4',
