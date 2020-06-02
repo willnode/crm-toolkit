@@ -28,7 +28,6 @@ const SEO = ({ title, description, image, url }) => (
     {image && <meta name="twitter:image" content={image} />}
   </Helmet>
 )
-}
 
 const ErrorPage = () => {
   return (
