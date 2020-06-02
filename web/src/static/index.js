@@ -2,10 +2,7 @@ import React from 'react';
 import List from '@material-ui/core/List';
 import Button from '@material-ui/core/Button';
 import Hidden from '@material-ui/core/Hidden';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import VpnKeyIcon from '@material-ui/icons/VpnKey';
-import CreateIcon from '@material-ui/icons/Create';
-import HistoryIcon from '@material-ui/icons/History';
+import Icon from '@material-ui/core/Icon';
 import { Link, Switch, Route, Redirect } from "react-router-dom";
 import Home from './home';
 import Login from './login';
@@ -44,10 +41,10 @@ function LeftBar() {
   return (
     <DrawerComponent>
       <List>
-        <DrawerListItem to="/" icon={DashboardIcon} label="Home" />
-        <DrawerListItem to="/login/" icon={VpnKeyIcon} label="Login" />
-        <DrawerListItem to="/register/" icon={CreateIcon} label="Register" />
-        <DrawerListItem to="/forgot/" icon={HistoryIcon} label="Recover" />
+        <DrawerListItem to="/" icon={() => <Icon>dashboard</Icon>} label="Home" />
+        <DrawerListItem to="/login/" icon={() => <Icon>vpn_key</Icon>} label="Login" />
+        <DrawerListItem to="/register/" icon={() => <Icon>create</Icon>} label="Register" />
+        <DrawerListItem to="/forgot/" icon={() => <Icon>history</Icon>} label="Recover" />
       </List>
     </DrawerComponent>
   )

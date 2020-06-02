@@ -9,10 +9,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import MenuIcon from '@material-ui/icons/Menu';
-import Dashboard from '@material-ui/icons/Dashboard';
-import People from '@material-ui/icons/People';
-import ExitToApp from '@material-ui/icons/ExitToApp';
+import Icon from '@material-ui/core/Icon';
 import { Link } from 'react-router-dom';
 import { appTitle } from '../main/Config';
 import { Context } from '../main/Contexts';
@@ -41,15 +38,15 @@ export function LoginMenu() {
       </IconButton>
       <AvatarMenu anchorEl={open} open={!!open} onClose={() => setOpen(null)} >
         <MenuItem component={Link} onClick={() => setOpen(null)} to={`/${role}`}>
-          <ListItemIcon children={<Dashboard />} />
+          <ListItemIcon children={<Icon>dashboard</Icon>} />
           <ListItemText children="Dashboard" />
         </MenuItem>
         <MenuItem component={Link} onClick={() => setOpen(null)} to={`/${role}/profile`}>
-          <ListItemIcon children={<People />} />
+          <ListItemIcon children={<Icon>people</Icon>} />
           <ListItemText children="Profile" />
         </MenuItem>
         <MenuItem onClick={doLogout}>
-          <ListItemIcon children={<ExitToApp />} />
+          <ListItemIcon children={<Icon>exit_to_app</Icon>} />
           <ListItemText children="Logout" />
         </MenuItem>
       </AvatarMenu>
@@ -69,7 +66,7 @@ export function HeaderComponent({ children }) {
             onClick={() => Context.set('drawerOpen', !Context.get('drawerOpen'))}
             className="appbar-menubutton"
           >
-            <MenuIcon />
+            <Icon>menu</Icon>
           </IconButton>
         </Hidden>
         <Typography variant="h6" className="appbar-title">

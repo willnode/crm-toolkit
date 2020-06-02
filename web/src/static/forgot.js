@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 import Avatar from '@material-ui/core/Avatar';
+import Icon from '@material-ui/core/Icon';
 import Button from '@material-ui/core/Button';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { history, setMessage, doLogin } from '../main/Helper';
+import { setMessage, doLogin } from '../main/Helper';
 import { Page, SEO } from '../widget/page';
 import { Input, Form, Submit } from '../widget/controls';
 import {
@@ -11,6 +11,7 @@ import {
   checkAllValidators, matchesField
 } from '../widget/validators';
 import { Context } from '../main/Contexts';
+import Box from '@material-ui/core/Box';
 
 function InnerForm({ onOk }) {
   const actionRef = useRef();
@@ -61,7 +62,7 @@ export default function Forgot() {
     <Page className="paper center" maxWidth="xs">
       <SEO title="Recover your Password" />
       <Avatar className="avatar">
-        <LockOutlinedIcon />
+        <Icon>lock_outlined</Icon>
       </Avatar>
       <Typography component="h1" variant="h5">
         Recover your Password

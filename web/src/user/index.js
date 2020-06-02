@@ -1,6 +1,6 @@
 import React from 'react';
 import List from '@material-ui/core/List';
-import DashboardIcon from '@material-ui/icons/Dashboard';
+import Icon from '@material-ui/core/Icon';
 import { Switch, Route } from 'react-router-dom';
 import Dashboard from './dashboard';
 import Profile from '../widget/shared/profile';
@@ -28,7 +28,7 @@ function LeftBar() {
   return (
     <DrawerComponent>
       <List>
-        <DrawerListItem to="/user/" icon={DashboardIcon} label="Dashboard" />
+        <DrawerListItem to="/user/" icon={() => <Icon>dashboard</Icon>} label="Dashboard" />
       </List>
     </DrawerComponent>
   )

@@ -10,15 +10,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import AddIcon from '@material-ui/icons/Add';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ArchiveIcon from '@material-ui/icons/Archive';
-import ArchiveRIcon from '@material-ui/icons/ArchiveRounded';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import SearchIcon from '@material-ui/icons/Search';
-import ClearIcon from '@material-ui/icons/Clear';
-import InputIcon from '@material-ui/icons/Input';
+import Icon from '@material-ui/core/Icon';
 import { history, doReload } from '../main/Helper';
 import { controlDelete } from './controls';
 import TablePagination from '@material-ui/core/TablePagination';
@@ -51,13 +43,13 @@ function SearchBar({ search, setSearch }) {
       endAdornment: search !== innerSearch ? (
         <InputAdornment position="end">
           <IconButton onClick={() => setSearch(innerSearch)}>
-            <SearchIcon />
+            <Icon>search</Icon>
           </IconButton>
         </InputAdornment>
       ) : (search !== '' &&
         <InputAdornment position="end">
           <IconButton onClick={() => setSearch('')}>
-            <ClearIcon />
+            <Icon>clear</Icon>
           </IconButton>
         </InputAdornment>
         )
@@ -68,17 +60,21 @@ function SearchBar({ search, setSearch }) {
 
 function toolbarActions(actions, endpoint) {
   endpoint = endpoint || guessEndpoint();
-  const renders = [{
-    key: 'archive',
-    icon: () => getQueryParam('archived') ? <ArchiveRIcon /> : <ArchiveIcon />,
-    tooltip: 'Toggle Archive',
-    onClick: () => history().replace(`?archived=${getQueryParam('archived') ? '' : '1'}`),
-  }, {
-    key: 'create',
-    icon: () => <AddIcon />,
-    tooltip: 'New',
-    onClick: () => history().push(`/${endpoint}/create`)
-  }].filter((x) => (actions || []).includes(x.key))
+  const renders = (actions || []).map((act) => {
+    if (typeof act === 'string') {
+      return [{
+        key: 'archive',
+        icon: () => getQueryParam('archived') ? <Icon>inbox</Icon> : <Icon>archive</Icon>,
+        tooltip: 'Toggle Archive',
+        onClick: () => history().replace(`?archived=${getQueryParam('archived') ? '' : '1'}`),
+      }, {
+        key: 'create',
+        icon: () => <Icon>add</Icon>,
+        tooltip: 'New',
+        onClick: () => history().push(`/${endpoint}/create`)
+      }].find((x) => x.key === act);
+    } else return act;
+  }).filter(x => !!x)
 
   return renders.map(({ key, icon: Icon, tooltip, onClick }) => (
     <IconButton key={key} title={tooltip} onClick={() => onClick()}><Icon /></IconButton>
@@ -90,14 +86,14 @@ function TableToolbar({ numSelected, title, searchable, search, setSearch, actio
     <Toolbar disableGutters color={numSelected > 0 ? 'primary' : undefined}>
       {
         actions && actions.includes('back') && (
-          <IconButton title="Go Back" onClick={() => history().goBack()}><ArrowBackIcon /></IconButton>
+          <IconButton title="Go Back" onClick={() => history().goBack()}><Icon>arrow_back</Icon></IconButton>
         )
       }
       <div className="table-toolbar-gutters">
         {numSelected > 0 ? (
           <Typography className="table-title" color="inherit" variant="subtitle1" component="div">
             {numSelected} selected
-        </Typography>
+          </Typography>
         ) : (
             <Typography className="table-title" variant="h6" component="h1">
               {title}
@@ -117,28 +113,32 @@ function TableToolbar({ numSelected, title, searchable, search, setSearch, actio
 function actionColumns(actions, label, title, endpoint) {
   title = title || 'Actions';
   endpoint = endpoint || guessEndpoint();
-  const renders = [{
-    key: 'detail',
-    icon: () => <InputIcon />,
-    tooltip: 'Open ' + label,
-    onClick: (id) => history().push(`/${endpoint}/detail/` + id),
-  }, {
-    key: 'edit',
-    icon: () => <EditIcon />,
-    tooltip: 'Edit ' + label,
-    onClick: (id) => history().push(`/${endpoint}/edit/` + id),
-  }, {
-    key: 'delete',
-    icon: () => <DeleteIcon />,
-    tooltip: 'Delete ' + label,
-    onClick: (id) => (
-      window.confirm(`Are you sure you want to delete this ${label}?`) &&
-      controlDelete(`${endpoint}/${id}`, (() => { doReload() }))()
-    ),
-  }].filter((x) => (actions || []).includes(x.key))
+  const renders = (actions || []).map((act) => {
+    if (typeof act === 'string') {
+      return [{
+        key: 'detail',
+        icon: () => <Icon>input</Icon>,
+        tooltip: 'Open ' + label,
+        onClick: (id) => history().push(`/${endpoint}/detail/` + id),
+      }, {
+        key: 'edit',
+        icon: () => <Icon>edit</Icon>,
+        tooltip: 'Edit ' + label,
+        onClick: (id) => history().push(`/${endpoint}/edit/` + id),
+      }, {
+        key: 'delete',
+        icon: () => <Icon>delete</Icon>,
+        tooltip: 'Delete ' + label,
+        onClick: (id) => (
+          window.confirm(`Are you sure you want to delete this ${label}?`) &&
+          controlDelete(`${endpoint}/${id}`, (() => { doReload() }))()
+        ),
+      }].find((x) => x.key === act);
+    } else return act;
+  }).filter(x => !!x)
 
   return {
-    title: 'Actions',
+    title,
     render: ({ value }) => renders.map(({ key, icon: Icon, tooltip, onClick }) => (
       <IconButton key={key} title={tooltip} onClick={() => onClick(value)}><Icon /></IconButton>
     )),

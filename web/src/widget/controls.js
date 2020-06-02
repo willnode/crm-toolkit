@@ -98,10 +98,10 @@ const Select = ({ name, label, options, validator, onChange, ...props }) => {
   </FormControl>
 }
 
-const Form = ({ action, redirect, onSubmit, children }) => {
+const Form = ({ action, redirect, onSubmit, children, ...props }) => {
   return (
     <Box width="100%" marginTop={1} clone>
-      <form action={action} onSubmit={onSubmit || controlPost(action, redirect)}>
+      <form action={action} onSubmit={onSubmit || controlPost(action, redirect)} {...props}>
         {children}
       </form>
     </Box>)

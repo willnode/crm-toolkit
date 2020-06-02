@@ -1,7 +1,7 @@
 import React from 'react';
 import { Page, SEO } from '../widget/page';
+import Icon from '@material-ui/core/Icon';
 import Avatar from '@material-ui/core/Avatar';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { Form, Input, Submit, Checkbox } from '../widget/controls';
 import Typography from '@material-ui/core/Typography';
 import { doLogin, setMessage, history } from '../main/Helper';
@@ -28,7 +28,7 @@ export default function () {
     <Page className="paper center" maxWidth="xs" >
       <SEO title="Register to CRM Toolkit" />
       <Avatar className="avatar">
-        <LockOutlinedIcon />
+        <Icon>lock_outlined</Icon>
       </Avatar>
       <Typography component="h1" variant="h5">
         Register

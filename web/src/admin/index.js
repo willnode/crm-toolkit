@@ -1,7 +1,6 @@
 import React from 'react';
 import List from '@material-ui/core/List';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import Icon from '@material-ui/core/Icon';
 import { Switch, Route } from 'react-router-dom';
 import Dashboard from './dashboard';
 import Profile from '../widget/shared/profile';
@@ -31,8 +30,8 @@ function LeftBar() {
   return (
     <DrawerComponent>
       <List>
-        <DrawerListItem to="/admin/" icon={DashboardIcon} label="Dashboard" />
-        <DrawerListItem to="/admin/user/" icon={SupervisedUserCircleIcon} label="Users" />
+        <DrawerListItem to="/admin/" icon={() => <Icon>dashboard</Icon>} label="Dashboard" />
+        <DrawerListItem to="/admin/user/" icon={() => <Icon>supervised_user_circle</Icon>} label="Users" />
       </List>
     </DrawerComponent>
   )

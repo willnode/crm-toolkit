@@ -1,8 +1,8 @@
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
-import { history, extractForm, doLogin, setError } from '../main/Helper';
+import { extractForm, doLogin, setError } from '../main/Helper';
 import { Page, SEO } from '../widget/page';
 import { Input, Form, Submit, Checkbox } from '../widget/controls';
 
@@ -22,7 +22,7 @@ export default function Login() {
     <Page className="paper center" maxWidth="xs">
       <SEO title="Login to CRM Toolkit" />
       <Avatar className="avatar">
-        <LockOutlinedIcon />
+        <Icon>lock_outlined</Icon>
       </Avatar>
       <Typography component="h1" variant="h5">
         Sign in
