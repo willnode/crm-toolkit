@@ -1,10 +1,8 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { history, getQueryParam } from '../main/Helper';
+import Typography from '@material-ui/core/Typography';
 import { Page, SEO } from '../widget/page';
-import { isProduction } from '../main/Config';
+import { history, getQueryParam } from '../main/Helper';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {

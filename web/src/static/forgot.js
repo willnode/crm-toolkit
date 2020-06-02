@@ -1,19 +1,17 @@
 import React, { useState, useRef } from 'react';
-import Avatar from '@material-ui/core/Avatar';
+import Box from '@material-ui/core/Box';
 import Icon from '@material-ui/core/Icon';
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { setMessage, doLogin } from '../main/Helper';
-import { Page, SEO } from '../widget/page';
-import { Input, Form, Submit } from '../widget/controls';
-import {
-  useValidator, required, minLength, validEmail,
-  checkAllValidators, matchesField
-} from '../widget/validators';
 import { Context } from '../main/Contexts';
-import Box from '@material-ui/core/Box';
+import { Page, SEO } from '../widget/page';
+import { setMessage, doLogin } from '../main/Helper';
+import { Input, Form, Submit } from '../widget/controls';
+import { useValidator, required, minLength } from '../widget/validators';
+import { validEmail, checkAllValidators, matchesField } from '../widget/validators';
 
-function InnerForm({ onOk }) {
+function InnerForm() {
   const actionRef = useRef();
   const [stage, setStage] = useState(0);
   const [email, setEmail] = useState('');
@@ -27,7 +25,9 @@ function InnerForm({ onOk }) {
   }
   return <Form action="forgot" redirect={() => {
     if (stage === 3) {
-      doLogin(email, password, false).then((login) => [setMessage('Your new password has been saved. Welcome back!')]);
+      doLogin(email, password, false).then((login) => [
+        setMessage('Your new password has been saved. Welcome back!')
+      ]);
     } else {
       setStage(stage + 1);
     }

@@ -1,20 +1,19 @@
 import React from 'react';
+import Icon from '@material-ui/core/Icon';
 import List from '@material-ui/core/List';
 import Button from '@material-ui/core/Button';
 import Hidden from '@material-ui/core/Hidden';
-import Icon from '@material-ui/core/Icon';
 import { Link, Switch, Route, Redirect } from "react-router-dom";
 import Home from './home';
 import Login from './login';
-import Forgot from './forgot';
-import Register from './register';
-import Offline from './offline';
 import Page404 from './404';
-import { login, getQueryParam } from '../main/Helper';
-import { DrawerComponent, DrawerListItem } from '../widget/drawer';
+import Forgot from './forgot';
+import Offline from './offline';
+import Register from './register';
 import { HeaderComponent } from '../widget/header';
 import { FooterComponent } from '../widget/footer';
-
+import { login, getQueryParam } from '../main/Helper';
+import { DrawerComponent, DrawerListItem } from '../widget/drawer';
 
 function RedirectIfLoggedInOrShow({ component : Comp }) {
   return login() ? <Redirect to={getQueryParam('redirect') || '/' + login().role + '/'} /> : <Comp />;

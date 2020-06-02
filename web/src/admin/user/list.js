@@ -1,6 +1,6 @@
 import React from 'react';
-import { RemoteTable, actionColumns } from '../../widget/table';
 import { getAvatarUrl } from '../../main/Helper';
+import { RemoteTable, actionColumns } from '../../widget/table';
 
 export default function () {
   return <RemoteTable
@@ -21,6 +21,6 @@ export default function () {
       },
       name: 'Name',
       email: 'Email',
-      login_id: actionColumns(['edit', 'delete'], 'User'),
+      login_id: actionColumns(['detail', 'edit', 'delete'], 'User'),
     }} />
 }

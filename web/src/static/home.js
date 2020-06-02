@@ -1,9 +1,9 @@
 import React from 'react';
-import { Page, SEO } from '../widget/page';
-import Button from '@material-ui/core/Button';
-import { publicUrl, appTitle } from '../main/Config';
 import Icon from '@material-ui/core/Icon';
+import Button from '@material-ui/core/Button';
+import { Page, SEO } from '../widget/page';
 import GitHubIcon from '../media/icons/github.svg';
+import { publicUrl, appTitle } from '../main/Config';
 
 export default function Home() {
   return (<Page className="paper center" maxWidth="md">

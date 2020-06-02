@@ -1,11 +1,10 @@
 import React from 'react';
-import { Page } from '../widget/page';
-import Typography from '@material-ui/core/Typography';
-import { login } from '../main/Helper';
-import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import { getAvatarUrl } from '../main/Helper';
+import Typography from '@material-ui/core/Typography';
+import { Link } from 'react-router-dom';
+import { Page } from '../widget/page';
+import { login, getAvatarUrl } from '../main/Helper';
 
 export default function () {
   return <Page className="paper center">

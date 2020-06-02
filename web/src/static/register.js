@@ -1,14 +1,12 @@
 import React from 'react';
-import { Page, SEO } from '../widget/page';
 import Icon from '@material-ui/core/Icon';
 import Avatar from '@material-ui/core/Avatar';
-import { Form, Input, Submit, Checkbox } from '../widget/controls';
 import Typography from '@material-ui/core/Typography';
-import { doLogin, setMessage, history } from '../main/Helper';
-import {
-  useValidator, required, minLength, validEmail,
-  checkAllValidators, matchesRegex, matchesField
-} from '../widget/validators';
+import { Page, SEO } from '../widget/page';
+import { doLogin, setMessage } from '../main/Helper';
+import { Form, Input, Submit, Checkbox } from '../widget/controls';
+import { useValidator, required, minLength, validEmail } from '../widget/validators';
+import { checkAllValidators, matchesRegex, matchesField } from '../widget/validators';
 
 function submit(_, data) {
   doLogin(
@@ -36,8 +34,10 @@ export default function () {
       <Form action="register" redirect={submit}>
         <Input validator={validators.name} name="name" label="Name" />
         <Input validator={validators.email} name="email" label="Email" type="email" />
-        <Input validator={validators.password} name="password" label="Password" type="password" autoComplete="new-password" />
-        <Input validator={validators.passconf} name="passconf" label="Re-enter Password" type="password" autoComplete="new-password" />
+        <Input validator={validators.password} name="password"
+          label="Password" type="password" autoComplete="new-password" />
+        <Input validator={validators.passconf} name="passconf"
+          label="Re-enter Password" type="password" autoComplete="new-password" />
         <Checkbox name="rememberme" label="Remember me" />
         <Submit disabled={!checkAllValidators(validators)} />
       </Form>

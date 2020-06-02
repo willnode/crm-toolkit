@@ -1,22 +1,22 @@
 
 import React from 'react';
 import { useTable } from 'react-table';
-import { Page } from './page';
-import IconButton from '@material-ui/core/IconButton';
-import TextField from '@material-ui/core/TextField';
+import Icon from '@material-ui/core/Icon';
 import Table from '@material-ui/core/Table';
+import Toolbar from '@material-ui/core/Toolbar';
+import TableRow from '@material-ui/core/TableRow';
+import TextField from '@material-ui/core/TextField';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Icon from '@material-ui/core/Icon';
-import { history, doReload } from '../main/Helper';
-import { controlDelete } from './controls';
-import TablePagination from '@material-ui/core/TablePagination';
-import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import TableContainer from '@material-ui/core/TableContainer';
+import TablePagination from '@material-ui/core/TablePagination';
+import { Page } from './page';
+import { controlDelete } from './controls';
+import { history, doReload } from '../main/Helper';
 
 function guessEndpoint() {
   return window.location.pathname.replace(/^\/+|\/+$/g, '');
@@ -227,7 +227,6 @@ function RemoteTable({ src, options, columns }) {
     let params = Object.fromEntries(
       Array.from(Object.entries(parameters)).filter(([k, v]) => v)
     );
-    console.log(params);
     return src + '?' + new URLSearchParams(params).toString();
   }, [src, parameters])
 

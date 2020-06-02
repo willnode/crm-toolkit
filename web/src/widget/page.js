@@ -1,14 +1,14 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
-import { serverGet } from '../main/Helper';
 import { useTheme } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { serverGet } from '../main/Helper';
 import { Helmet } from 'react-helmet';
 
-function SEO({ title, description, image, url }) {
-  return <Helmet>
+const SEO = ({ title, description, image, url }) => (
+  <Helmet>
     {/* General tags */}
     {title && <title>{title}</title>}
     {description && <meta name="description" content={description} />}
@@ -27,6 +27,7 @@ function SEO({ title, description, image, url }) {
     {description && <meta name="twitter:description" content={description} />}
     {image && <meta name="twitter:image" content={image} />}
   </Helmet>
+)
 }
 
 const ErrorPage = () => {

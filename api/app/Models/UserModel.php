@@ -5,13 +5,17 @@ class UserModel extends BaseModel
 	protected $table = 'login';
 	protected $primaryKey = 'login_id';
 	protected $select = [
-		'login_id', 'username',	'email', 'name', 'avatar', 'otp',
+		'login_id', 'username',	'email', 'name',
+		'avatar', 'otp', 'created_at', 'updated_at'
 	];
 	protected $searchable = [
 		'username', 'email', 'name'
 	];
 	protected $allowedFields = [
 		'name', 'email', 'avatar', 'username'
+	];
+	protected $columnsOnQuery = [
+		'login_id', 'name', 'email', 'avatar'
 	];
 	protected $fileUploadRules = [
 		'avatar' => ['types' => ['jpg', 'png', 'bmp']]

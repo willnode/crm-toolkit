@@ -1,13 +1,13 @@
+import React from 'react';
 import { hydrate, render } from 'react-dom';
-import React, { useState } from 'react';
 import { BrowserRouter } from "react-router-dom";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { publicUrl } from './main/Config';
+import './media/style.css';
 import App from './main/App';
+import { publicUrl } from './main/Config';
 import { Context } from './main/Contexts';
 import { ErrorBoundary } from './static/offline';
-import './media/style.css';
 
 function GenerateTheme(theme) {
   return createMuiTheme({
@@ -25,7 +25,7 @@ function GenerateTheme(theme) {
 }
 
 function MainApp() {
-  const theme = Context.bind('theme', useState('light'))[0];
+  const theme = Context.bind('theme', React.useState('light'))[0];
   const generated = React.useMemo(() => GenerateTheme(theme), [theme]);
 
   return (

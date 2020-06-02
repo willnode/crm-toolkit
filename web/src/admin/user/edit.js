@@ -1,18 +1,13 @@
 import React from 'react';
 import { Page } from '../../widget/page';
-import {
-  Form, Input, Submit, BackButton,
-  CommandButton, FlexGroup
-} from '../../widget/controls';
-import { useParams } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
-import { doReload, history } from '../../main/Helper';
-import {
-  useValidator, required, minLength,
-  matchesRegex, checkAllValidators, validEmail
-} from '../../widget/validators';
+import { useParams } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
-
+import { doReload, history } from '../../main/Helper';
+import { CommandButton, FlexGroup } from '../../widget/controls';
+import { Form, Input, Submit, BackButton } from '../../widget/controls';
+import { useValidator, required, minLength } from '../../widget/validators';
+import { matchesRegex, checkAllValidators, validEmail } from '../../widget/validators';
 
 export default function () {
   const id = useParams().id || 0;

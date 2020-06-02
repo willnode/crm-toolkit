@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { withRouter } from "react-router-dom";
+import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Context, TemporaryContext } from './Contexts';
-import { popMessages } from './Helper';
-import { appKey } from './Config';
-import Admin from '../admin';
+import { withRouter } from "react-router-dom";
 import User from '../user';
+import Admin from '../admin';
 import Static from '../static';
+import { appKey } from './Config';
 import Layout from '../widget/layout';
+import { popMessages } from './Helper';
+import { Context, TemporaryContext } from './Contexts';
 
-class App extends Component {
+class App extends React.Component {
   constructor() {
     super();
     this.state = {

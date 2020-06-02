@@ -1,5 +1,5 @@
-import { serverUrl, uploadsUrl, publicUrl, imageAvatarUrl, appKey } from './Config';
 import { Context, TemporaryContext } from './Contexts';
+import { serverUrl, uploadsUrl, publicUrl, imageAvatarUrl, appKey } from './Config';
 
 const serverHandler = async (url, method, body) => {
   let response;
@@ -46,6 +46,11 @@ const extractForm = (event) => {
 }
 
 const doLogin = async (username, password, rememberme) => {
+  username = username || login().email;
+  password = password || (atob(Context.get('auth').substr(6)).split(':', 2)[1]);
+  if (rememberme === undefined)
+    rememberme = Boolean(localStorage.getItem(appKey + 'appauth'));
+
   Context.set('auth', 'Basic ' + btoa(username + ':' + password));
   try {
     const { login } = await serverGet('login');

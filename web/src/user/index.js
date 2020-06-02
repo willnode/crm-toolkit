@@ -1,15 +1,15 @@
 import React from 'react';
-import List from '@material-ui/core/List';
 import Icon from '@material-ui/core/Icon';
+import List from '@material-ui/core/List';
 import { Switch, Route } from 'react-router-dom';
 import Dashboard from './dashboard';
-import Profile from '../widget/shared/profile';
 import Page404 from '../static/404';
-import { CheckRole } from '../widget/controls';
 import { SEO } from '../widget/page';
+import Profile from '../widget/shared/profile';
+import { CheckRole } from '../widget/controls';
+import { FooterComponent } from '../widget/footer';
 import { LoginMenu, HeaderComponent } from '../widget/header';
 import { DrawerComponent, DrawerListItem } from '../widget/drawer';
-import { FooterComponent } from '../widget/footer';
 
 function Main() {
   return (

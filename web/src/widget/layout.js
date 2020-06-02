@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 import Alert from '@material-ui/lab/Alert';
-import { Context } from '../main/Contexts';
 import { Switch, Route } from 'react-router-dom';
+import { Context } from '../main/Contexts';
 
 function Notification() {
   Context.bind('message', useState(null));
   Context.bind('error', useState(null));
-  return <>
+  return (<>
     {(x => x ? <Alert severity="success" color="info">{x}</Alert> : null)(Context.get('message'))}
     {(x => x ? <Alert severity="error">{x}</Alert> : null)(Context.get('error'))}
-  </>
+  </>)
 }
 
 export function RouteByRole({ roles, component }) {
-  return <Switch>{roles.map(x => <Route key={x.role} path={'/' + x.role} component={x[component]} />)}</Switch>
+  return (
+    <Switch>
+      {roles.map(x => <Route key={x.role}
+        path={'/' + x.role} component={x[component]} />)}
+    </Switch>
+  )
 }
 
 export default function Layout({ roles }) {

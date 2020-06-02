@@ -203,6 +203,11 @@ class BaseModel extends Model
 	protected $_method = NULL;
 	protected $_action = NULL;
 
+	/**
+	 * @var \App\Models\LoginModel
+	 */
+	protected $login = NULL;
+
 	public function __construct(ConnectionInterface &$db = null, ValidationInterface $validation = null)
 	{
 		parent::__construct($db, $validation);
@@ -382,6 +387,7 @@ class BaseModel extends Model
 		$paramVerb = $request->getPost('method');
 		$method = $this->translateMethod($httpVerb, $paramVerb, $id);
 		$action = $request->getPost('action');
+		$this->login = $request->login;
 		$event = $this->trigger('beforeExecute', [
 			'builder' => $cursor,
 			'id' => $id,
@@ -390,9 +396,9 @@ class BaseModel extends Model
 			'request' => $request,
 			'response' => NULL,
 		]);
-		$this->_method = $method;
-		$this->_action = $action;
-		$this->_id = $id;
+		$this->_method = $event['method'];
+		$this->_action = $event['action'];
+		$this->_id = $event['id'];
 		if (!empty($event['response'])) {
 			return $event['response'];
 		}

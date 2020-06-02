@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Drawer from '@material-ui/core/Drawer';
-import Toolbar from '@material-ui/core/Toolbar';
 import Hidden from '@material-ui/core/Hidden';
+import Toolbar from '@material-ui/core/Toolbar';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Context } from '../main/Contexts';
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
-
+import { Context } from '../main/Contexts';
 
 const DrawerListItem = ({ to, icon, label }) => (
   <ListItem component={Link} onClick={() => Context.set('drawerOpen', false)} button to={to}>
