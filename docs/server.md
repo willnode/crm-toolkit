@@ -129,13 +129,13 @@ To help you get started, CRM Toolkit includes several built-in Models:
 |--+ UserModel.php
 ```
 
-| Model Name        | What it is for?                                              |
-| ----------------- | ------------------------------------------------------------ |
-| ForgotModel.php   | Help users change password in case they forgot               |
-| LoginModel.php    | Used across the system for identifying users through `Authorization` header |
-| ProfileModel.php  | Change currently logged in user data (e.g. email/name/avatar) |
-| RegisterModel.php | Allows self-registering new accounts                         |
-| UserModel.php     | Help admin manage user accounts                              |
+| Model Name          | What it is for?                                              |
+| ------------------- | ------------------------------------------------------------ |
+| `ForgotModel.php`   | Help users change password in case they forgot               |
+| `LoginModel.php`    | Used across the system for identifying users through `Authorization` header |
+| `ProfileModel.php`  | Change currently logged in user data (e.g. email/name/avatar) |
+| `RegisterModel.php` | Allows self-registering new accounts                         |
+| `UserModel.php`     | Help admin manage user accounts                              |
 
 All models (except `LoginModel`) inherits `BaseModel.php` which provides the main logic for the `execute()` method.
 
@@ -214,13 +214,15 @@ class Admin extends BaseController{
 
 This is how you do operations on the model:
 
-| HTTP Header               | Meaning                                                  |
-| ------------------------- | -------------------------------------------------------- |
-| `GET /admin/article/`     | Read all articles (paginated)                            |
-| `GET /admin/article/2`    | Read an article with ID 2                                |
-| `POST /admin/article/`    | Insert a new article (the ID is automatically generated) |
-| `POST /admin/article/2`   | Update some or all fields in article with ID 2           |
-| `DELETE /admin/article/2` | Delete an article with ID 2                              |
+| HTTP Header               | Meaning                                                  | Term     |
+| ------------------------- | -------------------------------------------------------- | -------- |
+| `GET /admin/article/`     | Read all articles (paginated)                            | `SELECT` |
+| `GET /admin/article/2`    | Read an article with ID 2                                | `SELECT` |
+| `POST /admin/article/`    | Insert a new article (the ID is automatically generated) | `CREATE` |
+| `POST /admin/article/2`   | Update some or all fields in article with ID 2           | `UPDATE` |
+| `DELETE /admin/article/2` | Delete an article with ID 2                              | `DELETE` |
+
+While getting the CRUD works using few options seems really awesome, most of the time you  do need more additional options to constrain user input or add some additional business logic. This is where most of the overridable attributes comes in.
 
 Let's take a deep look how they work.
 
@@ -267,7 +269,91 @@ Complete GET query parameter options:
 | `search`                      | `null`  | If specified, and `searchable` is not empty, then it will considered as additional `WHERE LIKE` clause for each column in `searchable`.<br /><br />Note: try to use few columns as possible since `LIKE` wildcard query is known to be really slow. |
 | Other values<br />`key=value` |         | If `key` is specified as one of `indexable` then it will considered as additional `WHERE` query based on `key` and it's pair `value`. |
 
+#### Create or Update an Item with POST
 
+Configurable options:
+
+```php
+// Table attributes that writable from POST body
+protected $allowedFields = [];
+// Rules to set validate data uploads
+protected $fileUploadRules = [];
+// Rules used to validate POST data
+protected $validationRules = [];  
+```
+
+The `allowedFields` is a must. If you omit it then the model will not accepting `POST` for `CREATE` or `UPDATE` operation.
+
+> Setting this attribute empty does not prevent `DELETE`  and other special operations like subquerying and state reducers using actions. If you want to make the model truly read-only, set `$only` to `[SELECT]`. 
+
+The `validationRules` attribute follows CodeIgniter documentation on [validating models](https://codeigniter4.github.io/userguide/models/model.html#validating-data). If a user violates one of validation during `CREATE` or `UPDATE` then the model simply rejects the whole request.
+
+```php
+protected $validationRules = [
+    'name' => 'required|min_length[3]|alpha_numeric_space',
+    'email' => 'required|valid_email',
+];
+```
+
+For files however, you might want to use `fileUploadRules`. Example usage:
+
+```php
+protected $fileUploadRules = [
+    'avatar' => ['types' => ['jpg', 'png', 'bmp']]
+];
+```
+
+List of default file options:
+
+```php
+[ 
+    // Specify destination folder under `api/writables/uploads`
+    'folder' => null, // This defaults to the rule name (key)  
+    // Specify whitelists of allowed upload extension types (array)
+    // Under the hood it checks using $file->guessExtension()
+    'types' => '*', 
+    // Is the file is required? Under the hood, this config also 
+    // checks whether the user already uploaded the file to database
+    // so user is not required to reupload the file during UPDATE.
+    'required' => false, 
+    // In case of file name conflict, overwrite existing file?
+    // If unset or false, let CodeIgniter rename the file.
+    // (If set true, Usually accompanied by `custom_file_name`)
+    'overwrite' => false, 
+    // A callable function for determining custom name for a given file.
+    // parameters: ($file, $name, $option, $input_data, $existing_row)
+    // (you might want to pass this thing as a string 
+    //         then put the function in a helper file)
+    'custom_file_name' => null,
+]
+```
+
+#### Constraint Usage
+
+```php
+protected $join = null;
+protected $only = null;
+protected $where = null;
+```
+#### Nested Query
+
+```php
+protected $lookUp = [];
+protected $lookDown = [];
+protected $compositeKey = NULL;
+protected $compositeValue = NULL;
+protected $compositeWrap = FALSE;
+```
+
+#### Event Hooks
+
+```php
+protected function executeBeforeExecute($event) { return $event; }
+protected function executeBeforeChange($event) { return $event; }
+protected function executeAfterChange($event) {	return $event; }
+protected function executeAfterFind($event) { return $event; }
+protected function executeAfterExecute($result) { return $result; }
+```
 
 ## Next
 

@@ -66,7 +66,7 @@ function control_file_delete($folder, $existing_value = '')
 
 /**
  * Handle file upload on POST, and also delete existing file in previous data (so no orphan files).
- * $attr => ['folder', 'types', 'required', 'custom_file_name' ]
+ * $attr => ['folder', 'types', 'required', 'overwrite', 'custom_file_name' ]
  */
 function control_file_upload(&$updates, $name, $attr, $existing_row = NULL)
 {
@@ -88,7 +88,8 @@ function control_file_upload(&$updates, $name, $attr, $existing_row = NULL)
 			throw new FileException('Bad file type');
 		}
 		$filename = is_callable($custom_file_name) ?
-			$custom_file_name($file) : $file->getName();
+			$custom_file_name($file, $name, $attr, $updates, $existing_row) :
+			$file->getName();
 		if(!$file->move(WRITEPATH.'uploads/'.$folder, $filename, $overwrite)) {
 			throw new FileException('Failed to move uploaded file');
 		}

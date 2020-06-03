@@ -1,5 +1,12 @@
-theme: jekyll-theme-minimal
+remote_theme: pmarsceill/just-the-docs
+markdown: kramdown
 title: CRM-Toolkit
 description: Battery-Included CodeIgniter, React, Material-UI Template
 logo: images/splash.png
-show_downloads: true
+baseurl: /crm-toolkit/
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      layout: "default"
