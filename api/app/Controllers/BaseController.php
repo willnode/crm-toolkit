@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 /**
@@ -31,13 +32,6 @@ class BaseController extends Controller
 	/** @var \App\Models\LoginModel */
 	protected $login;
 
-
-	/**
-	 * To be overridden, role name applied
-	 * @var string
-	 */
-	const ROLE = NULL;
-
 	/**
 	 * Constructor.
 	 */
@@ -51,7 +45,5 @@ class BaseController extends Controller
 		//--------------------------------------------------------------------
 
 		$this->login = $request->login ?? null;
-
 	}
-
 }

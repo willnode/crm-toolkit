@@ -1,4 +1,6 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use CodeIgniter\Config\Services;
 
@@ -8,7 +10,7 @@ class LoginModel
 	// Database variables
 	const TABLE = 'login';
 	const TABLEKEY = 'login_id';
-	const USERNAMES = [ 'email', 'username' ];
+	const USERNAMES = ['email', 'username'];
 	const TABLEPW = 'password';
 	const TABLEOTP = 'otp';
 
@@ -22,12 +24,13 @@ class LoginModel
 
 	public $data;
 
-	public function __construct() {
+	public function __construct()
+	{
 		// Get authentication
 		$request = Services::request();
 		if ($request->hasHeader('Authorization')) {
 			$nonce = base64_decode(substr($request->getHeader('Authorization')->getValue(), 6), true);
-			if ($nonce AND count($nonce = explode(':', $nonce, 2)) === 2) {
+			if ($nonce and count($nonce = explode(':', $nonce, 2)) === 2) {
 				$this->username = $nonce[0];
 				$this->password = $nonce[1];
 				$db  = \Config\Database::connect();

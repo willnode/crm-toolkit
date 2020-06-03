@@ -16,7 +16,7 @@ defined('APP_NAMESPACE') || define('APP_NAMESPACE', 'App');
 
 /*
 |--------------------------------------------------------------------------
-| HTTP Verbs constants for convenience
+| HTTP Verbs and other constants for convenience
 |--------------------------------------------------------------------------
 */
 define('GET', 'get');
@@ -28,6 +28,8 @@ define('DELETE', 'delete');
 define('UPDATE', 'update');
 define('CREATE', 'create');
 define('REPLACE', 'replace');
+define('PRODUCTION', 'production');
+define('DEVELOPMENT', 'development');
 
 /*
 |--------------------------------------------------------------------------

@@ -1,4 +1,6 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 class ProfileModel extends BaseModel
 {
@@ -17,7 +19,7 @@ class ProfileModel extends BaseModel
 		'name' => 'required|min_length[3]',
 		'email' => 'required|valid_email'
 	];
-	protected $only = [ SELECT, UPDATE ];
+	protected $only = [SELECT, UPDATE];
 
 	protected function executeBeforeChange($event)
 	{
@@ -26,7 +28,7 @@ class ProfileModel extends BaseModel
 		// Password Change
 		if ($method === UPDATE) {
 			if (!empty($data['password'])) {
-				if(control_password_update($data)) {
+				if (control_password_update($data)) {
 					$data['otp'] = NULL;
 				}
 			} else {

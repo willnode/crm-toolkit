@@ -204,6 +204,10 @@ class BaseModel extends Model
 	protected $_action = NULL;
 
 	/**
+	 * @var \CodeIgniter\HTTP\IncomingRequest
+	 */
+	protected $request = NULL;
+	/**
 	 * @var \App\Models\LoginModel
 	 */
 	protected $login = NULL;
@@ -387,6 +391,7 @@ class BaseModel extends Model
 		$paramVerb = $request->getPost('method');
 		$method = $this->translateMethod($httpVerb, $paramVerb, $id);
 		$action = $request->getPost('action');
+		$this->request = $request;
 		$this->login = $request->login;
 		$event = $this->trigger('beforeExecute', [
 			'builder' => $cursor,
@@ -685,7 +690,7 @@ class BaseModel extends Model
 			return $event;
 		}
 
-		$id = $event['id'][0];
+		$id = $event['id'];
 		if (!($existing = $this->builder->get(null, 0, false)->getRow()))
 			throw new ValidationException("Data Not Found");
 		foreach ($this->fileUploadRules as $name => $attr) {
@@ -706,7 +711,8 @@ class BaseModel extends Model
 	/**
 	 * Hook to translate DB error (e.g. duplicate/lack of key/etc)
 	 */
-	protected function translateDBErrorMessage($err) {
+	protected function translateDBErrorMessage($err)
+	{
 		return $err;
 	}
 
@@ -751,7 +757,6 @@ class BaseModel extends Model
 
 	protected function executeAfterUpdate($event)
 	{
-		$event['id'] = $event['id'][0];
 		$event['method'] = $this->_method ?? UPDATE;
 		$this->trigger('afterChange', $event);
 		return $event;
@@ -759,7 +764,6 @@ class BaseModel extends Model
 
 	protected function executeAfterDelete($event)
 	{
-		$event['id'] = $event['id'][0];
 		$event['data'] = NULL;
 		$event['method'] = DELETE;
 		$this->trigger('afterChange', $event);
@@ -914,5 +918,83 @@ class BaseModel extends Model
 	protected function executeAfterFind($event)
 	{
 		return $event;
+	}
+
+	// --------
+
+	/**
+	 * Small subset features of original insert
+	 */
+	public function insert($data = null, bool $returnID = true)
+	{
+
+		$this->insertID = 0;
+
+		if (is_object($data)) {
+			$data = (array) $data;
+		}
+
+		if ($this->skipValidation === false) {
+			if ($this->cleanRules()->validate($data) === false) {
+				return false;
+			}
+		}
+
+		$data = array_intersect_key($data, array_flip($this->allowedFields));
+		$eventData = $this->trigger('beforeInsert', ['data' => $data]);
+
+		if (count($eventData['data'])) {
+			$builder = $this->builder();
+			$result = $builder->insert($eventData['data']);
+			if ($result) {
+				$this->insertID = $this->db->insertID();
+			}
+		} else {
+			$result = false;
+		}
+
+		// Trigger afterInsert events with the inserted data and new ID
+		$this->trigger('afterInsert', ['id' => $this->insertID, 'data' => $eventData['data'], 'result' => $result]);
+
+		if (!$result) {
+			return $result;
+		} else {
+			return $this->insertID;
+		}
+	}
+
+	/**
+	 * Small subset features of original update
+	 */
+	public function update($id = null, $data = null): bool
+	{
+
+		if (is_numeric($id) || is_string($id)) {
+			$id = [$this->primaryKey => $id];
+		}
+
+		if (is_object($data)) {
+			$data = (array) $data;
+		}
+
+		if ($this->skipValidation === false) {
+			if ($this->cleanRules(true)->validate($data) === false) {
+				return false;
+			}
+		}
+
+		$data = array_intersect_key($data, array_flip($this->allowedFields));
+		$builder = $this->builder()->where($id);
+		$eventData = $this->trigger('beforeUpdate', ['id' => $id, 'data' => $data]);
+
+		if (count($eventData['data'])) {
+			$result = $builder->update($eventData['data']);
+		} else {
+			$result = true;
+		}
+
+		$this->trigger('afterUpdate', ['id' => $id, 'data' => $eventData['data'], 'result' => $result]);
+
+		return $result;
 	}
 }

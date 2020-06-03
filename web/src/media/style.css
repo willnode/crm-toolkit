@@ -31,6 +31,11 @@
 .appbar-root {
 	z-index: var(--z-index-appbar) !important;
 }
+.app-bubble {
+	position: sticky;
+    top: 60px;
+    z-index:  var(--z-index-appbar);
+}
 .drawer-paper {
 	width: var(--drawer-width);
 	flex-shrink: 0;

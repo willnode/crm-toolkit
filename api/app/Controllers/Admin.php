@@ -5,8 +5,6 @@ use App\Models\UserModel;
 
 class Admin extends BaseController
 {
-	const ROLE = 'admin';
-
 	public function index()
 	{
 		return load_info([

@@ -7,8 +7,8 @@ function Notification() {
   Context.bind('message', useState(null));
   Context.bind('error', useState(null));
   return (<>
-    {(x => x ? <Alert severity="success" color="info">{x}</Alert> : null)(Context.get('message'))}
-    {(x => x ? <Alert severity="error">{x}</Alert> : null)(Context.get('error'))}
+    {(x => x ? <Alert className="app-bubble" severity="success" color="info">{x}</Alert> : null)(Context.get('message'))}
+    {(x => x ? <Alert className="app-bubble" severity="error">{x}</Alert> : null)(Context.get('error'))}
   </>)
 }
 

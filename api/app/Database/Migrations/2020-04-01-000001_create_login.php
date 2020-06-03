@@ -1,11 +1,19 @@
 <?php namespace App\Database\Migrations;
 
+use CodeIgniter\CLI\CLI;
+
 class CreateLogin extends \CodeIgniter\Database\Migration
 {
 
 	public function up()
 	{
 		// Create login
+
+		if ($this->db->tableExists('login')) {
+			$name = $this->db->prefixTable('login');
+			CLI::write("Table $name already exists, skipping.");
+			return;
+		}
 
 		$this->forge->addField([
 			'login_id'           => [

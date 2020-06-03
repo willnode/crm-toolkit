@@ -186,6 +186,9 @@ function load_json($data) {
  */
 function load_info($data = []) {
 	$data['status'] = 'Info';
+	if (ENVIRONMENT === PRODUCTION) {
+		unset($data['routes']);
+	}
 	return load_json($data);
 }
 
@@ -212,6 +215,28 @@ function load_error($message, $code = NULL) {
 	}
 	$message['status'] = 'Error';
 	return load_json($message);
+}
+
+/**
+ * Send email using current config.
+ */
+function sendSimpleEmail($recipient, $subject, $view, $data = []) {
+	$email = \Config\Services::email();
+	$email->setTo($recipient);
+	$email->setSubject($subject);
+	$email->setMessage(view($view, $data));
+	if (ENVIRONMENT === DEVELOPMENT &&
+		strpos($email->fromEmail, '@example.com') !== FALSE) {
+		return;
+	}
+	$result = $email->send();
+	if (!$result) {
+		sendImmediately(load_error(
+			ENVIRONMENT === PRODUCTION ?
+			'Sorry there\'s problem sending the email' :
+			$email->printDebugger()
+		));
+	}
 }
 
 /**

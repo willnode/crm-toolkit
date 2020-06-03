@@ -1,4 +1,6 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 class RegisterModel extends BaseModel
 {
@@ -12,7 +14,7 @@ class RegisterModel extends BaseModel
 		'email' => 'required|valid_email',
 		'password' => 'required|min_length[8]',
 	];
-	protected $only = [ CREATE ];
+	protected $only = [CREATE];
 
 	protected function executeBeforeChange($event)
 	{

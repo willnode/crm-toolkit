@@ -17,7 +17,9 @@ class Auth implements FilterInterface
 			if (empty($request->login->data) OR $request->login->data->role !== $request->room) {
 				$response = Services::response();
 				$response->setStatusCode(401);
-				Services::response()->setHeader('WWW-Authenticate', 'Basic realm="'.$request->room.'"');
+				if (ENVIRONMENT === DEVELOPMENT) {
+					$response->setHeader('WWW-Authenticate', 'Basic realm="'.$request->room.'"');
+				}
 				return $response->setJSON([
 					'status'=>'Error',
 					'message' => 'Wrong Authentication'

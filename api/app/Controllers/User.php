@@ -1,15 +1,15 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Models\ProfileModel;
 
 class User extends BaseController
 {
-	const ROLE = 'user';
-
 	public function index()
 	{
 		return load_info([
-			'routes'=>[
+			'routes' => [
 				'/user/profile/',
 			],
 		]);
