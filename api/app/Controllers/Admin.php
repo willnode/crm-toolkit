@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Models\ProfileModel;
 use App\Models\UserModel;
@@ -8,7 +10,7 @@ class Admin extends BaseController
 	public function index()
 	{
 		return load_info([
-			'routes'=>[
+			'routes' => [
 				'/admin/user/',
 				'/admin/profile/',
 			],

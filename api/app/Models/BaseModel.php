@@ -296,7 +296,7 @@ class BaseModel extends Model
 		$orderDirection = $orderDirection === 'desc' ? 'desc' : 'asc';
 		if ($orderBy) {
 			if (
-				is_array($this->select) and
+				!is_array($this->select) ||
 				array_search(
 					$orderBy,
 					$this->select,
