@@ -1,6 +1,10 @@
+---
+nav_order: 4
+---
+
 # Building a Server App
 
-From the previous articles we mention that CRM Toolkit uses CodeIgniter 4 as the base framework to bridge the connection between a client app and a database. 
+From the previous articles we mention that CRM Toolkit uses CodeIgniter 4 as the base framework to bridge the connection between a client app and a database.
 
 ## Installing
 
@@ -41,7 +45,7 @@ The base URL is the server URL base location. Only used during development for d
 
 #### Front URL
 
-The front URL is the live client app URL location. This is used to handle CORS. You can use array if your app live on multiple URLs. 
+The front URL is the live client app URL location. This is used to handle CORS. You can use array if your app live on multiple URLs.
 
 If you have problems dealing with CORS, you can set `app.frontUrl` to `*`. Although, you'll face security issue if you leave it that way (use this technique as a last resort).
 
@@ -64,7 +68,7 @@ In previous article, we have discussed these controllers:
 |--+ User.php
 ```
 
-By default, `Admin.php` and `User.php` is an authenticated area protected with `Auth.php` from Filters. `Home.php` is the "Home" for endpoints which no needs authentication (.i.e. `/login`, `/register` and `/forgot`).  If you want to add more Home endpoints, you also need to configure routes in `api/app/Config/Routes.php`: 
+By default, `Admin.php` and `User.php` is an authenticated area protected with `Auth.php` from Filters. `Home.php` is the "Home" for endpoints which no needs authentication (.i.e. `/login`, `/register` and `/forgot`).  If you want to add more Home endpoints, you also need to configure routes in `api/app/Config/Routes.php`:
 
 ```php
 $routes->get('/', 'Home::index');
@@ -83,7 +87,7 @@ There are two built-in Filters used thorough the system
 
 This filter initializes `LoginModel` and checks whether the `Authorization` header value is correct. If the user key is available in the database and its password matches, and the client accessing the correct "room" for given user role, then the filter will go pass thorough, otherwise it returns `401 Unauthorized`.
 
-If you change the controller name, you need to configure Filters in `api/app/Config/Filters.php`: 
+If you change the controller name, you need to configure Filters in `api/app/Config/Filters.php`:
 
 ```php
 public $filters = [
@@ -96,6 +100,8 @@ public $filters = [
 ```
 
 >  Note: You can see that we also include `login` and `forgot` endpoints; this is a special behaviour defined in `Filters.php`  as they shouldn't return `401` on incomplete password.
+
+All authentication is done using `Basic` auth.
 
 #### CORS.php
 
@@ -160,7 +166,7 @@ class CustomModel extends BaseModel
 	// Modification options
 	protected $allowedFields = [];
 	protected $fileUploadRules = [];
-	protected $validationRules = [];    
+	protected $validationRules = [];
     // Constraint options
 	protected $join = NULL;
 	protected $only = NULL;
@@ -196,7 +202,7 @@ class ArticleModel extends BaseModel
 	];
     // Table attributes that can be written
 	protected $allowedFields = [
-		'article_login', 'article_title', 
+		'article_login', 'article_title',
         'article_body'
 	];
 }
@@ -254,7 +260,7 @@ GET /admin/article/?page=2&pageSize=20
 Which results in this SQL query:
 
 ```sql
-SELECT * FROM `article` LIMIT 20 OFFSET 40 
+SELECT * FROM `article` LIMIT 20 OFFSET 40
 ```
 
 Complete GET query parameter options:
@@ -279,12 +285,12 @@ protected $allowedFields = [];
 // Rules to set validate data uploads
 protected $fileUploadRules = [];
 // Rules used to validate POST data
-protected $validationRules = [];  
+protected $validationRules = [];
 ```
 
 The `allowedFields` is a must. If you omit it then the model will not accepting `POST` for `CREATE` or `UPDATE` operation.
 
-> Setting this attribute empty does not prevent `DELETE`  and other special operations like subquerying and state reducers using actions. If you want to make the model truly read-only, set `$only` to `[SELECT]`. 
+> Setting this attribute empty does not prevent `DELETE`  and other special operations like subquerying and state reducers using actions. If you want to make the model truly read-only, set `$only` to `[SELECT]`.
 
 The `validationRules` attribute follows CodeIgniter documentation on [validating models](https://codeigniter4.github.io/userguide/models/model.html#validating-data). If a user violates one of validation during `CREATE` or `UPDATE` then the model simply rejects the whole request.
 
@@ -306,23 +312,23 @@ protected $fileUploadRules = [
 List of default file options:
 
 ```php
-[ 
+[
     // Specify destination folder under `api/writables/uploads`
-    'folder' => null, // This defaults to the rule name (key)  
+    'folder' => null, // This defaults to the rule name (key)
     // Specify whitelists of allowed upload extension types (array)
     // Under the hood it checks using $file->guessExtension()
-    'types' => '*', 
-    // Is the file is required? Under the hood, this config also 
+    'types' => '*',
+    // Is the file is required? Under the hood, this config also
     // checks whether the user already uploaded the file to database
     // so user is not required to reupload the file during UPDATE.
-    'required' => false, 
+    'required' => false,
     // In case of file name conflict, overwrite existing file?
     // If unset or false, let CodeIgniter rename the file.
     // (If set true, Usually accompanied by `custom_file_name`)
-    'overwrite' => false, 
+    'overwrite' => false,
     // A callable function for determining custom name for a given file.
     // parameters: ($file, $name, $option, $input_data, $existing_row)
-    // (you might want to pass this thing as a string 
+    // (you might want to pass this thing as a string
     //         then put the function in a helper file)
     'custom_file_name' => null,
 ]

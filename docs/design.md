@@ -1,3 +1,7 @@
+---
+nav_order: 3
+---
+
 # Designing the App
 
 In previous section you're able to run CRM-Toolkit on your local computer. Now it's time to bring your app idea alive without getting burden by common developer mistakes.
@@ -79,7 +83,7 @@ Now here's some keypoints:
 + All column (field) names uses `snake_case`.
 + The table's `PRIMARY KEY` should be  `table_name + "_id"`, also this field must be `AUTO_INCREMENT` hence should **never** be modified after creation.
 + All other fields (except `created_at`/`updated_at`) are prefixed with `table_name` (the `login` table is **only** an exception as you'll reference it more often than rest of table in the database).
-+ `FOREIGN KEY` fields should named like `table_name + constraint_table_name` 
++ `FOREIGN KEY` fields should named like `table_name + constraint_table_name`
 + `UNIQUE` and `FOREIGN KEY` fields should always be `nullable`
 + Unconstrained (attribute) fields should never be `nullable`, as long as it companied with a default value (empty string, 0, default enum, etc).
 + All fields that references other field must be constrained using `FOREIGN KEY` to retain Referential Integrity.

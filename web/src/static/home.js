@@ -17,7 +17,7 @@ export default function Home() {
     <p>To begin exploring, login with username <code>admin</code> or <code>user</code>. The password
 		for both account is equal with corresponding username.</p>
     <p>Check out our repo at <Button href="http://github.com/willnode/crm-toolkit" target="_blank"
-      rel="noopener noreferrer"><Icon><svg className="embed"><use xlinkHref={GitHubIcon} /></svg></Icon>
+      rel="noopener noreferrer"><Icon><GitHubIcon /></Icon>
       <span style={{ marginLeft: '0.5em' }}>GitHub</span></Button></p>
   </Page>)
 }

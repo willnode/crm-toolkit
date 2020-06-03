@@ -1,3 +1,6 @@
+---
+nav_order: 2
+---
 
 # Know the Basics
 
