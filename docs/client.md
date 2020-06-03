@@ -14,7 +14,9 @@ In CRM Toolkit, we have designed a client web from ground up, powered with Parce
 
 Using the install script, it runs `npm install` on the web directory.
 
-The installed `node_modules` contains about 100 MB in javascript 
+The installed `node_modules` contains about 80 MB or almost 15000 files so it might take a while for first installation. The number may huge but it's reasonably small compared to typical project that runs `create-react-app` (their project runs 150 MB in node_modules!)
+
+
 
 ## Next
 

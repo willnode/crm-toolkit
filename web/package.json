@@ -23,16 +23,16 @@
     "modclean": "^3.0.0-beta.1",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-bundle-visualiser": "^1.2.0",
-    "parcel-plugin-static-files-copy": "^2.3.1",
+    "parcel-plugin-static-files-copy": "^2.4.1",
     "react-snap": "^1.23.0",
     "rimraf": "^2.6.2"
   },
   "scripts": {
     "build": "parcel build src/index.html --public-url / --no-source-maps",
-    "start": "parcel src/index.html -p 3000 --open",
     "prebuild": "rimraf dist",
     "postbuild": "node postbuild",
-    "postinstall": "modclean -r --no-dirs --ignore=\"react-*/**/*.js.map\""
+    "start": "parcel src/index.html -p 3000 --open",
+    "postinstall": "modclean -r -k -P --ignore=\"react-*/**/*.js.map\""
   },
   "homepage": "/",
   "staticFiles": {
